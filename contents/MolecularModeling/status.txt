@@ -1,0 +1,7 @@
+#Status of MolecularModeling package
+
+Split support for higher-order chemical data types (like ChemWrapper) from Basics.
+
+Add support for importing a molecule or atom that Mathematica recognizes.
+
+Add more animation support and physical calculations support.

@@ -1,0 +1,146 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      4517,        137]
+NotebookOptionsPosition[      3697,        104]
+NotebookOutlinePosition[      4513,        135]
+CellTagsIndexPosition[      4470,        132]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  "\[IndentingNewLine]", "\[IndentingNewLine]", 
+  "\[IndentingNewLine]"}]], "Input",
+ CellChangeTimes->{{3.6785430880045853`*^9, 3.6785430916550703`*^9}, 
+   3.67854340534492*^9},
+ TextAlignment->Center],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"Button", "[", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Cell", "[", 
+       RowBox[{"\"\<Load\>\"", ",", "\"\<Title\>\"", ",", 
+        RowBox[{"FontColor", "\[Rule]", "White"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"Selectable", "\[Rule]", "True"}]}], "]"}], "//", 
+      "DisplayForm"}], ",", 
+     RowBox[{
+      RowBox[{"SetOptions", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"NotebookOpen", "@", 
+         RowBox[{"FileNameJoin", "@", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"NotebookDirectory", "[", "]"}], ",", "\"\<contents\>\"", 
+            ",", "\"\<DiscreteVariableRepresentation\>\"", ",", "\"\<DVR\>\"",
+             ",", "\"\<Resources\>\"", ",", "\"\<Interfaces\>\"", ",", 
+            "\"\<PrimaryInterface.nb\>\""}], "}"}]}]}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"Saveable", "\[Rule]", "False"}], ",", "\[IndentingNewLine]", 
+        
+        RowBox[{"WindowTitle", "\[Rule]", "\"\<DVR App Interface\>\""}]}], 
+       "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{"NotebookClose", "[", "]"}]}], ",", "\[IndentingNewLine]", 
+     RowBox[{"Appearance", "\[Rule]", "\"\<Frameless\>\""}]}], 
+    "\[IndentingNewLine]", "]"}], "//", 
+   RowBox[{
+    RowBox[{"Framed", "[", 
+     RowBox[{"#", ",", 
+      RowBox[{"RoundingRadius", "\[Rule]", "5"}], ",", 
+      RowBox[{"FrameStyle", "\[Rule]", 
+       RowBox[{"GrayLevel", "[", ".95", "]"}]}], ",", "\[IndentingNewLine]", 
+      RowBox[{"Background", "\[Rule]", 
+       RowBox[{"GrayLevel", "[", ".6", "]"}]}]}], "]"}], "&"}]}], "//", 
+  "Deploy"}]], "Input",
+ CellChangeTimes->{{3.6785427643233128`*^9, 3.678542838776623*^9}, {
+  3.678542934197089*^9, 3.6785430435369253`*^9}, {3.678543078994403*^9, 
+  3.678543080322363*^9}, {3.678543549585676*^9, 3.6785436076002893`*^9}, {
+  3.678543769262896*^9, 3.678543773741912*^9}, {3.678544090306473*^9, 
+  3.678544091265335*^9}}],
+
+Cell[BoxData[
+ TagBox[
+  FrameBox[
+   ButtonBox[
+    TagBox[Cell["Load", "Title",
+      Selectable->True,
+      FontColor->GrayLevel[1]],
+     DisplayForm],
+    Appearance->"Frameless",
+    ButtonFunction:>(SetOptions[
+       NotebookOpen[
+        FileNameJoin[{
+          NotebookDirectory[], "contents", "DiscreteVariableRepresentation", 
+          "DVR", "Resources", "Interfaces", "PrimaryInterface.nb"}]], 
+       Saveable -> False, WindowTitle -> "DVR App Interface"]; 
+     NotebookClose[]),
+    Evaluator->Automatic,
+    Method->"Preemptive"],
+   Background->GrayLevel[0.6],
+   FrameStyle->GrayLevel[0.95],
+   RoundingRadius->5,
+   StripOnInput->False],
+  Deploy,
+  DefaultBaseStyle->"Deploy"]], "Output",
+ CellMargins->0,
+ CellChangeTimes->{3.6785437746846952`*^9, 3.678544092974587*^9},
+ TextAlignment->Center]
+}, {2}]]
+},
+Editable->False,
+Saveable->False,
+Selectable->False,
+WindowSize->{375, 340},
+WindowMargins->{{52, Automatic}, {Automatic, 0}},
+WindowFrame->"Normal",
+WindowElements->{},
+WindowFrameElements->{},
+Background->GrayLevel[0.5],
+FrontEndVersion->"10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, \
+2015)",
+StyleDefinitions->Notebook[{
+   Cell[
+    StyleData[StyleDefinitions -> "Default.nb"]], 
+   Cell[
+    StyleData[All], ShowCellBracket -> False]}, Visible -> False, 
+  FrontEndVersion -> 
+  "10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, 2015)", 
+  StyleDefinitions -> "PrivateStylesheetFormatting.nb"],
+AppearanceElements -> {}
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 297, 6, 131, "Input"],
+Cell[CellGroupData[{
+Cell[880, 30, 1981, 43, 420, "Input"],
+Cell[2864, 75, 820, 26, 75, "Output"]
+}, {2}]]
+}
+]
+*)
+
+(* End of internal cache information *)

@@ -1,0 +1,143 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      3975,        134]
+NotebookOptionsPosition[      2725,        106]
+NotebookOutlinePosition[      3083,        122]
+CellTagsIndexPosition[      3040,        119]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[StyleData[StyleDefinitions -> "Default.nb"]],
+
+Cell[StyleData["Chapter"],
+ ShowGroupOpener->False,
+ DefaultNewCellStyle->"Section"],
+
+Cell[StyleData["Subchapter"],
+ ShowGroupOpener->True],
+
+Cell[StyleData["Section"],
+ ShowGroupOpener->True,
+ DefaultNewCellStyle->"Subsection"],
+
+Cell[StyleData["Subsection"],
+ ShowGroupOpener->True,
+ DefaultNewCellStyle->"Subsubsection"],
+
+Cell[StyleData["Subsubsection"],
+ ShowGroupOpener->True,
+ DefaultNewCellStyle->"Text"],
+
+Cell[StyleData["Subsubsubsection", StyleDefinitions -> "Subsubsection"],
+ ShowGroupOpener->True,
+ DefaultNewCellStyle->"Text",
+ FontSize->14],
+
+Cell[StyleData["Subsubtitle"],
+ CellFrame->{{0, 0}, {1, 0}}],
+
+Cell[StyleData["Item"],
+ ShowGroupOpener->True,
+ ShowShortBoxForm->False,
+ CellGroupingRules->{"SectionGrouping", 65},
+ DefaultNewCellStyle->"ItemParagraph",
+ FontSize->14,
+ FontWeight->"Bold"],
+
+Cell[StyleData["TopStructure", StyleDefinitions -> StyleData["Item"]],
+ CellFrame->{{1, 0}, {1, 0}},
+ CellDingbat->None,
+ ShowGroupOpener->False,
+ CellMargins->{{81, 10}, {0, 8}},
+ DefaultNewCellStyle->"SubStructure",
+ FontSize->18,
+ FontColor->Automatic],
+
+Cell[StyleData["SubStructure", StyleDefinitions -> StyleData["Item"]],
+ CellFrame->{{1, 0}, {0, 0}},
+ CellDingbat->"+",
+ ShowGroupOpener->False,
+ CellMargins->{{81, 10}, {0, 0}},
+ CellElementSpacings->{"CellMinHeight"->20},
+ ReturnCreatesNewCell->True,
+ CellFrameMargins->35,
+ DefaultNewCellStyle->"SubSubStructure",
+ FontSize->16,
+ FontWeight->"Plain",
+ FontSlant->"Italic",
+ FontColor->Automatic],
+
+Cell[StyleData["SubSubStructure", StyleDefinitions -> StyleData[
+ "SubStructure"]],
+ CellDingbat->"-",
+ CellFrameMargins->45,
+ DefaultNewCellStyle->"SubSubDescription",
+ FontSize->14,
+ FontSlant->"Plain",
+ FontVariations->{"Underline"->False},
+ FontColor->Automatic],
+
+Cell[StyleData["SubSubDescription", StyleDefinitions -> StyleData[
+ "SubSubStructure"]],
+ CellDingbat->"|",
+ CellFrameMargins->50,
+ FontSize->12,
+ FontColor->Automatic],
+
+Cell[StyleData["Invisible"],
+ ShowCellBracket->False,
+ CellSize->{1, 1},
+ FontColor->CurrentValue[
+   StyleData["Notebook"], "Background"]],
+
+Cell[StyleData["Code"],
+ InitializationCell->False]
+},
+WindowSize->{808, 755},
+WindowMargins->{{12, Automatic}, {Automatic, 24}},
+FrontEndVersion->"10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, \
+2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 49, 0, 36, 49, 0, "StyleData", "StyleDefinitions", ""],
+Cell[610, 22, 84, 2, 80, 26, 0, "StyleData", "Chapter", "All"],
+Cell[697, 26, 53, 1, 60, 29, 0, "StyleData", "Subchapter", "All"],
+Cell[753, 29, 86, 2, 65, 26, 0, "StyleData", "Section", "All"],
+Cell[842, 33, 92, 2, 51, 29, 0, "StyleData", "Subsection", "All"],
+Cell[937, 37, 86, 2, 44, 32, 0, "StyleData", "Subsubsection", "All"],
+Cell[1026, 41, 141, 3, 38, 72, 0, "StyleData", "Subsubsubsection", "All"],
+Cell[1170, 46, 60, 1, 54, 30, 0, "StyleData", "Subsubtitle", "All"],
+Cell[1233, 49, 193, 6, 44, 23, 0, "StyleData", "Item", "All"],
+Cell[1429, 57, 255, 7, 49, 70, 0, "StyleData", "TopStructure", "All"],
+Cell[1687, 66, 398, 12, 34, 70, 0, "StyleData", "SubStructure", "All"],
+Cell[2088, 80, 266, 8, 32, 83, 1, "StyleData", "SubSubStructure", "All"],
+Cell[2357, 90, 168, 5, 30, 88, 1, "StyleData", "SubSubDescription", "All"],
+Cell[2528, 97, 139, 4, 20, 28, 0, "StyleData", "Invisible", "All"],
+Cell[2670, 103, 51, 1, 64, 23, 0, "StyleData", "Code", "All"]
+}
+]
+*)
+
+(* End of internal cache information *)

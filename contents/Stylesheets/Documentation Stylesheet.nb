@@ -1,0 +1,114 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      3385,        105]
+NotebookOptionsPosition[      2028,         72]
+NotebookOutlinePosition[      2564,         92]
+CellTagsIndexPosition[      2521,         89]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[StyleData[StyleDefinitions -> "Default.nb"]],
+
+Cell[StyleData["Notebook"],
+ DefaultNewCellStyle->"Chapter"],
+
+Cell[StyleData["Chapter"],
+ ShowGroupOpener->True,
+ DefaultNewCellStyle->"PackageDocString"],
+
+Cell[StyleData["PackageDocString", StyleDefinitions -> StyleData["Text"]],
+ CellMargins->{{27, Inherited}, {8, 18}},
+ CellGroupingRules->{SectionGrouping, 60},
+ DefaultNewCellStyle->"Section"],
+
+Cell[StyleData["Section"],
+ ShowGroupOpener->True,
+ DefaultNewCellStyle->"Subsection"],
+
+Cell[StyleData["Subsection"],
+ ShowGroupOpener->True,
+ DefaultNewCellStyle->"ClassDocString"],
+
+Cell[StyleData["ClassDocString", StyleDefinitions -> StyleData["Text"]],
+ CellGroupingRules->{SectionGrouping, 60},
+ DefaultNewCellStyle->"Subsubsection"],
+
+Cell[StyleData["Subsubsection"],
+ ShowGroupOpener->True,
+ DefaultNewCellStyle->"Code"],
+
+Cell[StyleData["Code"],
+ Evaluatable->False,
+ CellGroupingRules->{SectionGrouping, 55},
+ InitializationCell->False,
+ DefaultNewCellStyle->"MethodDocString"],
+
+Cell[StyleData["Subsubsubsection"],
+ ShowGroupOpener->True,
+ CellGroupingRules->{"SectionGrouping", 51},
+ DefaultNewCellStyle->"MethodDocString",
+ MenuSortingValue->1505,
+ MenuCommandKey->"9"],
+
+Cell[StyleData["Input"],
+ MenuCommandKey->None],
+
+Cell[StyleData["MethodDocString", StyleDefinitions -> StyleData["Text"]],
+ CellGroupingRules->{SectionGrouping, 60},
+ DefaultNewCellStyle->"Subsubsection"],
+
+Cell[StyleData["InlineCell", StyleDefinitions -> StyleData["Code"]]]
+},
+WindowSize->{808, 755},
+WindowMargins->{{Automatic, 156}, {Automatic, 0}},
+FrontEndVersion->"10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, \
+2015)",
+StyleDefinitions->Notebook[{
+   Cell[
+    StyleData["Code"]]}, Visible -> False, FrontEndVersion -> 
+  "10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, 2015)", 
+  StyleDefinitions -> "Default.nb"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 49, 0, 36, 49, 0, "StyleData", "StyleDefinitions", ""],
+Cell[610, 22, 60, 1, 36, 27, 0, "StyleData", "Notebook", "All"],
+Cell[673, 25, 92, 2, 80, 26, 0, "StyleData", "Chapter", "All"],
+Cell[768, 29, 192, 3, 44, 74, 0, "StyleData", "PackageDocString", "All"],
+Cell[963, 34, 86, 2, 65, 26, 0, "StyleData", "Section", "All"],
+Cell[1052, 38, 93, 2, 51, 29, 0, "StyleData", "Subsection", "All"],
+Cell[1148, 42, 154, 2, 43, 72, 0, "StyleData", "ClassDocString", "All"],
+Cell[1305, 46, 86, 2, 44, 32, 0, "StyleData", "Subsubsection", "All"],
+Cell[1394, 50, 156, 4, 58, 23, 0, "StyleData", "Code", "All"],
+Cell[1553, 56, 192, 5, 38, 35, 0, "StyleData", "Subsubsubsection", "All",
+ MenuSortingValue->1505,
+ MenuCommandKey->"9"],
+Cell[1748, 63, 47, 1, 38, 24, 0, "StyleData", "Input", "All",
+ MenuCommandKey->None],
+Cell[1798, 66, 155, 2, 46, 73, 0, "StyleData", "MethodDocString", "All"],
+Cell[1956, 70, 68, 0, 58, 68, 0, "StyleData", "InlineCell", "All"]
+}
+]
+*)
+
+(* End of internal cache information *)

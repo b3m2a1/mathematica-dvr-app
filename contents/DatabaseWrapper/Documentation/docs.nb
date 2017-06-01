@@ -1,0 +1,1742 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     49566,       1733]
+NotebookOptionsPosition[     39257,       1372]
+NotebookOutlinePosition[     39745,       1391]
+CellTagsIndexPosition[     39702,       1388]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Basics", "Section",
+ CellChangeTimes->{{3.678803040594921*^9, 3.678803042335286*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["DatabaseRoot Class", "Subsection"],
+
+Cell["\<\
+A root class that tracks various properties, which also can close database \
+connections\
+\>", "ClassDocString",
+ CellChangeTimes->{{3.6787984968396482`*^9, 3.678798504224203*^9}, {
+  3.6787986156075983`*^9, 3.678798664725103*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Class field: Drivers", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ClassField", "[", "Drivers", "]"}]], "Code",
+ CellChangeTimes->{3.6787986712241077`*^9}],
+
+Cell["\<\
+The drivers currently in use. When a connection is opened, a driver is added.\
+\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678798673833413*^9, 3.678798716386325*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Class field: ConnectedDatabases", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ClassField", "[", "ConnectedDatabases", "]"}]], "Code",
+ CellChangeTimes->{3.678798722949333*^9}],
+
+Cell["List of databases with open connections", "MethodDocString",
+ CellChangeTimes->{{3.678798725063463*^9, 3.678798731506093*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Class field: AllowedConnections", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ClassField", "[", "AllowedConnections", "]"}]], "Code",
+ CellChangeTimes->{3.678798736500819*^9}],
+
+Cell["Number of connections allowed.", "MethodDocString",
+ CellChangeTimes->{{3.678798737694151*^9, 3.678798753153734*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: KillConnections", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"KillConnections", ",", "self_", ",", 
+   RowBox[{"n_:", "All"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678798758756239*^9}],
+
+Cell["Kills connections", "MethodDocString",
+ CellChangeTimes->{{3.6787987746972237`*^9, 3.678798777101768*^9}}]
+}, Open  ]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Database Class", "Subsection"],
+
+Cell["\<\
+The basic class that represents a database. Opens up a connection to the \
+database, and then provides access methods to it.\
+\>", "ClassDocString",
+ CellChangeTimes->{{3.6788015432107553`*^9, 3.678801584799962*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: $Init", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"InitializationFunction", "[", 
+  RowBox[{"self_", ",", 
+   RowBox[{"root", ":", 
+    RowBox[{"_", "?", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"IsInstance", "[", 
+        RowBox[{"#", ",", "DatabaseRootClass"}], "]"}], "&"}], ")"}]}], ":", 
+    "$DatabaseDefaultRoot"}], ",", "\n", "\t", 
+   RowBox[{"driver", ":", 
+    RowBox[{"Alternatives", "@@", 
+     RowBox[{"JDBCDriverNames", "[", "]"}]}], ":", "\"\<SQLite\>\""}], ",", 
+   "\n", "\t", 
+   RowBox[{"database", ":", 
+    RowBox[{"(", 
+     RowBox[{"_String", "|", "None"}], ")"}], ":", "None"}]}], "]"}]], "Code",\
+
+ CellChangeTimes->{{3.678798832856613*^9, 3.6787988364715643`*^9}}],
+
+Cell["\<\
+Opens either a potential connection by passing a driver, or a database, by \
+passing a file, or both, by passing a driver and a file\
+\>", "Text",
+ CellChangeTimes->{{3.67879884168661*^9, 3.678798877365781*^9}, {
+  3.6787992929789886`*^9, 3.678799308240415*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound Property: IsOpen", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundProperty", "[", 
+  RowBox[{"IsOpen", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{3.678799312043264*^9}],
+
+Cell["Returns whether the database connection is open or not.", \
+"MethodDocString",
+ CellChangeTimes->{{3.67879931429947*^9, 3.678799325663813*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Open", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Open", ",", "self_", ",", 
+   RowBox[{"dbfile", ":", 
+    RowBox[{"(", 
+     RowBox[{"_String", "|", "None"}], ")"}], ":", "None"}], ",", "\n", "\t", 
+   
+   RowBox[{"ops", ":", 
+    RowBox[{"OptionsPattern", "[", 
+     RowBox[{"Flatten", "@", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"Options", "@", "OpenSQLConnection"}], ",", 
+        RowBox[{"OverwriteTarget", "->", "False"}]}], "}"}]}], "]"}]}]}], 
+  "]"}]], "Code",
+ CellChangeTimes->{{3.678799346433569*^9, 3.678799349784153*^9}}],
+
+Cell["\<\
+Opens a connection, either to a file, or to the instances saved database file\
+\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678799416851063*^9, 3.6787994281094017`*^9}, {
+  3.678799662345758*^9, 3.678799675662303*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Close", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Close", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{3.678799680561406*^9}],
+
+Cell["Closes the connection", "MethodDocString",
+ CellChangeTimes->{{3.678799681771288*^9, 3.678799684326065*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Apply", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Apply", ",", "self_", ",", "function_", ",", "args___"}], 
+  "]"}]], "Code",
+ CellChangeTimes->{3.6787996878490343`*^9}],
+
+Cell[TextData[{
+ "Applies a function to the database. Used primarily with ",
+ Cell[BoxData[
+  FormBox["DatabaseLink`", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " functions"
+}], "MethodDocString",
+ CellChangeTimes->{{3.6787996888428917`*^9, 3.678799722325327*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Execute", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Execute", ",", "self_", ",", "commands_", ",", "args___"}], 
+  "]"}]], "Code",
+ CellChangeTimes->{{3.6787997316963367`*^9, 3.678799734492963*^9}}],
+
+Cell["\<\
+Executes SQL code on the database. Can be used to write pure SQL functions to \
+use with the database, such as merging two databases\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678799737010887*^9, 3.678799787683403*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Class field: LoadedTables", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ClassField", "[", "LoadedTables", "]"}]], "Code",
+ CellChangeTimes->{3.678799793239057*^9}],
+
+Cell["\<\
+An association of Name\[Rule]Table pairs, used as the first place to look \
+when loading a table\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.67879979678721*^9, 3.678799806331264*^9}, {
+   3.678799846854787*^9, 3.678799876294175*^9}, 3.678799967408924*^9}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: LoadTable", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{
+  "LoadTable", ",", "self_", ",", "\n", "\t", "name_", ",", "\n", "\t", 
+   RowBox[{"columns", ":", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"_String", "->", "_"}], ")"}], "|", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"_String", "->", "_"}], ")"}], ".."}], "}"}], "|", 
+      "Automatic"}], ")"}], ":", "Automatic"}], ",", "\n", "\t", "ops___", 
+   ",", "\n", "\t", 
+   RowBox[{"Table", "->", "Automatic"}], ",", "\n", "\t", 
+   RowBox[{"\"\<Reload\>\"", "->", "False"}], ",", "\n", "\t", 
+   RowBox[{"\"\<Overwrite\>\"", "->", "False"}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.678799973242352*^9, 3.678799977918874*^9}}],
+
+Cell["Loads a table instance", "MethodDocString",
+ CellChangeTimes->{{3.678799979260847*^9, 3.678799987614196*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Table", "Subsubsubsection",
+ CellChangeTimes->{{3.6787999892461767`*^9, 3.678799989774321*^9}}],
+
+Cell[TextData[{
+ "The table class to use when loading the table. Defaults to the basic ",
+ Cell[BoxData[
+  FormBox["DataTableClass", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", but there\[CloseCurlyQuote]s an extension for ",
+ Cell[BoxData[
+  FormBox["MatrixTable", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " that is very useful for storing matrices"
+}], "MethodDocString",
+ CellChangeTimes->{{3.678800047076269*^9, 3.67880010174188*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["\[OpenCurlyDoubleQuote]Reload\[CloseCurlyDoubleQuote]", \
+"Subsubsubsection",
+ CellChangeTimes->{{3.678799991190065*^9, 3.678799994830228*^9}}],
+
+Cell["\<\
+Reloads the table, if it had been previously loaded, using a new table type.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678800023160471*^9, 3.678800040727109*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["\[OpenCurlyDoubleQuote]Overwrite\[CloseCurlyDoubleQuote]", \
+"Subsubsubsection",
+ CellChangeTimes->{{3.678799997366026*^9, 3.678799999437975*^9}}],
+
+Cell["Overwrites any currently existing table.", "MethodDocString",
+ CellChangeTimes->{{3.678800001218463*^9, 3.6788000106618843`*^9}}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: TableNames", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"TableNames", ",", "self_", ",", 
+   RowBox[{"sel", ":", 
+    RowBox[{"(", 
+     RowBox[{"_String", "|", 
+      RowBox[{"{", 
+       RowBox[{"_String", ".."}], "}"}], "|", 
+      RowBox[{"{", 
+       RowBox[{"_Integer", ".."}], "}"}], "|", "All"}], ")"}], ":", "All"}], 
+   ",", 
+   RowBox[{"pattern_:", "None"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.6788001106807127`*^9, 3.678801618250382*^9}],
+
+Cell["\<\
+Gets the names of tables. If a table doesn\[CloseCurlyQuote]t appear in the \
+database, it simply won\[CloseCurlyQuote]t appear in the output list.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678801303360319*^9, 3.6788013473492203`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: DropTables", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"DropTables", ",", "self_", ",", 
+   RowBox[{"tabs", ":", 
+    RowBox[{"(", 
+     RowBox[{"_String", "|", 
+      RowBox[{"{", 
+       RowBox[{"_String", ".."}], "}"}], "|", 
+      RowBox[{"{", 
+       RowBox[{"_Integer", ".."}], "}"}], "|", "All"}], ")"}], ":", "All"}]}],
+   "]"}]], "Code",
+ CellChangeTimes->{3.678801602282131*^9}],
+
+Cell[TextData[{
+ "Drops tables as specified by ",
+ Cell[BoxData[
+  FormBox["TableNames", TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "MethodDocString",
+ CellChangeTimes->{{3.678801603722082*^9, 3.6788016133393993`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: View", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"View", ",", "self_", ",", 
+   RowBox[{"viewFunction_:", "Automatic"}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.67880136940946*^9, 3.678801373135282*^9}, 
+   3.678801598275666*^9}],
+
+Cell["A way to pan through the different tables", "MethodDocString",
+ CellChangeTimes->{{3.678801378837264*^9, 3.678801403612904*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: $ToRepresentation", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"RepresentationFunction", "[", "self_", "]"}], ":=", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"tn", "=", 
+       RowBox[{
+        RowBox[{"self", "::", "TableNames"}], "[", "]"}]}], "}"}], ",", "\n", 
+     "\t", 
+     RowBox[{"Framed", "[", "\n", "\t\t\t", 
+      RowBox[{
+       RowBox[{"Grid", "[", 
+        RowBox[{
+         RowBox[{"{", "\n", "\t\t\t\t", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"self", "::", "Database"}], "//", "TextCell"}], "}"}], 
+           ",", "\n", "\t\t\t\t", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Length", "@", "tn"}], ">", "0"}], ",", "\n", 
+             "\t\t\t\t", 
+             RowBox[{"{", 
+              RowBox[{"Framed", "[", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"Grid", "[", "\n", "\t\t\t\t\t", 
+                  RowBox[{"Partition", "[", 
+                   RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"Framed", "[", 
+                    RowBox[{
+                    RowBox[{"TextCell", "[", "#", "]"}], ",", 
+                    RowBox[{"RoundingRadius", "->", "2"}], ",", 
+                    RowBox[{"Background", "->", 
+                    RowBox[{"RGBColor", "[", 
+                    RowBox[{"1", ",", "1", ",", ".8"}], "]"}]}]}], "]"}], 
+                    "&"}], "/@", "tn"}], ")"}], ",", "3"}], "]"}], "\n", 
+                  "\t\t\t\t\t", "]"}], "//", 
+                 RowBox[{
+                  RowBox[{"Pane", "[", 
+                   RowBox[{"#", ",", 
+                    RowBox[{"ImageSize", "->", 
+                    RowBox[{"{", 
+                    RowBox[{"Automatic", ",", "100"}], "}"}]}]}], "]"}], 
+                  "&"}]}], ",", "\n", "\t\t\t\t\t", 
+                RowBox[{"RoundingRadius", "->", "5"}]}], "]"}], "}"}], ",", 
+             "\n", "\t\t\t\t", 
+             RowBox[{"{", 
+              RowBox[{"\"\<EMPTY\>\"", "//", "TextCell"}], "}"}]}], "]"}]}], 
+          "\n", "\t\t\t\t", "}"}], ",", "\n", "\t\t\t\t", 
+         RowBox[{"Alignment", "->", "Center"}], ",", "\n", "\t\t\t\t", 
+         RowBox[{"Background", "->", 
+          RowBox[{"GrayLevel", "[", ".95", "]"}]}], ",", 
+         RowBox[{"Dividers", "->", "True"}]}], "]"}], ",", "\n", "\t\t\t", 
+       RowBox[{"Background", "->", 
+        RowBox[{"GrayLevel", "[", ".9", "]"}]}], ",", "\n", "\t\t\t", 
+       RowBox[{"RoundingRadius", "->", "5"}]}], "]"}]}], "\n", "\t\t", 
+    "]"}]}], ";"}]], "Code"],
+
+Cell["Shows all of the tables stored by name.", "MethodDocString",
+ CellChangeTimes->{{3.6788014083539047`*^9, 3.6788014172363873`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: InterpretType", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"BoundMethod", "[", 
+    RowBox[{"InterpretType", ",", "self_", ",", "typeName_"}], "]"}], ":=", 
+   "\n", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"typeChoices", "=", 
+        RowBox[{
+         RowBox[{"self", "::", "Apply"}], "[", "SQLDataTypeNames", "]"}]}], 
+       ",", 
+       RowBox[{"type", "=", 
+        RowBox[{"ToUpperCase", "@", 
+         RowBox[{"ToString", "[", "typeName", "]"}]}]}]}], "}"}], ",", "\n", 
+     "\t", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"Not", "@", 
+        RowBox[{"MemberQ", "[", 
+         RowBox[{"typeChoices", ",", "type"}], "]"}]}], ",", "\n", "\t\t", 
+       RowBox[{"With", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"reps", "=", 
+           RowBox[{"{", "\n", "\t\t\t\t", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{
+               "\"\<INT\>\"", "|", "\"\<INTEGER\>\"", "|", 
+                "\"\<TINYINT\>\""}], ")"}], "->", "\"\<INT\>\""}], ",", "\n", 
+             "\t\t\t\t", 
+             RowBox[{
+              RowBox[{"(", "\"\<NULL\>\"", ")"}], "->", "\"\<NULL\>\""}], ",",
+              "\n", "\t\t\t\t", 
+             RowBox[{
+              RowBox[{"(", "\"\<REAL\>\"", ")"}], "->", "\"\<REAL\>\""}], ",",
+              "\n", "\t\t\t\t", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{
+               "\"\<STR\>\"", "|", "\"\<STRING\>\"", "|", "\"\<VARCHAR\>\"", 
+                "|", "\"\<TEXT\>\""}], ")"}], "->", "\"\<STR\>\""}], ",", 
+             "\n", "\t\t\t\t", 
+             RowBox[{
+              RowBox[{"(", 
+               RowBox[{"\"\<BLOB\>\"", "|", "\"\<BIN\>\""}], ")"}], "->", 
+              "\"\<BIN\>\""}]}], "}"}]}], "}"}], ",", "\n", "\t\t\t", 
+         RowBox[{"Replace", "[", 
+          RowBox[{
+           RowBox[{"Position", "[", 
+            RowBox[{
+             RowBox[{"typeChoices", "/.", "reps"}], ",", 
+             RowBox[{"type", "/.", "reps"}]}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"{", "}"}], "->", "\"\<NULL\>\""}], ",", 
+             RowBox[{
+              RowBox[{"{", "i_", "}"}], ":>", 
+              RowBox[{"typeChoices", "[", 
+               RowBox[{"[", "i", "]"}], "]"}]}]}], "}"}]}], "]"}]}], "\n", 
+        "\t\t\t", "]"}], ",", "\n", "\t\t", "type"}], "\n", "\t\t", "]"}]}], 
+    "\n", "\t", "]"}]}], ";"}]], "Code"],
+
+Cell["Provides type interpretation for loading tables", "MethodDocString",
+ CellChangeTimes->{{3.678801503580618*^9, 3.678801532513294*^9}}]
+}, Open  ]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["DataTable Class", "Subsection"],
+
+Cell["A table in an SQL database", "ClassDocString",
+ CellChangeTimes->{{3.678801678846711*^9, 3.6788017089970417`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: $Init", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"InitializationFunction", "[", 
+  RowBox[{"self_", ",", "\n", "\t", 
+   RowBox[{"database", ":", 
+    RowBox[{"_", "?", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"IsInstance", "[", 
+        RowBox[{"#", ",", "DatabaseClass"}], "]"}], "&"}], ")"}]}]}], ",", 
+   "\n", "\t", "name_String", ",", "\n", "\t", 
+   RowBox[{"columns", ":", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"_String", "->", 
+        RowBox[{"(", 
+         RowBox[{"_String", "|", "_List", "|", "_Alternatives"}], ")"}]}], 
+       ")"}], "|", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"_String", "->", 
+          RowBox[{"(", 
+           RowBox[{"_String", "|", "_List", "|", "_Alternatives"}], ")"}]}], 
+         ")"}], ".."}], "}"}], "|", "Automatic"}], ")"}], ":", "Automatic"}], 
+   ",", "\n", "\t", "ops___"}], "]"}]], "Code",
+ CellChangeTimes->{3.6788015912258043`*^9}],
+
+Cell[TextData[{
+ "If the table ",
+ Cell[BoxData[
+  FormBox["name", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " doesn\[CloseCurlyQuote]t exist in the database, this creates it, with the \
+columns specified by columns."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678801724025319*^9, 3.678801764516368*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Static method: FormatColumn", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"StaticMethod", "[", 
+  RowBox[{"FormatColumn", ",", "colSpec_"}], "]"}]], "Code",
+ CellChangeTimes->{3.6788017751991987`*^9}],
+
+Cell["\<\
+Formats a rule specifying a column type into an object that can be passed to \
+properly create the column\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678801776919709*^9, 3.6788018100511713`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Apply", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Apply", ",", "self_", ",", "function_", ",", "args___"}], 
+  "]"}]], "Code",
+ CellChangeTimes->{3.678801816245796*^9}],
+
+Cell["Applies the function specified to the table.", "MethodDocString",
+ CellChangeTimes->{{3.678801818905284*^9, 3.6788018345867987`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: TableCommandExecute", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{
+  "TableCommandExecute", ",", "self_", ",", "\n", "\t", "command_String", ",",
+    "\n", "\t", "subcommand_String", ",", "\n", "\t", 
+   RowBox[{"argstrings", ":", "_List", ":", 
+    RowBox[{"{", "\"\< \>\"", "}"}]}], ",", "\n", "\t", 
+   RowBox[{"\"\<SpanLines\>\"", "->", "True"}], ",", "\n", "\t", 
+   RowBox[{"\"\<Parentheses\>\"", "->", "False"}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.6788018405738993`*^9, 3.678801862674377*^9}}],
+
+Cell["\<\
+Executes an SQL command on the table. Formats a main command, a subcommand, \
+and args.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678801841893095*^9, 3.6788019330722647`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["\[OpenCurlyDoubleQuote]SpanLines\[CloseCurlyDoubleQuote]", \
+"Subsubsubsection",
+ CellChangeTimes->{{3.678801935464551*^9, 3.6788019382405043`*^9}}],
+
+Cell["Formats the args across multiple lines", "MethodDocString",
+ CellChangeTimes->{{3.678801939476606*^9, 3.678801955471876*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["\[OpenCurlyDoubleQuote]Parentheses\[CloseCurlyDoubleQuote]", \
+"Subsubsubsection",
+ CellChangeTimes->{{3.6788019573999853`*^9, 3.678801961232086*^9}}],
+
+Cell["Specifies whether to wrap each argument in parentheses", \
+"MethodDocString",
+ CellChangeTimes->{{3.6788019623647823`*^9, 3.678801974871439*^9}, {
+  3.678802449380041*^9, 3.678802457424667*^9}}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: TemplateExecute", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{
+  "TemplateExecute", ",", "self_", ",", "argTemplate_", ",", "args___", ",", 
+   "\n", "\t\t", 
+   RowBox[{"Replace", "->", "Automatic"}], ",", 
+   RowBox[{"StringReplace", "->", "None"}], ",", "\n", "\t\t", 
+   RowBox[{"Repeated", "->", "False"}], ",", 
+   RowBox[{"Verbose", "->", "False"}], ",", 
+   RowBox[{"StringJoin", "->", "True"}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.67880199274774*^9, 3.67880202285818*^9}}],
+
+Cell[TextData[{
+ "Generates a command from ",
+ Cell[BoxData[
+  FormBox["argTemplate", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " and ",
+ Cell[BoxData[
+  FormBox["args", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678802025079422*^9, 3.678802064410117*^9}, 
+   3.6788021657412024`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Replace", "Subsubsubsection",
+ CellChangeTimes->{{3.678802170874156*^9, 3.6788021715701847`*^9}}],
+
+Cell[TextData[{
+ "Specifies the replacements to perform on ",
+ Cell[BoxData[
+  FormBox["args", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ". \n\nBy default, ",
+ Cell[BoxData[
+  FormBox["Table", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " becomes the table name and ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"Column", "[", 
+    RowBox[{"{", "key_", "}"}], "]"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " becomes the column in the table gotten by calling ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"ColumnNames", "[", "key", "]"}], TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "MethodDocString",
+ CellChangeTimes->{{3.678802173213327*^9, 3.678802174442071*^9}, {
+  3.678802212064583*^9, 3.678802290201598*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["StringReplace", "Subsubsubsection",
+ CellChangeTimes->{{3.6788022942304688`*^9, 3.678802296429121*^9}}],
+
+Cell[TextData[{
+ "Specifies replacements to perform on the argTemplate\n\nBy default  ",
+ Cell[BoxData[
+  FormBox["\"\<<<Table>>\>\"", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " becomes the instance table name, but that\[CloseCurlyQuote]s it."
+}], "MethodDocString",
+ CellChangeTimes->{{3.6788022997330227`*^9, 3.678802312020904*^9}, {
+  3.678802364020609*^9, 3.678802428043992*^9}}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: RunString", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"RunString", ",", "self_", ",", 
+   RowBox[{"routineString", ":", 
+    RowBox[{"(", 
+     RowBox[{"_String", "|", 
+      RowBox[{"File", "[", "_String", "]"}]}], ")"}]}], ",", "args___"}], 
+  "]"}]], "Code",
+ CellChangeTimes->{3.678802496698876*^9}],
+
+Cell[TextData[{
+ "Uses ",
+ Cell[BoxData[
+  FormBox["TemplateExecute", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " to execute a string with ",
+ Cell[BoxData[
+  FormBox["args", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ". Can also pass a file as ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"File", "[", "filename_", "]"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678802498098768*^9, 3.67880254199524*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: RunRoutine", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"RunRoutine", ",", "self_", ",", "fileSpec_", ",", "args___"}], 
+  "]"}]], "Code",
+ CellChangeTimes->{3.678802548537972*^9}],
+
+Cell["\<\
+Runs a SQL routine from a file. By default searches in the SQL Routines \
+folder in the code directory of the package.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678802551381254*^9, 3.678802578078122*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: ColumnLengths", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"ColumnLengths", ",", "self_", ",", 
+   RowBox[{"colSpec_:", "All"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678802584312937*^9}],
+
+Cell[TextData[{
+ "Returns ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"name", "\[Rule]", "length"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " pairs for the columns in the table, as gotten by applying ",
+ Cell[BoxData[
+  FormBox["ColumnNames", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " to ",
+ Cell[BoxData[
+  FormBox["colSpec", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678802585514151*^9, 3.678802644772488*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: ColumnNames", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"ColumnNames", ",", "self_", ",", 
+   RowBox[{"cols", ":", 
+    RowBox[{"(", 
+     RowBox[{"_String", "|", "_Column", "|", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"_String", "|", "_Column"}], ")"}], ".."}], "}"}], "|", 
+      RowBox[{"{", 
+       RowBox[{"_Integer", ".."}], "}"}], "|", "All"}], ")"}], ":", "All"}]}],
+   "]"}]], "Code",
+ CellChangeTimes->{{3.6788026718523006`*^9, 3.678802672240995*^9}}],
+
+Cell[TextData[{
+ "Gets column names from the table. If the column isn\[CloseCurlyQuote]t in \
+the table, it doesn\[CloseCurlyQuote]t appear in the list of results, unless \
+wrapped in ",
+ Cell[BoxData[
+  FormBox["Column", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " when passed, which acts as an override."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678802676067466*^9, 3.678802723895699*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: ColumnApply", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"ColumnApply", ",", "self_", ",", "function_", ",", 
+   RowBox[{"colTOvals", ":", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"_String", "->", "_"}], ")"}], "|", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"_String", "->", "_"}], ")"}], ".."}], "}"}], "|", 
+      RowBox[{"(", 
+       RowBox[{"_Integer", "->", "_"}], ")"}], "|", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"_Integer", "->", "_"}], ")"}], ".."}], "}"}], "|", 
+      RowBox[{"{", 
+       RowBox[{"{", "__", "}"}], "}"}]}], ")"}]}], ",", "args___"}], 
+  "]"}]], "Code",
+ CellChangeTimes->{{3.6788027325547132`*^9, 3.678802734207468*^9}}],
+
+Cell["Applies a function specifically to a column.", "MethodDocString",
+ CellChangeTimes->{{3.6788027357236967`*^9, 3.678802743983094*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: FormatInsertData", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"FormatInsertData", ",", "self_", ",", 
+   RowBox[{"colTOvals", ":", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"_String", "->", "_"}], ")"}], "|", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"_String", "->", "_"}], ")"}], ".."}], "}"}], "|", 
+      RowBox[{"(", 
+       RowBox[{"_Integer", "->", "_"}], ")"}], "|", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"_Integer", "->", "_"}], ")"}], ".."}], "}"}], "|", 
+      RowBox[{"{", 
+       RowBox[{"{", "__", "}"}], "}"}]}], ")"}]}]}], "]"}]], "Code",
+ CellChangeTimes->{3.6788027502342*^9}],
+
+Cell["\<\
+Formats columns of data to be inserted into the table appropriately\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678802753313493*^9, 3.678802770414646*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: ColumnInsert", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"ColumnInsert", ",", "self_", ",", 
+   RowBox[{"colTOvals", ":", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"_String", "->", "_"}], ")"}], "|", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"_String", "->", "_"}], ")"}], ".."}], "}"}], "|", 
+      RowBox[{"(", 
+       RowBox[{"_Integer", "->", "_"}], ")"}], "|", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"_Integer", "->", "_"}], ")"}], ".."}], "}"}], "|", 
+      RowBox[{"{", 
+       RowBox[{"{", "__", "}"}], "}"}]}], ")"}]}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.678802776601367*^9, 3.678802777110846*^9}, 
+   3.67880283318814*^9}],
+
+Cell["Inserts data as columns.", "MethodDocString",
+ CellChangeTimes->{{3.678802814539192*^9, 3.678802820027919*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: RowInsert", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"RowInsert", ",", "self_", ",", 
+   RowBox[{"colids", ":", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"(", "_String", ")"}], ".."}], "}"}], "|", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"(", "_Integer", ")"}], ".."}], "}"}], "|", "All"}], ")"}]}], 
+   ",", "values_List"}], "]"}]], "Code",
+ CellChangeTimes->{3.6788028383080683`*^9}],
+
+Cell["Inserts data as rows.", "MethodDocString",
+ CellChangeTimes->{{3.678802839445668*^9, 3.67880284331345*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Insert", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Insert", ",", "self_", ",", "args__"}], "]"}]], "Code",
+ CellChangeTimes->{3.6788028492442636`*^9}],
+
+Cell[TextData[{
+ "Attempts to guess how data should be inserted, based on ",
+ Cell[BoxData[
+  FormBox["args", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " and does it that way."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678802850092155*^9, 3.678802868937006*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound update: Update", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Update", ",", "self_", ",", "cols_", ",", 
+   RowBox[{"data", ":", 
+    RowBox[{"Except", "[", "_Rule", "]"}], ":", "None"}], ",", 
+   RowBox[{"Row", "->", 
+    RowBox[{"Interval", "[", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "Automatic"}], "}"}], "]"}]}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678802876660226*^9}],
+
+Cell["\<\
+Updates elements in a column or span of columns. May not be supported by all \
+drivers.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.67880287843009*^9, 3.678802905669381*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Select", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Select", ",", "self_", ",", 
+   RowBox[{"cols", ":", 
+    RowBox[{"(", 
+     RowBox[{"_String", "|", "_Column", "|", "_List", "|", "All"}], ")"}], 
+    ":", "All"}], ",", 
+   RowBox[{"cond_:", "None"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.6788029096399307`*^9}],
+
+Cell["Gets data from the specified columns.", "MethodDocString",
+ CellChangeTimes->{{3.678802910607386*^9, 3.6788029211171093`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: AddColumns", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"AddColumns", ",", "self_", ",", 
+   RowBox[{"cols", ":", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"_String", "->", "_"}], ")"}], "|", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"_String", "->", "_"}], ")"}], ".."}], "}"}]}]}], ",", 
+   RowBox[{"mode_:", "\"\<Batch\>\""}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678802927832238*^9}],
+
+Cell["\<\
+Adds columns to the table. May not be supported by all drivers.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678802929383052*^9, 3.678802942612611*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: DropColumns", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"DropColumns", ",", "self_", ",", 
+   RowBox[{"cols", ":", 
+    RowBox[{
+     RowBox[{"(", "_String", ")"}], "|", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"(", "_String", ")"}], ".."}], "}"}]}]}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678802950414065*^9}],
+
+Cell["\<\
+Drops columns from the table. May not be supported by all drivers.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678802929383052*^9, 3.678802956964073*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Drop", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Drop", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{3.678802961478923*^9}],
+
+Cell["Deletes the table from the database", "MethodDocString",
+ CellChangeTimes->{{3.678802962257546*^9, 3.678802970340806*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: View", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"View", ",", "self_", ",", 
+   RowBox[{"viewFunction_:", "Automatic"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678802974646922*^9}],
+
+Cell["\<\
+Provides a way to see the data stored. Uses tableform in non-elided form by \
+default\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678802977406546*^9, 3.67880299573127*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: $ToRepresentation", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"RepresentationFunction", "[", 
+  RowBox[{"self_", ",", 
+   RowBox[{"viewFunction_:", "Automatic"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.6788030020701103`*^9}],
+
+Cell["Mostly routes to view", "MethodDocString",
+ CellChangeTimes->{{3.678803016933757*^9, 3.6788030310080433`*^9}}]
+}, Open  ]]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Extensions", "Section",
+ CellChangeTimes->{{3.678803052352607*^9, 3.6788030558234587`*^9}, {
+  3.678803332402115*^9, 3.67880333493005*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["MatrixTable Class", "Subsection"],
+
+Cell[TextData[{
+ "A subclass of ",
+ Cell[BoxData[
+  FormBox["DataTableClass", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " that explicitly stores matrices, although it can store various properties \
+alongside the matrix."
+}], "ClassDocString",
+ CellChangeTimes->{{3.678803064740368*^9, 3.678803101045971*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: $Init", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"InitializationFunction", "[", 
+  RowBox[{"self_", ",", 
+   RowBox[{"database", ":", 
+    RowBox[{"_", "?", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"IsInstance", "[", 
+         RowBox[{"#", ",", "DatabaseClass"}], "]"}], ")"}], "&"}], ")"}]}]}], 
+   ",", "\n", "\t", "name_String", ",", "\n", "\t", 
+   RowBox[{"extraColumns", ":", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"(", 
+         RowBox[{"_String", "->", "_"}], ")"}], ".."}], "}"}], "|", 
+      "Automatic"}], ")"}], ":", "Automatic"}], ",", "\n", "\t", "ops___"}], 
+  "]"}]], "Code",
+ CellChangeTimes->{{3.678803113511449*^9, 3.6788031170301733`*^9}}],
+
+Cell[TextData[{
+ "Forces the creation of the columns ",
+ Cell[BoxData[
+  FormBox["\"\<Row\>\"", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", ",
+ Cell[BoxData[
+  FormBox["\"\<Column\>\"", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", and ",
+ Cell[BoxData[
+  FormBox["\"\<Value\>\"", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", which are an integer, integer, and real respectively. Other columns will \
+be placed before these in the table."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678803118000231*^9, 3.6788031997881403`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Save", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Save", ",", "self_", ",", 
+   RowBox[{"matrix", ":", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"__", "?", "NumberQ"}], "}"}], ".."}], "}"}]}], ",", 
+   RowBox[{"extras", ":", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"_String", "|", "_Column"}], ")"}], "->", "_List"}], ")"}], 
+     "..."}]}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678803205407329*^9}],
+
+Cell[TextData[{
+ "Saves a matrix, plus whatever other column data you\[CloseCurlyQuote]d like \
+to store. ",
+ Cell[BoxData[
+  FormBox["Null", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "s are padded onto the extra data if it\[CloseCurlyQuote]s shorter than the \
+matrix."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678803206277646*^9, 3.6788032418435287`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method : Load", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Load", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{3.678803262021984*^9}],
+
+Cell[TextData[{
+ "Stitches the matrix back together from the ",
+ Cell[BoxData[
+  FormBox["\"\<Row\>\"", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " and ",
+ Cell[BoxData[
+  FormBox["\"\<Value\>\"", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " columns"
+}], "MethodDocString",
+ CellChangeTimes->{{3.678803262943008*^9, 3.678803293721336*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: View", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"View", ",", "self_", ",", 
+   RowBox[{"viewFunction_:", "Automatic"}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.6788033004604063`*^9, 3.67880330865911*^9}}],
+
+Cell["Array plots the matrix in non-elided form, by default", \
+"MethodDocString",
+ CellChangeTimes->{{3.678803309786512*^9, 3.67880332013048*^9}}]
+}, Open  ]]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell["Examples", "Section",
+ CellChangeTimes->{{3.67880332931531*^9, 3.678803331010034*^9}}]
+},
+WindowSize->{808, 755},
+WindowMargins->{{85, Automatic}, {Automatic, 0}},
+FrontEndVersion->"10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, \
+2015)",
+StyleDefinitions->FrontEnd`FileName[{
+   ParentDirectory[
+    ParentDirectory[]], "Stylesheets"}, "Documentation Stylesheet.nb", 
+  CharacterEncoding -> "UTF-8"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 91, 1, 64, "Section"],
+Cell[CellGroupData[{
+Cell[696, 27, 40, 0, 44, "Subsection"],
+Cell[739, 29, 241, 5, 30, "ClassDocString"],
+Cell[CellGroupData[{
+Cell[1005, 38, 45, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[1075, 42, 112, 2, 49, "Code"],
+Cell[1190, 46, 180, 4, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[1419, 56, 56, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[1500, 60, 121, 2, 49, "Code"],
+Cell[1624, 64, 132, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[1805, 71, 56, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[1886, 75, 121, 2, 49, "Code"],
+Cell[2010, 79, 123, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[2182, 86, 54, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[2261, 90, 179, 4, 50, "Code"],
+Cell[2443, 96, 112, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[2616, 104, 36, 0, 36, "Subsection"],
+Cell[2655, 106, 226, 4, 49, "ClassDocString"],
+Cell[CellGroupData[{
+Cell[2906, 114, 44, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[2975, 118, 673, 18, 83, "Code"],
+Cell[3651, 138, 272, 5, 49, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[3972, 149, 47, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[4044, 153, 139, 3, 50, "Code"],
+Cell[4186, 158, 149, 2, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[4384, 166, 43, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[4452, 170, 555, 15, 66, "Code"],
+Cell[5010, 187, 231, 5, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[5290, 198, 44, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[5359, 202, 136, 3, 50, "Code"],
+Cell[5498, 207, 114, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[5661, 214, 44, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[5730, 218, 175, 4, 50, "Code"],
+Cell[5908, 224, 276, 7, 31, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[6233, 237, 46, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[6304, 241, 201, 4, 50, "Code"],
+Cell[6508, 247, 233, 4, 49, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[6790, 257, 50, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[6865, 261, 115, 2, 49, "Code"],
+Cell[6983, 265, 268, 5, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[7300, 276, 48, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[7373, 280, 739, 18, 144, "Code"],
+Cell[8115, 300, 115, 1, 30, "MethodDocString"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8267, 306, 101, 1, 28, "Subsubsubsection"],
+Cell[8371, 309, 464, 11, 51, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[8872, 325, 149, 2, 22, "Subsubsubsection"],
+Cell[9024, 329, 177, 3, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[9238, 337, 152, 2, 22, "Subsubsubsection"],
+Cell[9393, 341, 135, 1, 30, "MethodDocString"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[9577, 348, 49, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[9651, 352, 451, 12, 51, "Code"],
+Cell[10105, 366, 250, 4, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[10404, 376, 49, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[10478, 380, 387, 11, 51, "Code"],
+Cell[10868, 393, 231, 6, 31, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[11148, 405, 43, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[11216, 409, 234, 5, 50, "Code"],
+Cell[11453, 416, 134, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[11636, 423, 56, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[11717, 427, 2649, 64, 287, "Code"],
+Cell[14369, 493, 136, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[14554, 500, 52, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[14631, 504, 2496, 66, 256, "Code"],
+Cell[17130, 572, 140, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[17331, 580, 37, 0, 36, "Subsection"],
+Cell[17371, 582, 120, 1, 30, "ClassDocString"],
+Cell[CellGroupData[{
+Cell[17516, 587, 44, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[17585, 591, 933, 26, 114, "Code"],
+Cell[18521, 619, 318, 8, 31, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[18888, 633, 52, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[18965, 637, 149, 3, 50, "Code"],
+Cell[19117, 642, 208, 4, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[19374, 652, 44, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[19443, 656, 173, 4, 50, "Code"],
+Cell[19619, 662, 139, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[19807, 669, 58, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[19890, 673, 493, 9, 130, "Code"],
+Cell[20386, 684, 190, 4, 30, "MethodDocString"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[20613, 693, 154, 2, 28, "Subsubsubsection"],
+Cell[20770, 697, 131, 1, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[20938, 703, 156, 2, 22, "Subsubsubsection"],
+Cell[21097, 707, 200, 3, 30, "MethodDocString"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[21346, 716, 54, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[21425, 720, 477, 10, 82, "Code"],
+Cell[21905, 732, 356, 12, 32, "MethodDocString"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[22298, 749, 103, 1, 28, "Subsubsubsection"],
+Cell[22404, 752, 752, 22, 93, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[23193, 779, 109, 1, 22, "Subsubsubsection"],
+Cell[23305, 782, 396, 8, 69, "MethodDocString"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[23750, 796, 48, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[23823, 800, 303, 8, 51, "Code"],
+Cell[24129, 810, 486, 16, 32, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[24664, 832, 49, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[24738, 836, 178, 4, 50, "Code"],
+Cell[24919, 842, 219, 4, 49, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[25187, 852, 52, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[25264, 856, 183, 4, 50, "Code"],
+Cell[25450, 862, 498, 16, 32, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[25997, 884, 50, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[26072, 888, 495, 13, 51, "Code"],
+Cell[26570, 903, 407, 9, 50, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[27026, 918, 50, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[27101, 922, 744, 21, 51, "Code"],
+Cell[27848, 945, 139, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[28036, 952, 55, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[28116, 956, 684, 20, 51, "Code"],
+Cell[28803, 978, 168, 3, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[29020, 987, 51, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[29096, 991, 731, 21, 51, "Code"],
+Cell[29830, 1014, 117, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[29996, 1021, 48, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[30069, 1025, 441, 13, 51, "Code"],
+Cell[30513, 1040, 113, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[30675, 1047, 45, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[30745, 1051, 154, 3, 50, "Code"],
+Cell[30902, 1056, 277, 7, 32, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[31228, 1069, 45, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[31298, 1073, 375, 9, 50, "Code"],
+Cell[31676, 1084, 187, 4, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[31912, 1094, 45, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[31982, 1098, 319, 8, 51, "Code"],
+Cell[32304, 1108, 132, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[32485, 1115, 49, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[32559, 1119, 422, 12, 51, "Code"],
+Cell[32984, 1133, 164, 3, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[33197, 1142, 50, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[33272, 1146, 319, 9, 51, "Code"],
+Cell[33594, 1157, 167, 3, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[33810, 1166, 43, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[33878, 1170, 135, 3, 50, "Code"],
+Cell[34016, 1175, 128, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[34193, 1182, 43, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[34261, 1186, 185, 4, 50, "Code"],
+Cell[34449, 1192, 185, 4, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[34683, 1202, 56, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[34764, 1206, 185, 4, 50, "Code"],
+Cell[34952, 1212, 116, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[35141, 1221, 145, 2, 50, "Section"],
+Cell[CellGroupData[{
+Cell[35311, 1227, 39, 0, 44, "Subsection"],
+Cell[35353, 1229, 320, 8, 50, "ClassDocString"],
+Cell[CellGroupData[{
+Cell[35698, 1241, 44, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[35767, 1245, 710, 20, 98, "Code"],
+Cell[36480, 1267, 565, 16, 50, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[37094, 1289, 43, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[37162, 1293, 477, 15, 51, "Code"],
+Cell[37642, 1310, 373, 9, 50, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[38064, 1325, 44, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[38133, 1329, 135, 3, 50, "Code"],
+Cell[38271, 1334, 362, 11, 31, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[38682, 1351, 43, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[38750, 1355, 210, 4, 50, "Code"],
+Cell[38963, 1361, 147, 2, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+Cell[39161, 1369, 92, 1, 50, "Section"]
+}
+]
+*)
+
+(* End of internal cache information *)

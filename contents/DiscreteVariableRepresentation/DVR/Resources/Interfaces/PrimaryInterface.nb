@@ -1,0 +1,2288 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     93154,       2279]
+NotebookOptionsPosition[     87379,       2105]
+NotebookOutlinePosition[     89505,       2163]
+CellTagsIndexPosition[     89462,       2160]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Discrete Variable Representation", "Chapter",
+ CellChangeTimes->{{3.677606121443987*^9, 3.6776061315466146`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["About", "Section",
+ CellChangeTimes->{{3.675595331901579*^9, 3.6755953326925488`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["What is a DVR?", "Subsection",
+ CellChangeTimes->{{3.675595336876307*^9, 3.675595339052903*^9}, 
+   3.67559544943932*^9}],
+
+Cell[TextData[{
+ "Discrete variable representation, or DVR, is a method for performing \
+quantum mechanical calculations. It hinges on approximating the Hamiltonian \
+operator, written ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    StyleBox["\[ScriptCapitalH]",
+     FontWeight->"Bold",
+     FontSlant->"Plain"], 
+    StyleBox["=",
+     FontWeight->"Plain",
+     FontSlant->"Plain"], 
+    RowBox[{
+     StyleBox["\[ScriptCapitalT]",
+      FontWeight->"Bold",
+      FontSlant->"Plain"], 
+     StyleBox["+",
+      FontWeight->"Plain",
+      FontSlant->"Plain"], 
+     StyleBox["\[ScriptCapitalV]",
+      FontWeight->"Bold"]}]}], TraditionalForm]]],
+ ", where ",
+ StyleBox["\[ScriptCapitalT]",
+  FontWeight->"Bold"],
+ " is the kinetic energy operator and ",
+ StyleBox["\[ScriptCapitalV] ",
+  FontWeight->"Bold"],
+ "is the potential energy operator. \n\nOne approximates by constructing a \
+grid of quadrature points and assuming two things:\n\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\t", 
+    TagBox[GridBox[{
+       {
+        RowBox[{"1", ")"}], 
+        RowBox[{
+        "Operators", " ", "which", " ", "are", " ", "pure", " ", "functions", 
+         " ", "of", " ", "coordinates", " ", "have", " ", "no", " ", "value", 
+         " ", "anywhere", " ", "except", " ", "at", " ", 
+         StyleBox["a",
+          FontSlant->"Plain"], " ", "grid", " ", "point"}]},
+       {
+        RowBox[{"2", ")"}], 
+        RowBox[{
+        "The", " ", "potential", " ", "energy", " ", "operator", " ", "is", 
+         " ", "such", " ", "an", " ", "operator"}]}
+      },
+      AutoDelete->False,
+      GridBoxAlignment->{"Columns" -> {{Left}}},
+      GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+     
+     "Grid"]}], TraditionalForm]]],
+ "\n\nThen in the matrix formulation of quantum mechanics, where ",
+ StyleBox["\[ScriptCapitalT]",
+  FontWeight->"Bold"],
+ " and ",
+ StyleBox["\[ScriptCapitalV]",
+  FontWeight->"Bold"],
+ " are matrices, ",
+ StyleBox["\[ScriptCapitalV]",
+  FontWeight->"Bold"],
+ " is diagonal. What this means, computation-wise, is that all one needs to \
+do is calculate the potential at each gridpoint classically and then arrange \
+these values along the diagonal of an appropriately constructed matrix.\n\n\
+All that is left, having dealt with the potential energy, is to find a matrix \
+representation for the kinetic energy. Furthermore, to achieve efficient \
+computations, this should be done without any integrations whatsoever.\n\n\
+Having done this, all one then needs to do is diagonalize the Hamiltonian \
+matrix, which will be the sum of these two matrices, and the eigenvalues will \
+be the energies and the eigenvectors the wavefunctions. "
+}], "Text",
+ CellChangeTimes->{{3.67760044511016*^9, 3.677600524218799*^9}, {
+  3.677600685567025*^9, 3.677600697062381*^9}, {3.6776007460447063`*^9, 
+  3.677601136785686*^9}, {3.677601172773548*^9, 3.677601318282887*^9}, {
+  3.677601352472826*^9, 3.677601437938833*^9}}],
+
+Cell["\<\
+Different (grid, kinetic energy, potential energy) tuples can then be \
+considered to be \[OpenCurlyDoubleQuote]a\[CloseCurlyDoubleQuote] DVR, which \
+is to say, they\[CloseCurlyQuote]re an explicit implementation of this \
+calculation framework.\
+\>", "Text",
+ CellChangeTimes->{{3.677601485958618*^9, 3.6776016313759823`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["How is this implemented?", "Subsection",
+ CellChangeTimes->{{3.6776014607842207`*^9, 3.677601473606904*^9}}],
+
+Cell["\<\
+Given a specific DVR type, all one needs to do is calculate the grid, kinetic \
+energy, and potential energy and combine these. The framework designed to \
+generalize this, is structured as follows:\
+\>", "Text",
+ CellChangeTimes->{{3.6776016503018436`*^9, 3.677601734646028*^9}, {
+  3.677603250041581*^9, 3.6776032645373917`*^9}}],
+
+Cell["Discrete Variable Representation", "TopStructure",
+ CellChangeTimes->{{3.677602011945088*^9, 3.677602020351063*^9}, {
+  3.6776032317464457`*^9, 3.677603239097752*^9}}],
+
+Cell["Config File", "SubStructure",
+ CellChangeTimes->{{3.6776020223242903`*^9, 3.677602035993164*^9}}],
+
+Cell["Grid generating function", "SubSubStructure",
+ CellChangeTimes->{{3.677603136230995*^9, 3.677603165348319*^9}, {
+  3.677603225379389*^9, 3.6776032286742268`*^9}, {3.677603309141445*^9, 
+  3.677603318613841*^9}}],
+
+Cell["Kinetic energy generating function", "SubSubStructure",
+ CellChangeTimes->{{3.677603136230995*^9, 3.677603165348319*^9}, {
+  3.677603225379389*^9, 3.6776032286742268`*^9}, {3.677603309141445*^9, 
+  3.6776033129173403`*^9}, {3.677603375725243*^9, 3.677603385706403*^9}}],
+
+Cell["Potential energy generating function", "SubSubStructure",
+ CellChangeTimes->{{3.677603136230995*^9, 3.677603165348319*^9}, {
+  3.677603225379389*^9, 3.6776032286742268`*^9}, {3.677603309141445*^9, 
+  3.6776033129173403`*^9}, {3.677603375725243*^9, 3.677603391714034*^9}}],
+
+Cell["Wavefunctions generating function", "SubSubStructure",
+ CellChangeTimes->{{3.677603136230995*^9, 3.677603165348319*^9}, {
+  3.677603225379389*^9, 3.6776032286742268`*^9}, {3.677603309141445*^9, 
+  3.6776033129173403`*^9}, {3.677603375725243*^9, 3.677603400122219*^9}}],
+
+Cell["Plotting function", "SubSubStructure",
+ CellChangeTimes->{{3.677603136230995*^9, 3.677603165348319*^9}, {
+  3.677603225379389*^9, 3.6776032286742268`*^9}, {3.677603309141445*^9, 
+  3.6776033129173403`*^9}, {3.677603375725243*^9, 3.6776034033404016`*^9}}],
+
+Cell["DVR Class @ Points, Range, Config File \[Rule] Instance", "SubStructure",
+ CellChangeTimes->{{3.677602300828677*^9, 3.6776023040736513`*^9}, {
+  3.677602445352379*^9, 3.677602445363576*^9}, {3.677602732648972*^9, 
+  3.677602732659672*^9}, {3.67760334226864*^9, 3.677603368045535*^9}}],
+
+Cell["\<\
+Creates an instance of the DVR using the attributes defined in the config \
+file plus other options\
+\>", "SubSubDescription",
+ CellChangeTimes->{{3.67760304366759*^9, 3.677603130192494*^9}, {
+  3.677603325444889*^9, 3.677603337468896*^9}, {3.677603844182172*^9, 
+  3.6776038464579163`*^9}}],
+
+Cell["Instance", "SubStructure",
+ CellChangeTimes->{{3.677602300828677*^9, 3.6776023040736513`*^9}, {
+   3.677602445352379*^9, 3.677602445363576*^9}, 3.677602732648972*^9, {
+   3.677603276065096*^9, 3.6776032770976133`*^9}}],
+
+Cell["Points", "SubSubStructure",
+ CellChangeTimes->{{3.67760328403859*^9, 3.677603321473727*^9}}],
+
+Cell["Range", "SubSubStructure",
+ CellChangeTimes->{{3.67760328403859*^9, 3.6776033234651413`*^9}}],
+
+Cell["Loading and saving functions", "SubSubStructure",
+ CellChangeTimes->{{3.67760328403859*^9, 3.677603323452909*^9}, {
+  3.677603854609003*^9, 3.677603861587469*^9}, {3.677603905551856*^9, 
+  3.677603915057246*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Run functions", "SubSubStructure",
+ CellChangeTimes->{{3.67760328403859*^9, 3.677603323452909*^9}, {
+  3.677603854609003*^9, 3.677603861587469*^9}, {3.677603905551856*^9, 
+  3.6776039173516703`*^9}}],
+
+Cell[TextData[{
+ "What should be noted is the DVR instance takes a config file as essentially \
+a template to implement to full details of the calculation. The framework at \
+hand also has options and parameters for saving results and calculating them \
+in the background, but the basic idea is simply that:\n\t\n\t",
+ StyleBox["Given a config file as a template, the framework deals with all \
+the calculation details",
+  FontSlant->"Italic"]
+}], "Text",
+ CellChangeTimes->{{3.677603933385612*^9, 3.677604118217773*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Using this notebook", "Subsection",
+ CellChangeTimes->{{3.678635384999291*^9, 3.678635392357839*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["New DVRs", "Subsubsection",
+ CellChangeTimes->{{3.678635399598414*^9, 3.678635406392716*^9}}],
+
+Cell[TextData[{
+ "The ",
+ Cell[BoxData[
+  FormBox[
+   TagBox[Cell["Quick Run", "Subsection"],
+    DisplayForm], TraditionalForm]]],
+ " section provides quick access to the standard DVR interface, but the \
+results from this can\[CloseCurlyQuote]t easily saved and it doesn\
+\[CloseCurlyQuote]t provide access to the DVR instance generated.\n\nThe ",
+ Cell[BoxData[
+  FormBox[
+   TagBox[Cell["Full Run", "Subsection"],
+    DisplayForm], TraditionalForm]]],
+ " provides no interface, except the button bar that is docked at the top of \
+this notebook. Explanation of what each button does can be found in the",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{" ", 
+    TagBox[Cell["Help", "Subsubsection"],
+     DisplayForm]}], TraditionalForm]]],
+ "section."
+}], "Text",
+ CellChangeTimes->{{3.678635955104953*^9, 3.678636129242124*^9}, {
+  3.678636163524438*^9, 3.6786362148831463`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Old Results", "Subsubsection",
+ CellChangeTimes->{{3.6786354091359863`*^9, 3.678635410928677*^9}}],
+
+Cell[TextData[{
+ "Old DVR notebooks and interface instances can be loaded in the ",
+ Cell[BoxData[
+  FormBox[
+   TagBox[Cell["Saved DVRs", "Subsection"],
+    DisplayForm], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "portion of the notebook.\nCalculated kinetic matrices and wavefunctions can \
+be loaded in the ",
+ Cell[BoxData[
+  FormBox[
+   TagBox[Cell["Saved Data", "Subsection"],
+    DisplayForm], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " segment."
+}], "Text",
+ CellChangeTimes->{{3.678635780879158*^9, 3.6786359275929203`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Documentation", "Subsubsection",
+ CellChangeTimes->{{3.6786354123043127`*^9, 3.678635414512294*^9}}],
+
+Cell["\<\
+Five packages are used in this min-app. The documentation for each of these, \
+alon with a brief description of what each does, can be found at the bottom \
+of this notebook.\
+\>", "Text",
+ CellChangeTimes->{{3.678635419070682*^9, 3.678635473817172*^9}}]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["New DVR", "Section",
+ CellChangeTimes->{{3.677852829454528*^9, 3.677852838820977*^9}, 
+   3.677856308357531*^9}],
+
+Cell[CellGroupData[{
+
+Cell["Quick Run", "Subsection",
+ CellChangeTimes->{{3.677856376835041*^9, 3.677856378370988*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Usage", "Subsubsection",
+ CellChangeTimes->{{3.677856399193028*^9, 3.677856405467773*^9}}],
+
+Cell[TextData[{
+ "This is a quick use interface. To perform more full-fledged calculations \
+start a new DVR session with ",
+ Cell[BoxData[
+  FormBox[
+   ButtonBox["\<\"New DVR Session\"\>",
+    Appearance->Automatic,
+    ButtonFunction:>{},
+    Evaluator->None,
+    Method->"Preemptive"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " in the docked cells at the top."
+}], "Text",
+ CellChangeTimes->{{3.67785640632561*^9, 3.67785647909518*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Interface Code", "Subsubsection",
+ CellChangeTimes->{{3.6778563843146553`*^9, 3.677856386466569*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Column", "@", 
+  RowBox[{"{", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Style", "[", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"Dynamic", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"!", 
+            RowBox[{
+            "ValueQ", "@", 
+             "DiscreteVariableRepresentation`DVRInterfaceClass"}]}], ",", 
+           RowBox[{"Get", "@", 
+            RowBox[{"FileNameJoin", "@", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"Nest", "[", 
+                RowBox[{"ParentDirectory", ",", 
+                 RowBox[{"NotebookDirectory", "[", "]"}], ",", "3"}], "]"}], 
+               ",", "\"\<init.m\>\""}], "}"}]}]}]}], "]"}], ";", 
+         RowBox[{"Global`interfaceDynamicRunning", "=", 
+          RowBox[{
+          "DiscreteVariableRepresentation`DVRInterfaceClass", "[", "]"}]}], 
+         ";", "\[IndentingNewLine]", "Global`interfaceDynamicRunning"}], ",", 
+        
+        RowBox[{"TrackedSymbols", "\[RuleDelayed]", 
+         RowBox[{"{", "Global`interfaceDynamicRunning", "}"}]}]}], 
+       "\[IndentingNewLine]", "]"}], ",", 
+      RowBox[{"DynamicEvaluationTimeout", "\[Rule]", "\[Infinity]"}]}], "]"}],
+     ",", "\[IndentingNewLine]", 
+    RowBox[{"Button", "[", 
+     RowBox[{"\"\<Reset\>\"", ",", 
+      RowBox[{"Global`interfaceDynamicRunning", "=", 
+       RowBox[{"RandomReal", "[", "]"}]}], ",", "\[IndentingNewLine]", 
+      RowBox[{"Method", "\[Rule]", "\"\<Queued\>\""}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Evaluator", "->", "\"\<Local\>\""}]}], "]"}]}], 
+   "}"}]}]], "Input",
+ CellChangeTimes->{{3.677856491003882*^9, 3.677856682819289*^9}, {
+   3.677856723089457*^9, 3.677856725154499*^9}, {3.677857511104566*^9, 
+   3.6778575368235598`*^9}, {3.6778576107348948`*^9, 3.677857613404045*^9}, {
+   3.677857664003613*^9, 3.677857706345834*^9}, {3.677857751616843*^9, 
+   3.67785781050758*^9}, {3.677861352902485*^9, 3.677861368102003*^9}, {
+   3.677861638524083*^9, 3.6778616399554768`*^9}, 3.6785439109265614`*^9, 
+   3.678543948971713*^9}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Interface", "Subsubsection",
+ CellChangeTimes->{{3.6778563898357887`*^9, 3.6778563915142803`*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     StyleBox[
+      DynamicBox[ToBoxes[If[
+          Not[
+           ValueQ[DiscreteVariableRepresentation`DVRInterfaceClass]], 
+          Get[
+           FileNameJoin[{
+             Nest[ParentDirectory, 
+              NotebookDirectory[], 3], 
+             "init.m"}]]]; $CellContext`interfaceDynamicRunning = 
+         DiscreteVariableRepresentation`DVRInterfaceClass[]; \
+$CellContext`interfaceDynamicRunning, StandardForm],
+       ImageSizeCache->{641., {278., 284.}},
+       TrackedSymbols:>{$CellContext`interfaceDynamicRunning}],
+      StripOnInput->False,
+      DynamicEvaluationTimeout->DirectedInfinity[1]]},
+    {
+     ButtonBox["\<\"Reset\"\>",
+      Appearance->Automatic,
+      ButtonFunction:>($CellContext`interfaceDynamicRunning = RandomReal[]),
+      Evaluator->"Local",
+      Method->"Queued"]}
+   },
+   DefaultBaseStyle->"Column",
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Column"]], "Output",
+ CellChangeTimes->{{3.678543940060505*^9, 3.678543981087183*^9}}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Full Run", "Subsection",
+ CellChangeTimes->{{3.677857481591012*^9, 3.677857486469722*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Help", "Subsubsection",
+ CellChangeTimes->{{3.6780279041121407`*^9, 3.678027905369327*^9}, {
+  3.678028342309002*^9, 3.678028342801577*^9}}],
+
+Cell["\<\
+The docked buttons provide a nice way to use this app in a more full-fledged \
+way\
+\>", "Text",
+ CellChangeTimes->{{3.678027781947895*^9, 3.6780278269821568`*^9}, {
+  3.6780279066254597`*^9, 3.678027907057146*^9}, {3.678028115214304*^9, 
+  3.678028117270297*^9}}],
+
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox[
+   ButtonBox["\<\"Load DVR Package\"\>",
+    Appearance->Automatic,
+    ButtonFunction:>{},
+    Evaluator->None,
+    Method->"Preemptive"], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " loads the underlying packages and imports them into the current scope"
+}], "Text",
+ CellChangeTimes->{{3.678028133304451*^9, 3.678028171965192*^9}}],
+
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox[
+   ButtonBox[
+    RowBox[{"New", " ", "DVR", " ", "Session"}],
+    Appearance->Automatic,
+    ButtonFunction:>{},
+    Evaluator->None,
+    Method->"Preemptive"], TraditionalForm]]],
+ " opens a notebook with options for running a DVR which autosaves and loads \
+the DVR instance"
+}], "Text",
+ CellChangeTimes->{{3.678028133304451*^9, 3.678028231272114*^9}, {
+  3.67848305962644*^9, 3.6784830843015738`*^9}}],
+
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox[
+   ButtonBox[
+    RowBox[{"New", " ", "DVR", " ", "Session"}],
+    Appearance->Automatic,
+    ButtonFunction:>{},
+    Evaluator->None,
+    Method->"Preemptive"], TraditionalForm]]],
+ " opens a notebook with step by step DVR running, but no dynamic content, to \
+circumvent the Windows dynamic bug in Mathematica 10.0-10.3."
+}], "Text",
+ CellChangeTimes->{{3.678028133304451*^9, 3.678028231272114*^9}, {
+  3.67848305962644*^9, 3.6784830843015738`*^9}, {3.67899437787982*^9, 
+  3.6789944267090807`*^9}, {3.67899456000299*^9, 3.678994564699011*^9}}],
+
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox[
+   ButtonBox[
+    RowBox[{"New", " ", "DVR", " ", "Type"}],
+    Appearance->Automatic,
+    ButtonFunction:>{},
+    Evaluator->None,
+    Method->"Preemptive"], TraditionalForm]]],
+ " opens a template notebook for defining new DVR types"
+}], "Text",
+ CellChangeTimes->{{3.678028133304451*^9, 3.6780282539193497`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Button Bar Code", "Subsubsection",
+ CellChangeTimes->{{3.678027711733303*^9, 3.678027715996317*^9}, {
+  3.67863613847301*^9, 3.678636139161594*^9}}],
+
+Cell[BoxData[
+ RowBox[{"runButtonBar", "=", 
+  RowBox[{"Row", "@", 
+   RowBox[{"{", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"Button", "[", 
+      RowBox[{"\"\<Load DVR Package\>\"", ",", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Get", "@", 
+         RowBox[{"FileNameJoin", "@", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Nest", "[", 
+             RowBox[{"ParentDirectory", ",", 
+              RowBox[{"NotebookDirectory", "[", "]"}], ",", "3"}], "]"}], 
+            ",", "\"\<init.m\>\""}], "}"}]}]}], "\[IndentingNewLine]", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+             "Names", "@", "\"\<DiscreteVariableRepresentation`*\>\""}], "//",
+              "Length"}], ")"}], ">", "0"}], ",", 
+          RowBox[{"FEDVR`interface`loaded", "=", "True"}]}], "]"}]}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Method", "\[Rule]", "\"\<Queued\>\""}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Evaluator", "->", "\"\<Local\>\""}]}], "]"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Button", "[", 
+      RowBox[{"\"\<New DVR Session\>\"", ",", 
+       RowBox[{
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"Not", "@", 
+           RowBox[{
+           "ValueQ", "@", "DiscreteVariableRepresentation`DVRNotebook"}]}], 
+          ",", 
+          RowBox[{"Get", "@", 
+           RowBox[{"FileNameJoin", "@", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Nest", "[", 
+               RowBox[{"ParentDirectory", ",", 
+                RowBox[{"NotebookDirectory", "[", "]"}], ",", "3"}], "]"}], 
+              ",", "\"\<init.m\>\""}], "}"}]}]}]}], "]"}], ";", 
+        "\[IndentingNewLine]", "DiscreteVariableRepresentation`DVRNotebook"}],
+        ",", "\[IndentingNewLine]", 
+       RowBox[{"Method", "\[Rule]", "\"\<Queued\>\""}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Evaluator", "->", "\"\<Local\>\""}]}], "]"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Button", "[", 
+      RowBox[{"\"\<New Dynamic Safe Session\>\"", ",", 
+       RowBox[{
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"Not", "@", 
+           RowBox[{
+           "ValueQ", "@", "DiscreteVariableRepresentation`DVRBaseClass"}]}], 
+          ",", 
+          RowBox[{"Get", "@", 
+           RowBox[{"FileNameJoin", "@", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Nest", "[", 
+               RowBox[{"ParentDirectory", ",", 
+                RowBox[{"NotebookDirectory", "[", "]"}], ",", "3"}], "]"}], 
+              ",", "\"\<init.m\>\""}], "}"}]}]}]}], "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"ClearAll", "@", "\"\<FEStaticDVR`*\>\""}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"CreateDocument", "@", 
+         RowBox[{"Get", "@", 
+          RowBox[{"FileNameJoin", "@", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+             "\"\<NonDynamicDVR.nb\>\""}], "}"}]}]}]}]}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Method", "\[Rule]", "\"\<Queued\>\""}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Evaluator", "->", "\"\<Local\>\""}]}], "]"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"Button", "[", 
+      RowBox[{"\"\<New DVR Type\>\"", ",", 
+       RowBox[{"GenerateDocument", "@", 
+        RowBox[{"FileNameJoin", "@", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"NotebookDirectory", "[", "]"}], ",", 
+           "\"\<NewDVRTemplate.nb\>\""}], "}"}]}]}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Method", "\[Rule]", "\"\<Queued\>\""}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Evaluator", "->", "\"\<Local\>\""}]}], "]"}]}], 
+    "\[IndentingNewLine]", "}"}]}]}]], "Input",
+ CellChangeTimes->{{3.6780277189583893`*^9, 3.678027755101624*^9}, {
+  3.678191298710237*^9, 3.678191567223071*^9}, {3.678228031024804*^9, 
+  3.678228056848037*^9}, {3.67854391629501*^9, 3.678543927451932*^9}, {
+  3.678543962303239*^9, 3.67854396703117*^9}, {3.67899419821245*^9, 
+  3.678994342885868*^9}, {3.6790108362169533`*^9, 3.6790108420156107`*^9}, {
+  3.6790110343609467`*^9, 3.6790110398706636`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"SetOptions", "[", 
+   RowBox[{
+    RowBox[{"EvaluationNotebook", "[", "]"}], ",", 
+    RowBox[{"DockedCells", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{"Cell", "[", 
+       RowBox[{"BoxData", "@", 
+        RowBox[{"ToBoxes", "@", "runButtonBar"}]}], "]"}], "}"}]}]}], "]"}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.6778532010613832`*^9, 3.677853230718234*^9}, {
+  3.67785328935719*^9, 3.6778532907870407`*^9}, {3.677854002225707*^9, 
+  3.6778540062886963`*^9}, {3.677855032929799*^9, 3.6778550481414843`*^9}, {
+  3.6778554748716097`*^9, 3.677855615814271*^9}, {3.677855847325177*^9, 
+  3.677855865513732*^9}, {3.6778560653442707`*^9, 3.6778561352892103`*^9}, {
+  3.677856185197529*^9, 3.677856209065778*^9}, {3.677856244075087*^9, 
+  3.677856271142284*^9}, {3.678027737672965*^9, 3.678027745115775*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Button Bar", "Subsubsection",
+ CellChangeTimes->{{3.678636089131783*^9, 3.678636090306944*^9}, {
+  3.678636136281221*^9, 3.6786361598008738`*^9}}],
+
+Cell[BoxData[
+ TemplateBox[{ButtonBox["\"Load DVR Package\"", ButtonFunction :> Get[
+       FileNameJoin[{
+         Nest[ParentDirectory, 
+          NotebookDirectory[], 3], "init.m"}]] If[Length[
+         Names["DiscreteVariableRepresentation`*"]] > 0, 
+       FEDVR`interface`loaded = True], Method -> "Queued", Evaluator -> 
+    "Local", Appearance -> Automatic],ButtonBox[
+   "\"New DVR Session\"", ButtonFunction :> (If[
+       Not[
+        ValueQ[DiscreteVariableRepresentation`DVRNotebook]], 
+       Get[
+        FileNameJoin[{
+          Nest[ParentDirectory, 
+           NotebookDirectory[], 3], "init.m"}]]]; 
+     DiscreteVariableRepresentation`DVRNotebook), Method -> "Queued", 
+    Evaluator -> "Local", Appearance -> Automatic],ButtonBox[
+   "\"New Dynamic Safe Session\"", ButtonFunction :> (If[
+       Not[
+        ValueQ[DiscreteVariableRepresentation`DVRBaseClass]], 
+       Get[
+        FileNameJoin[{
+          Nest[ParentDirectory, 
+           NotebookDirectory[], 3], "init.m"}]]]; ClearAll["FEStaticDVR`*"]; 
+     CreateDocument[
+       Get[
+        FileNameJoin[{
+          NotebookDirectory[], "NonDynamicDVR.nb"}]]]), Method -> "Queued", 
+    Evaluator -> "Local", Appearance -> Automatic],ButtonBox[
+   "\"New DVR Type\"", ButtonFunction :> GenerateDocument[
+      FileNameJoin[{
+        NotebookDirectory[], "NewDVRTemplate.nb"}]], Method -> "Queued", 
+    Evaluator -> "Local", Appearance -> Automatic]},
+  "RowDefault"]], "Output",
+ CellChangeTimes->{3.679011041106303*^9}]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Old Results", "Section",
+ CellChangeTimes->{{3.677852875972142*^9, 3.6778528902619677`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Saved DVRs", "Subsection",
+ CellChangeTimes->{{3.678366461596944*^9, 3.6783664647715263`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Interface Code", "Subsubsection",
+ CellChangeTimes->{{3.678366590741231*^9, 3.678366592836053*^9}}],
+
+Cell[BoxData[
+ RowBox[{"With", "[", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"dvrSetter", "=", 
+      RowBox[{
+       RowBox[{"Dynamic", "[", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"PopupMenu", "[", 
+          RowBox[{
+           RowBox[{"FEDVR`updateFiles", ";", 
+            RowBox[{"Dynamic", "[", 
+             RowBox[{"FEDVR`interfaceNotebook", ",", "\[IndentingNewLine]", 
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"FEDVR`interfaceNotebook", "=", "#"}], ";", 
+                 "\[IndentingNewLine]", 
+                 RowBox[{"FEDVR`interfaceObject", "=", "\"\<\>\""}], ";", 
+                 "\[IndentingNewLine]", 
+                 RowBox[{"If", "[", 
+                  RowBox[{
+                   RowBox[{"#", "\[NotEqual]", "\"\<\>\""}], ",", 
+                   RowBox[{"FEDVR`lastSet", "=", "\"\<nb\>\""}], ",", 
+                   RowBox[{"FEDVR`lastSet", "=", "\"\<\>\""}]}], "]"}], ";"}],
+                 "&"}], ")"}]}], "]"}]}], ",", "\[IndentingNewLine]", 
+           RowBox[{"Block", "[", 
+            RowBox[{
+             RowBox[{"{", "savedDVRs", "}"}], ",", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"With", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"dir", "=", 
+                  RowBox[{"FileNameJoin", "@", 
+                   RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"ParentDirectory", "@", 
+                    RowBox[{"NotebookDirectory", "[", "]"}]}], ",", 
+                    "\"\<Saved DVRs\>\""}], "}"}]}]}], "}"}], ",", 
+                "\[IndentingNewLine]", 
+                RowBox[{
+                 RowBox[{"SetDirectory", "@", "dir"}], ";", 
+                 "\[IndentingNewLine]", 
+                 RowBox[{"savedDVRs", "=", 
+                  RowBox[{
+                   RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"FileNameJoin", "@", 
+                    RowBox[{"{", 
+                    RowBox[{"dir", ",", "#"}], "}"}]}], "->", 
+                    RowBox[{"(", 
+                    RowBox[{"StringTrim", "[", 
+                    RowBox[{"#", ",", "\"\<.nb\>\""}], "]"}], ")"}]}], "&"}], 
+                    ")"}], "/@", 
+                   RowBox[{"FileNames", "[", "\"\<*.nb\>\"", "]"}]}]}], ";", 
+                 "\[IndentingNewLine]", 
+                 RowBox[{"ResetDirectory", "[", "]"}], ";"}]}], 
+               "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+              RowBox[{"Prepend", "[", 
+               RowBox[{"savedDVRs", ",", 
+                RowBox[{"\"\<\>\"", "->", 
+                 RowBox[{"Style", "[", 
+                  RowBox[{
+                  "\"\<Interface Notebook\>\"", ",", "Italic", ",", "Gray"}], 
+                  "]"}]}]}], "]"}]}]}], "\[IndentingNewLine]", "]"}]}], "]"}],
+          ",", "\[IndentingNewLine]", 
+         RowBox[{"TrackedSymbols", "\[RuleDelayed]", 
+          RowBox[{"{", "FEDVR`updateFiles", "}"}]}]}], "]"}], "//", 
+       RowBox[{
+        RowBox[{"EventHandler", "[", 
+         RowBox[{"#", ",", 
+          RowBox[{"{", 
+           RowBox[{"\"\<MouseClicked\>\"", "\[RuleDelayed]", 
+            RowBox[{"(", 
+             RowBox[{"FEDVR`updateFiles", "=", 
+              RowBox[{"RandomReal", "[", "]"}]}], ")"}]}], "}"}], ",", 
+          RowBox[{"PassEventsDown", "\[Rule]", "True"}]}], "]"}], "&"}]}]}], 
+     ",", "\[IndentingNewLine]", 
+     RowBox[{"interfaceSetter", "=", 
+      RowBox[{
+       RowBox[{"Dynamic", "[", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"PopupMenu", "[", 
+          RowBox[{
+           RowBox[{"FEDVR`updateFiles", ";", 
+            RowBox[{"Dynamic", "[", 
+             RowBox[{"FEDVR`interfaceObject", ",", "\[IndentingNewLine]", 
+              RowBox[{"(", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"FEDVR`interfaceObject", "=", "#"}], ";", 
+                 "\[IndentingNewLine]", 
+                 RowBox[{"FEDVR`interfaceNotebook", "=", "\"\<\>\""}], ";", 
+                 "\[IndentingNewLine]", 
+                 RowBox[{"If", "[", 
+                  RowBox[{
+                   RowBox[{"#", "\[NotEqual]", "\"\<\>\""}], ",", 
+                   RowBox[{"FEDVR`lastSet", "=", "\"\<ob\>\""}], ",", 
+                   RowBox[{"FEDVR`lastSet", "=", "\"\<\>\""}]}], "]"}], ";"}],
+                 "&"}], ")"}]}], "]"}]}], ",", "\[IndentingNewLine]", 
+           RowBox[{"Block", "[", 
+            RowBox[{
+             RowBox[{"{", "savedDVRs", "}"}], ",", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"With", "[", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"dir", "=", 
+                  RowBox[{"FileNameJoin", "@", 
+                   RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"ParentDirectory", "@", 
+                    RowBox[{"NotebookDirectory", "[", "]"}]}], ",", 
+                    "\"\<Saved DVRs\>\"", ",", 
+                    "\"\<Interface Instances\>\""}], "}"}]}]}], "}"}], ",", 
+                "\[IndentingNewLine]", 
+                RowBox[{
+                 RowBox[{"SetDirectory", "@", "dir"}], ";", 
+                 "\[IndentingNewLine]", 
+                 RowBox[{"savedDVRs", "=", 
+                  RowBox[{
+                   RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"FileNameJoin", "@", 
+                    RowBox[{"{", 
+                    RowBox[{"dir", ",", "#"}], "}"}]}], "->", 
+                    RowBox[{"(", 
+                    RowBox[{"StringReplace", "[", 
+                    RowBox[{"#", ",", 
+                    RowBox[{
+                    RowBox[{"\"\<FEDVRInterface$\>\"", "~~", 
+                    RowBox[{"year", ":", 
+                    RowBox[{"PatternSequence", "[", 
+                    RowBox[{
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}]}], "]"}]}], "~~", 
+                    RowBox[{"month", ":", 
+                    RowBox[{"PatternSequence", "[", 
+                    RowBox[{
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}]}], "]"}]}], "~~", 
+                    RowBox[{"day", ":", 
+                    RowBox[{"PatternSequence", "[", 
+                    RowBox[{
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}]}], "]"}]}], "~~", 
+                    RowBox[{"hour", ":", 
+                    RowBox[{"PatternSequence", "[", 
+                    RowBox[{
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}]}], "]"}]}], "~~", 
+                    RowBox[{"minute", ":", 
+                    RowBox[{"PatternSequence", "[", 
+                    RowBox[{
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}]}], "]"}]}], "~~", 
+                    "\"\<.zip\>\""}], "\[RuleDelayed]", 
+                    RowBox[{"StringJoin", "@", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "year", ",", "\"\</\>\"", ",", "month", ",", "\"\</\>\"", 
+                    ",", "day", ",", "\"\< \>\"", ",", "hour", ",", 
+                    "\"\<:\>\"", ",", "minute"}], "}"}]}]}]}], 
+                    "\[IndentingNewLine]", "]"}], ")"}]}], "&"}], ")"}], "/@", 
+                   RowBox[{"FileNames", "[", "\"\<*.zip\>\"", "]"}]}]}], ";", 
+                 "\[IndentingNewLine]", 
+                 RowBox[{"ResetDirectory", "[", "]"}], ";"}]}], 
+               "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+              RowBox[{"Prepend", "[", 
+               RowBox[{"savedDVRs", ",", 
+                RowBox[{"\"\<\>\"", "->", 
+                 RowBox[{"Style", "[", 
+                  RowBox[{
+                  "\"\<Interface Instance\>\"", ",", "Italic", ",", "Gray"}], 
+                  "]"}]}]}], "]"}]}]}], "\[IndentingNewLine]", "]"}]}], "]"}],
+          ",", "\[IndentingNewLine]", 
+         RowBox[{"TrackedSymbols", "\[RuleDelayed]", 
+          RowBox[{"{", "FEDVR`updateFiles", "}"}]}]}], "]"}], "//", 
+       RowBox[{
+        RowBox[{"EventHandler", "[", 
+         RowBox[{"#", ",", 
+          RowBox[{"{", 
+           RowBox[{"\"\<MouseClicked\>\"", "\[RuleDelayed]", 
+            RowBox[{"(", 
+             RowBox[{"FEDVR`updateFiles", "=", 
+              RowBox[{"RandomReal", "[", "]"}]}], ")"}]}], "}"}], ",", 
+          RowBox[{"PassEventsDown", "\[Rule]", "True"}]}], "]"}], "&"}]}]}], 
+     ",", "\[IndentingNewLine]", 
+     RowBox[{"openButton", "=", 
+      RowBox[{"Button", "[", 
+       RowBox[{"\"\<Open\>\"", ",", 
+        RowBox[{"Replace", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Quiet", "@", 
+            RowBox[{"Needs", "[", 
+             RowBox[{"\"\<DiscreteVariableRepresentation`\>\"", ",", 
+              RowBox[{"FileNameJoin", "@", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"Nest", "[", 
+                  RowBox[{"ParentDirectory", ",", 
+                   RowBox[{"NotebookDirectory", "[", "]"}], ",", "3"}], "]"}],
+                  ",", "\"\<init.m\>\""}], "}"}]}]}], "\[IndentingNewLine]", 
+             "]"}]}], ";", "FEDVR`lastSet"}], ",", 
+          RowBox[{"{", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"\"\<nb\>\"", "\[RuleDelayed]", 
+             RowBox[{"SystemOpen", "@", "FEDVR`interfaceNotebook"}]}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"\"\<ob\>\"", "\[RuleDelayed]", 
+             RowBox[{"With", "[", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"o", "=", 
+                 RowBox[{
+                 "ObjectOrientedProgramming`LoadObject", "@", 
+                  "FEDVR`interfaceObject"}]}], "}"}], ",", 
+               RowBox[{"CreateDialog", "@", "o"}]}], "]"}]}]}], 
+           "\[IndentingNewLine]", "}"}]}], "]"}], ",", "\[IndentingNewLine]", 
+        
+        RowBox[{"Method", "\[Rule]", "\"\<Queued\>\""}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"ImageSize", "\[Rule]", "Automatic"}]}], "]"}]}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"objSummary", "=", 
+      RowBox[{"Dynamic", "[", 
+       RowBox[{
+        RowBox[{"Replace", "[", 
+         RowBox[{"FEDVR`lastSet", ",", 
+          RowBox[{"{", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"\"\<nb\>\"", "\[RuleDelayed]", 
+             RowBox[{"With", "[", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"name", "=", 
+                  RowBox[{"FileBaseName", "@", "FEDVR`interfaceNotebook"}]}], 
+                 ",", 
+                 RowBox[{"data", "=", 
+                  RowBox[{"Get", "@", "FEDVR`interfaceNotebook"}]}]}], "}"}], 
+               ",", "\[IndentingNewLine]", 
+               RowBox[{"TemplateApply", "[", 
+                RowBox[{"\"\<Saved DVR Notebook: `name`\n\t`time`\>\"", ",", 
+                 RowBox[{"<|", 
+                  RowBox[{
+                   RowBox[{"\"\<name\>\"", "\[Rule]", "name"}], ",", 
+                   "\[IndentingNewLine]", 
+                   RowBox[{"\"\<time\>\"", "->", 
+                    RowBox[{"Replace", "[", "\[IndentingNewLine]", 
+                    RowBox[{
+                    RowBox[{"Cases", "[", 
+                    RowBox[{"data", ",", 
+                    RowBox[{
+                    RowBox[{"HoldPattern", "[", 
+                    RowBox[{
+                    "ObjectOrientedProgramming`MathematicaClass", "[", "s_", 
+                    "]"}], "]"}], "\[RuleDelayed]", 
+                    RowBox[{"ToString", "[", 
+                    RowBox[{"Unevaluated", "[", "s", "]"}], "]"}]}], ",", 
+                    "\[Infinity]"}], "]"}], ",", "\[IndentingNewLine]", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"symString_", ",", "___"}], "}"}], ":>", 
+                    RowBox[{"StringReplace", "[", 
+                    RowBox[{"symString", ",", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"(", 
+                    RowBox[{
+                    "\"\<$CellContext`FEDVRInterface$\>\"", "|", 
+                    "\"\<FEDVRInterface$\>\""}], ")"}], "~~", 
+                    RowBox[{"year", ":", 
+                    RowBox[{"PatternSequence", "[", 
+                    RowBox[{
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}]}], "]"}]}], "~~", 
+                    RowBox[{"month", ":", 
+                    RowBox[{"PatternSequence", "[", 
+                    RowBox[{
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}]}], "]"}]}], "~~", 
+                    RowBox[{"day", ":", 
+                    RowBox[{"PatternSequence", "[", 
+                    RowBox[{
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}]}], "]"}]}], "~~", 
+                    RowBox[{"hour", ":", 
+                    RowBox[{"PatternSequence", "[", 
+                    RowBox[{
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}]}], "]"}]}], "~~", 
+                    RowBox[{"minute", ":", 
+                    RowBox[{"PatternSequence", "[", 
+                    RowBox[{
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}]}], "]"}]}]}], 
+                    "\[RuleDelayed]", 
+                    RowBox[{"StringJoin", "@", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "\"\<Created on \>\"", ",", "year", ",", "\"\</\>\"", ",",
+                     "month", ",", "\"\</\>\"", ",", "day", ",", 
+                    "\"\< at \>\"", ",", "hour", ",", "\"\<:\>\"", ",", 
+                    "minute"}], "}"}]}]}]}], "\[IndentingNewLine]", "]"}]}]}],
+                     "\[IndentingNewLine]", "]"}]}]}], "|>"}]}], "]"}]}], 
+              "]"}]}], ",", "\[IndentingNewLine]", 
+            RowBox[{"\"\<ob\>\"", "\[RuleDelayed]", 
+             RowBox[{"DynamicModule", "[", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"icon", "=", "\"\<SquarePlusIconMedium\>\""}], ",", 
+                 RowBox[{"mode", "=", "\"\<Elided\>\""}], ",", 
+                 "\[IndentingNewLine]", 
+                 RowBox[{"obj", "=", "FEDVR`interfaceObject"}], ",", 
+                 RowBox[{"dateString", "=", 
+                  RowBox[{"StringReplace", "[", 
+                   RowBox[{
+                    RowBox[{"FileBaseName", "@", "FEDVR`interfaceObject"}], 
+                    ",", 
+                    RowBox[{
+                    RowBox[{"\"\<FEDVRInterface$\>\"", "~~", 
+                    RowBox[{"year", ":", 
+                    RowBox[{"PatternSequence", "[", 
+                    RowBox[{
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}]}], "]"}]}], "~~", 
+                    RowBox[{"month", ":", 
+                    RowBox[{"PatternSequence", "[", 
+                    RowBox[{
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}]}], "]"}]}], "~~", 
+                    RowBox[{"day", ":", 
+                    RowBox[{"PatternSequence", "[", 
+                    RowBox[{
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}]}], "]"}]}], "~~", 
+                    RowBox[{"hour", ":", 
+                    RowBox[{"PatternSequence", "[", 
+                    RowBox[{
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}]}], "]"}]}], "~~", 
+                    RowBox[{"minute", ":", 
+                    RowBox[{"PatternSequence", "[", 
+                    RowBox[{
+                    RowBox[{"_", "?", "DigitQ"}], ",", 
+                    RowBox[{"_", "?", "DigitQ"}]}], "]"}]}]}], 
+                    "\[RuleDelayed]", 
+                    RowBox[{"StringJoin", "@", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    "\"\<Created on \>\"", ",", "year", ",", "\"\</\>\"", ",",
+                     "month", ",", "\"\</\>\"", ",", "day", ",", 
+                    "\"\< at \>\"", ",", "hour", ",", "\"\<:\>\"", ",", 
+                    "minute"}], "}"}]}]}]}], "\[IndentingNewLine]", "]"}]}]}],
+                 "}"}], ",", 
+               RowBox[{"With", "[", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{"b", "=", 
+                   RowBox[{"Button", "[", 
+                    RowBox[{
+                    RowBox[{"Dynamic", "[", 
+                    RowBox[{"RawBoxes", "@", 
+                    RowBox[{"FEPrivate`FrontEndResource", "[", 
+                    RowBox[{"\"\<FEBitmaps\>\"", ",", "icon"}], "]"}]}], 
+                    "]"}], ",", 
+                    RowBox[{"mode", "=", 
+                    RowBox[{"Replace", "[", 
+                    RowBox[{"mode", ",", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"\"\<Elided\>\"", "\[RuleDelayed]", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"icon", "=", "\"\<SquareMinusIconMedium\>\""}], 
+                    ";", "None"}], ")"}]}], ",", "\[IndentingNewLine]", 
+                    RowBox[{"None", "\[RuleDelayed]", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"icon", "=", "\"\<SquarePlusIconMedium\>\""}], 
+                    ";", "\"\<Elided\>\""}], ")"}]}]}], "}"}]}], "]"}]}], ",",
+                     "\[IndentingNewLine]", 
+                    RowBox[{"Method", "\[Rule]", "\"\<Queued\>\""}], ",", 
+                    "\[IndentingNewLine]", 
+                    RowBox[{"Appearance", "->", "\"\<Frameless\>\""}]}], 
+                    "]"}]}], "}"}], ",", "\[IndentingNewLine]", 
+                 RowBox[{"Grid", "[", 
+                  RowBox[{
+                   RowBox[{"{", 
+                    RowBox[{"{", 
+                    RowBox[{"b", ",", 
+                    RowBox[{"Dynamic", "[", "\[IndentingNewLine]", 
+                    RowBox[{
+                    RowBox[{"Replace", "[", 
+                    RowBox[{"mode", ",", 
+                    RowBox[{"{", "\[IndentingNewLine]", 
+                    RowBox[{
+                    RowBox[{"\"\<Elided\>\"", "\[RuleDelayed]", 
+                    RowBox[{"TemplateApply", "[", 
+                    RowBox[{
+                    "\"\<DVR Interface Object: `name`\n\t`time`\>\"", ",", 
+                    RowBox[{"<|", 
+                    RowBox[{
+                    RowBox[{"\"\<name\>\"", "\[Rule]", 
+                    RowBox[{"FileBaseName", "@", "obj"}]}], ",", 
+                    RowBox[{"\"\<time\>\"", "->", "dateString"}]}], "|>"}]}], 
+                    "]"}]}], ",", "\[IndentingNewLine]", 
+                    RowBox[{"_", "\[RuleDelayed]", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"Quiet", "@", 
+                    RowBox[{"Needs", "[", 
+                    RowBox[{"\"\<DiscreteVariableRepresentation`\>\"", ",", 
+                    RowBox[{"FileNameJoin", "@", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"Nest", "[", 
+                    RowBox[{"ParentDirectory", ",", 
+                    RowBox[{"NotebookDirectory", "[", "]"}], ",", "3"}], 
+                    "]"}], ",", "\"\<init.m\>\""}], "}"}]}]}], 
+                    "\[IndentingNewLine]", "]"}]}], ";", 
+                    RowBox[{
+                    "ObjectOrientedProgramming`LoadObject", "@", "obj"}]}], 
+                    ")"}]}]}], "\[IndentingNewLine]", "}"}]}], "]"}], ",", 
+                    RowBox[{"TrackedSymbols", "\[RuleDelayed]", 
+                    RowBox[{"{", "mode", "}"}]}]}], "]"}]}], "}"}], "}"}], 
+                   ",", 
+                   RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}]}], 
+                "\[IndentingNewLine]", "]"}]}], "]"}]}], ",", 
+            "\[IndentingNewLine]", 
+            RowBox[{"_", "\[RuleDelayed]", "\"\<\>\""}]}], 
+           "\[IndentingNewLine]", "}"}]}], "]"}], ",", 
+        RowBox[{"TrackedSymbols", "\[RuleDelayed]", 
+         RowBox[{"{", "FEDVR`lastSet", "}"}]}]}], "]"}]}]}], 
+    "\[IndentingNewLine]", "}"}], ",", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Grid", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"dvrSetter", ",", "interfaceSetter"}], "}"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"{", 
+         RowBox[{"objSummary", ",", "SpanFromLeft"}], "}"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"{", "openButton", "}"}]}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"Alignment", "\[Rule]", "Left"}], ",", "\[IndentingNewLine]", 
+      RowBox[{"Dividers", "\[Rule]", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"2", "\[Rule]", 
+            RowBox[{"GrayLevel", "[", ".75", "]"}]}], ",", 
+           RowBox[{
+            RowBox[{"-", "2"}], "\[Rule]", 
+            RowBox[{"GrayLevel", "[", ".75", "]"}]}]}], "}"}]}], "}"}]}]}], 
+     "]"}], "//", "Panel"}]}], "\[IndentingNewLine]", "]"}]], "Input",
+ CellChangeTimes->{{3.6783666247136173`*^9, 3.678366643948468*^9}, {
+   3.678366682906843*^9, 3.678366687554463*^9}, {3.678366749558701*^9, 
+   3.678366769135538*^9}, 3.678366827786747*^9, {3.678366864365056*^9, 
+   3.678366936036251*^9}, {3.67836704724905*^9, 3.6783672188201017`*^9}, {
+   3.678367362405109*^9, 3.678367367680938*^9}, {3.6783674061923237`*^9, 
+   3.6783676034432383`*^9}, {3.678367748876132*^9, 3.678367761508059*^9}, {
+   3.678367800073131*^9, 3.6783678726783733`*^9}, {3.678367910983692*^9, 
+   3.678367960669812*^9}, {3.678368374389945*^9, 3.678368649402713*^9}, {
+   3.6783687176915216`*^9, 3.6783687380573273`*^9}, {3.678368810465877*^9, 
+   3.678369022985812*^9}, {3.6783690620212727`*^9, 3.678369388572878*^9}, {
+   3.678369431461508*^9, 3.6783694505756683`*^9}, {3.678369495883196*^9, 
+   3.6783695786037073`*^9}, {3.6783696203025312`*^9, 
+   3.6783696439473677`*^9}, {3.678369674571947*^9, 3.678369685451989*^9}, {
+   3.6783697192273903`*^9, 3.6783697491848297`*^9}, {3.678369810167506*^9, 
+   3.678369816000499*^9}, {3.678369866905468*^9, 3.678370064771894*^9}, {
+   3.6783703121812696`*^9, 3.6783704495800247`*^9}, {3.678372021797922*^9, 
+   3.678372058445723*^9}, {3.678372122912178*^9, 3.678372668838916*^9}, {
+   3.678372705727497*^9, 3.6783727983492117`*^9}, {3.678372846651561*^9, 
+   3.678373038352564*^9}, {3.678373075602693*^9, 3.678373082969081*^9}, {
+   3.6783731151417093`*^9, 3.678373120749707*^9}, {3.678412360130887*^9, 
+   3.6784123622045507`*^9}, {3.678413779118997*^9, 3.67841381814802*^9}, {
+   3.678413921835355*^9, 3.678413944325487*^9}, 3.6784140037264977`*^9, {
+   3.678414147657689*^9, 3.67841416285672*^9}, 3.6784142825999813`*^9, 
+   3.678414314793027*^9, {3.678414658923111*^9, 3.6784146631850357`*^9}, {
+   3.67841478666086*^9, 3.678414789906975*^9}, {3.6784148922295837`*^9, 
+   3.67841491060261*^9}, {3.6785438492118397`*^9, 3.678543907477886*^9}, {
+   3.6785439734108353`*^9, 3.6785439766751013`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Interface", "Subsubsection",
+ CellChangeTimes->{{3.678366596091968*^9, 3.678366597900166*^9}}],
+
+Cell[BoxData[
+ PanelBox[
+  TagBox[GridBox[{
+     {
+      TagBox[
+       DynamicBox[ToBoxes[
+         PopupMenu[
+         FEDVR`updateFiles; 
+          Dynamic[FEDVR`interfaceNotebook, (FEDVR`interfaceNotebook = #; 
+            FEDVR`interfaceObject = ""; 
+            If[# != "", FEDVR`lastSet = "nb", FEDVR`lastSet = ""]; Null)& ], 
+          
+          Block[{$CellContext`savedDVRs}, 
+           With[{$CellContext`dir = FileNameJoin[{
+                 ParentDirectory[
+                  NotebookDirectory[]], "Saved DVRs"}]}, 
+             SetDirectory[$CellContext`dir]; $CellContext`savedDVRs = 
+              Map[FileNameJoin[{$CellContext`dir, #}] -> 
+                StringTrim[#, ".nb"]& , 
+                FileNames["*.nb"]]; ResetDirectory[]; Null]; 
+           Prepend[$CellContext`savedDVRs, "" -> 
+             Style["Interface Notebook", Italic, Gray]]]], StandardForm],
+        ImageSizeCache->{155., {6., 17.}},
+        TrackedSymbols:>{FEDVR`updateFiles}],
+       EventHandlerTag[{
+        "MouseClicked" :> (FEDVR`updateFiles = RandomReal[]), PassEventsDown -> 
+         True, Method -> "Preemptive", PassEventsUp -> True}]], 
+      TagBox[
+       DynamicBox[ToBoxes[
+         PopupMenu[
+         FEDVR`updateFiles; 
+          Dynamic[FEDVR`interfaceObject, (FEDVR`interfaceObject = #; 
+            FEDVR`interfaceNotebook = ""; 
+            If[# != "", FEDVR`lastSet = "ob", FEDVR`lastSet = ""]; Null)& ], 
+          
+          Block[{$CellContext`savedDVRs}, 
+           With[{$CellContext`dir = FileNameJoin[{
+                 ParentDirectory[
+                  NotebookDirectory[]], "Saved DVRs", 
+                 "Interface Instances"}]}, 
+             SetDirectory[$CellContext`dir]; $CellContext`savedDVRs = 
+              Map[FileNameJoin[{$CellContext`dir, #}] -> 
+                StringReplace[#, StringExpression["FEDVRInterface$", 
+                    Pattern[$CellContext`year, 
+                    PatternSequence[
+                    PatternTest[
+                    Blank[], DigitQ], 
+                    PatternTest[
+                    Blank[], DigitQ], 
+                    PatternTest[
+                    Blank[], DigitQ], 
+                    PatternTest[
+                    Blank[], DigitQ]]], 
+                    Pattern[$CellContext`month, 
+                    PatternSequence[
+                    PatternTest[
+                    Blank[], DigitQ], 
+                    PatternTest[
+                    Blank[], DigitQ]]], 
+                    Pattern[$CellContext`day, 
+                    PatternSequence[
+                    PatternTest[
+                    Blank[], DigitQ], 
+                    PatternTest[
+                    Blank[], DigitQ]]], 
+                    Pattern[$CellContext`hour, 
+                    PatternSequence[
+                    PatternTest[
+                    Blank[], DigitQ], 
+                    PatternTest[
+                    Blank[], DigitQ]]], 
+                    Pattern[$CellContext`minute, 
+                    PatternSequence[
+                    PatternTest[
+                    Blank[], DigitQ], 
+                    PatternTest[
+                    Blank[], DigitQ]]], ".zip"] :> 
+                  StringJoin[{$CellContext`year, "/", $CellContext`month, 
+                    "/", $CellContext`day, " ", $CellContext`hour, 
+                    ":", $CellContext`minute}]]& , 
+                FileNames["*.zip"]]; ResetDirectory[]; Null]; 
+           Prepend[$CellContext`savedDVRs, "" -> 
+             Style["Interface Instance", Italic, Gray]]]], StandardForm],
+        ImageSizeCache->{146., {6., 17.}},
+        TrackedSymbols:>{FEDVR`updateFiles}],
+       EventHandlerTag[{
+        "MouseClicked" :> (FEDVR`updateFiles = RandomReal[]), PassEventsDown -> 
+         True, Method -> "Preemptive", PassEventsUp -> True}]]},
+     {
+      DynamicBox[ToBoxes[
+        Replace[
+        FEDVR`lastSet, {
+         "nb" :> With[{$CellContext`name = 
+             FileBaseName[FEDVR`interfaceNotebook], $CellContext`data = 
+             Get[FEDVR`interfaceNotebook]}, 
+            TemplateApply["Saved DVR Notebook: `name`\n\t`time`", 
+             Association["name" -> $CellContext`name, "time" -> Replace[
+                Cases[$CellContext`data, HoldPattern[
+                   ObjectOrientedProgramming`MathematicaClass[
+                    Pattern[$CellContext`s, 
+                    Blank[]]]] :> ToString[
+                   Unevaluated[$CellContext`s]], Infinity], {
+                  Pattern[$CellContext`symString, 
+                   Blank[]], 
+                  BlankNullSequence[]} :> 
+                StringReplace[$CellContext`symString, StringExpression[
+                    Alternatives[
+                    "$CellContext`FEDVRInterface$", "FEDVRInterface$"], 
+                    Pattern[$CellContext`year, 
+                    PatternSequence[
+                    PatternTest[
+                    Blank[], DigitQ], 
+                    PatternTest[
+                    Blank[], DigitQ], 
+                    PatternTest[
+                    Blank[], DigitQ], 
+                    PatternTest[
+                    Blank[], DigitQ]]], 
+                    Pattern[$CellContext`month, 
+                    PatternSequence[
+                    PatternTest[
+                    Blank[], DigitQ], 
+                    PatternTest[
+                    Blank[], DigitQ]]], 
+                    Pattern[$CellContext`day, 
+                    PatternSequence[
+                    PatternTest[
+                    Blank[], DigitQ], 
+                    PatternTest[
+                    Blank[], DigitQ]]], 
+                    Pattern[$CellContext`hour, 
+                    PatternSequence[
+                    PatternTest[
+                    Blank[], DigitQ], 
+                    PatternTest[
+                    Blank[], DigitQ]]], 
+                    Pattern[$CellContext`minute, 
+                    PatternSequence[
+                    PatternTest[
+                    Blank[], DigitQ], 
+                    PatternTest[
+                    Blank[], DigitQ]]]] :> 
+                  StringJoin[{
+                    "Created on ", $CellContext`year, "/", $CellContext`month,
+                     "/", $CellContext`day, " at ", $CellContext`hour, 
+                    ":", $CellContext`minute}]]]]]], "ob" :> 
+          DynamicModule[{$CellContext`icon = 
+             "SquarePlusIconMedium", $CellContext`mode = 
+             "Elided", $CellContext`obj = 
+             FEDVR`interfaceObject, $CellContext`dateString = StringReplace[
+               FileBaseName[FEDVR`interfaceObject], 
+               StringExpression["FEDVRInterface$", 
+                 Pattern[$CellContext`year, 
+                  PatternSequence[
+                   PatternTest[
+                    Blank[], DigitQ], 
+                   PatternTest[
+                    Blank[], DigitQ], 
+                   PatternTest[
+                    Blank[], DigitQ], 
+                   PatternTest[
+                    Blank[], DigitQ]]], 
+                 Pattern[$CellContext`month, 
+                  PatternSequence[
+                   PatternTest[
+                    Blank[], DigitQ], 
+                   PatternTest[
+                    Blank[], DigitQ]]], 
+                 Pattern[$CellContext`day, 
+                  PatternSequence[
+                   PatternTest[
+                    Blank[], DigitQ], 
+                   PatternTest[
+                    Blank[], DigitQ]]], 
+                 Pattern[$CellContext`hour, 
+                  PatternSequence[
+                   PatternTest[
+                    Blank[], DigitQ], 
+                   PatternTest[
+                    Blank[], DigitQ]]], 
+                 Pattern[$CellContext`minute, 
+                  PatternSequence[
+                   PatternTest[
+                    Blank[], DigitQ], 
+                   PatternTest[
+                    Blank[], DigitQ]]]] :> 
+               StringJoin[{
+                 "Created on ", $CellContext`year, "/", $CellContext`month, 
+                  "/", $CellContext`day, " at ", $CellContext`hour, 
+                  ":", $CellContext`minute}]]}, 
+            With[{$CellContext`b = Button[
+                Dynamic[
+                 RawBoxes[
+                  FEPrivate`FrontEndResource[
+                  "FEBitmaps", $CellContext`icon]]], $CellContext`mode = 
+                Replace[$CellContext`mode, {
+                  "Elided" :> ($CellContext`icon = "SquareMinusIconMedium"; 
+                    None), None :> ($CellContext`icon = 
+                    "SquarePlusIconMedium"; "Elided")}], Method -> "Queued", 
+                Appearance -> "Frameless"]}, 
+             Grid[{{$CellContext`b, 
+                Dynamic[
+                 
+                 Replace[$CellContext`mode, {
+                  "Elided" :> 
+                   TemplateApply["DVR Interface Object: `name`\n\t`time`", 
+                    Association[
+                    "name" -> FileBaseName[$CellContext`obj], 
+                    "time" -> $CellContext`dateString]], Blank[] :> (Quiet[
+                    Needs["DiscreteVariableRepresentation`", 
+                    FileNameJoin[{
+                    Nest[ParentDirectory, 
+                    NotebookDirectory[], 3], "init.m"}]]]; 
+                    ObjectOrientedProgramming`LoadObject[$CellContext`obj])}],
+                  TrackedSymbols :> {$CellContext`mode}]}}, Alignment -> 
+              Center]]], Blank[] :> ""}], StandardForm],
+       ImageSizeCache->{0., {0., 6.}},
+       TrackedSymbols:>{FEDVR`lastSet}], "\[SpanFromLeft]"},
+     {
+      ButtonBox["\<\"Open\"\>",
+       Appearance->Automatic,
+       ButtonFunction:>Replace[Quiet[
+           Needs["DiscreteVariableRepresentation`", 
+            FileNameJoin[{
+              Nest[ParentDirectory, 
+               NotebookDirectory[], 3], "init.m"}]]]; FEDVR`lastSet, {
+         "nb" :> SystemOpen[FEDVR`interfaceNotebook], "ob" :> 
+          With[{DiscreteVariableRepresentation`o = 
+             ObjectOrientedProgramming`LoadObject[FEDVR`interfaceObject]}, 
+            CreateDialog[DiscreteVariableRepresentation`o]]}],
+       Evaluator->Automatic,
+       ImageSize->Automatic,
+       Method->"Queued"], ""}
+    },
+    AutoDelete->False,
+    GridBoxAlignment->{"Columns" -> {{Left}}},
+    GridBoxDividers->{
+     "RowsIndexed" -> {2 -> GrayLevel[0.75], -2 -> GrayLevel[0.75]}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Grid"]]], "Output",
+ CellChangeTimes->{3.6785440011208973`*^9}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Saved Data", "Subsection",
+ CellChangeTimes->{{3.6783664942596273`*^9, 3.67836650175539*^9}, {
+  3.6783665439772663`*^9, 3.678366547073432*^9}, {3.678635899901244*^9, 
+  3.678635901373348*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Interface Code", "Subsubsection",
+ CellChangeTimes->{{3.6783731770849943`*^9, 3.678373181780055*^9}, 
+   3.6786282288291817`*^9}],
+
+Cell[BoxData[
+ RowBox[{"DynamicModule", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"DB", "=", 
+      RowBox[{"(", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{"!", 
+           RowBox[{
+           "ValueQ", "@", "DiscreteVariableRepresentation`DVRBaseClass"}]}], 
+          ",", 
+          RowBox[{"Get", "@", 
+           RowBox[{"FileNameJoin", "@", 
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"Nest", "[", 
+               RowBox[{"ParentDirectory", ",", 
+                RowBox[{"NotebookDirectory", "[", "]"}], ",", "3"}], "]"}], 
+              ",", "\"\<init.m\>\""}], "}"}]}]}]}], "]"}], ";", 
+        "\[IndentingNewLine]", 
+        RowBox[{"Replace", "[", 
+         RowBox[{
+          RowBox[{
+          "DiscreteVariableRepresentation`DVRBaseClass", "::", "Database"}], 
+          ",", 
+          RowBox[{"None", "\[RuleDelayed]", 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+             "DiscreteVariableRepresentation`DVRBaseClass", "::", 
+              "Database"}], "=", 
+             RowBox[{"DatabaseWrapper`DatabaseClass", "@", 
+              RowBox[{"FileNameJoin", "@", 
+               RowBox[{"{", 
+                RowBox[{
+                "DiscreteVariableRepresentation`$DVRRoot", ",", 
+                 "\"\<Resources\>\"", ",", "\"\<Data.sql\>\""}], "}"}]}]}]}], 
+            ")"}]}]}], "\[IndentingNewLine]", "]"}]}], ")"}]}], ",", 
+     "\[IndentingNewLine]", "tables", ",", "\[IndentingNewLine]", 
+     RowBox[{"viewMode", "=", "\"\<Elided\>\""}], ",", "\[IndentingNewLine]", 
+     
+     RowBox[{"icon", "=", "\"\<SquarePlusIconMedium\>\""}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"tableIndex", "=", "1"}]}], "}"}], ",", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"tables", "=", 
+     RowBox[{
+      RowBox[{"DB", "::", "TableNames"}], "[", "]"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"Grid", "[", 
+      RowBox[{"{", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{"Grid", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"{", "\[IndentingNewLine]", 
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"Button", "[", 
+                   RowBox[{"\"\<\[FirstPage]\>\"", ",", 
+                    RowBox[{"(", 
+                    RowBox[{"tableIndex", "=", "1"}], ")"}], ",", 
+                    RowBox[{"Appearance", "->", "\"\<Frameless\>\""}]}], 
+                   "]"}], "//", 
+                  RowBox[{
+                   RowBox[{"Item", "[", 
+                    RowBox[{"#", ",", 
+                    RowBox[{"ItemSize", "\[Rule]", 
+                    RowBox[{"{", 
+                    RowBox[{"1", ",", "All"}], "}"}]}]}], "]"}], "&"}]}], ",", 
+                 RowBox[{
+                  RowBox[{"Button", "[", 
+                   RowBox[{"\"\<\[LeftPointer]\>\"", ",", 
+                    RowBox[{"(", 
+                    RowBox[{"tableIndex", "=", 
+                    RowBox[{"Max", "@", 
+                    RowBox[{"{", 
+                    RowBox[{"1", ",", 
+                    RowBox[{"tableIndex", "-", "1"}]}], "}"}]}]}], ")"}], ",", 
+                    RowBox[{"Appearance", "->", "\"\<Frameless\>\""}]}], 
+                   "]"}], "//", 
+                  RowBox[{
+                   RowBox[{"Item", "[", 
+                    RowBox[{"#", ",", 
+                    RowBox[{"ItemSize", "\[Rule]", 
+                    RowBox[{"{", 
+                    RowBox[{"1", ",", "All"}], "}"}]}]}], "]"}], "&"}]}], ",",
+                  "\[IndentingNewLine]", 
+                 RowBox[{"Dynamic", "[", 
+                  RowBox[{
+                   RowBox[{"Slider", "[", 
+                    RowBox[{
+                    RowBox[{"Dynamic", "[", "tableIndex", "]"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"1", ",", 
+                    RowBox[{"Length", "@", "tables"}], ",", "1"}], "}"}], ",", 
+                    RowBox[{"ImageSize", "\[Rule]", "Small"}]}], "]"}], ",", 
+                   RowBox[{"TrackedSymbols", "\[RuleDelayed]", 
+                    RowBox[{"{", "tables", "}"}]}]}], "]"}], ",", 
+                 RowBox[{
+                  RowBox[{"Button", "[", 
+                   RowBox[{"\"\<\[RightPointer]\>\"", ",", 
+                    RowBox[{"(", 
+                    RowBox[{"tableIndex", "=", 
+                    RowBox[{"Min", "@", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"Length", "@", "tables"}], ",", 
+                    RowBox[{"tableIndex", "+", "1"}]}], "}"}]}]}], ")"}], ",", 
+                    RowBox[{"Appearance", "->", "\"\<Frameless\>\""}]}], 
+                   "]"}], "//", 
+                  RowBox[{
+                   RowBox[{"Item", "[", 
+                    RowBox[{"#", ",", 
+                    RowBox[{"ItemSize", "\[Rule]", 
+                    RowBox[{"{", 
+                    RowBox[{"1", ",", "All"}], "}"}]}]}], "]"}], "&"}]}], ",",
+                  "\[IndentingNewLine]", 
+                 RowBox[{
+                  RowBox[{"Button", "[", 
+                   RowBox[{"\"\<\[LastPage]\>\"", ",", 
+                    RowBox[{"(", 
+                    RowBox[{"tableIndex", "=", 
+                    RowBox[{"Length", "@", "tables"}]}], ")"}], ",", 
+                    RowBox[{"Appearance", "->", "\"\<Frameless\>\""}]}], 
+                   "]"}], "//", 
+                  RowBox[{
+                   RowBox[{"Item", "[", 
+                    RowBox[{"#", ",", 
+                    RowBox[{"ItemSize", "\[Rule]", 
+                    RowBox[{"{", 
+                    RowBox[{"1", ",", "All"}], "}"}]}]}], "]"}], "&"}]}]}], 
+                "\[IndentingNewLine]", "}"}], "}"}], ",", 
+              "\[IndentingNewLine]", 
+              RowBox[{"Dividers", "\[Rule]", 
+               RowBox[{"{", 
+                RowBox[{
+                 RowBox[{"{", 
+                  RowBox[{
+                   RowBox[{"2", "\[Rule]", "Black"}], ",", 
+                   RowBox[{"3", "\[Rule]", "Black"}], ",", 
+                   RowBox[{"4", "\[Rule]", "Black"}], ",", 
+                   RowBox[{"5", "\[Rule]", "Black"}]}], "}"}], ",", 
+                 RowBox[{"{", "}"}]}], "}"}]}]}], "]"}], "//", 
+            RowBox[{
+             RowBox[{"Framed", "[", 
+              RowBox[{"#", ",", 
+               RowBox[{"RoundingRadius", "\[Rule]", "5"}], ",", 
+               RowBox[{"FrameMargins", "\[Rule]", "None"}]}], "]"}], "&"}]}], 
+           "//", 
+           RowBox[{
+            RowBox[{"Pane", "[", 
+             RowBox[{"#", ",", 
+              RowBox[{"{", 
+               RowBox[{"200", ",", "25"}], "}"}], ",", 
+              RowBox[{"ImageSizeAction", "\[Rule]", "\"\<ShrinkToFit\>\""}], 
+              ",", 
+              RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}], "&"}]}], "//",
+           "Deploy"}], "}"}], ",", "\[IndentingNewLine]", 
+        RowBox[{"{", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Dynamic", "[", "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"If", "[", 
+               RowBox[{
+                RowBox[{"!", 
+                 RowBox[{
+                 "ValueQ", "@", 
+                  "DiscreteVariableRepresentation`DVRBaseClass"}]}], ",", 
+                RowBox[{"Get", "@", 
+                 RowBox[{"FileNameJoin", "@", 
+                  RowBox[{"{", 
+                   RowBox[{
+                    RowBox[{"Nest", "[", 
+                    RowBox[{"ParentDirectory", ",", 
+                    RowBox[{"NotebookDirectory", "[", "]"}], ",", "3"}], 
+                    "]"}], ",", "\"\<init.m\>\""}], "}"}]}]}]}], "]"}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{"If", "[", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"tableIndex", ">", "0"}], "&&", 
+                 RowBox[{"tableIndex", "\[LessEqual]", 
+                  RowBox[{"Length", "@", "tables"}]}]}], ",", 
+                "\[IndentingNewLine]", 
+                RowBox[{"With", "[", 
+                 RowBox[{
+                  RowBox[{"{", 
+                   RowBox[{"name", "=", 
+                    RowBox[{"tables", "[", 
+                    RowBox[{"[", "tableIndex", "]"}], "]"}]}], "}"}], ",", 
+                  "\[IndentingNewLine]", 
+                  RowBox[{"With", "[", 
+                   RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"table", "=", 
+                    RowBox[{
+                    RowBox[{"DB", "::", "LoadTable"}], "[", 
+                    RowBox[{"name", ",", 
+                    RowBox[{
+                    "Table", "\[Rule]", 
+                    "DatabaseWrapper`MatrixTableClass"}]}], "]"}]}], ",", 
+                    "\[IndentingNewLine]", 
+                    RowBox[{"cls", "=", "\[IndentingNewLine]", 
+                    RowBox[{"Replace", "[", 
+                    RowBox[{"name", ",", 
+                    RowBox[{"{", "\[IndentingNewLine]", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"_", "?", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"StringMatchQ", "[", 
+                    RowBox[{"name", ",", 
+                    RowBox[{"\"\<Wavefunctions\>\"", "~~", "NumberString"}]}],
+                     "]"}], "&"}], ")"}]}], "\[RuleDelayed]", 
+                    "DiscreteVariableRepresentation`WavefunctionTableClass"}],
+                     ",", "\[IndentingNewLine]", 
+                    RowBox[{
+                    RowBox[{"_", "?", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"StringMatchQ", "[", 
+                    RowBox[{"name", ",", 
+                    RowBox[{"\"\<Kinetic\>\"", "~~", "NumberString"}]}], 
+                    "]"}], "&"}], ")"}]}], "\[RuleDelayed]", 
+                    "DiscreteVariableRepresentation`KineticMatrixTableClass"}]\
+}], "\[IndentingNewLine]", "}"}]}], "\[IndentingNewLine]", "]"}]}]}], "}"}], 
+                    ",", "\[IndentingNewLine]", 
+                    RowBox[{"Replace", "[", 
+                    RowBox[{"table", ",", "\[IndentingNewLine]", 
+                    RowBox[{
+                    RowBox[{"Except", "[", "_String", "]"}], "\[RuleDelayed]", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"Append", "[", 
+                    RowBox[{
+                    RowBox[{"cls", "::", "Properties"}], ",", 
+                    RowBox[{"\"\<PassObj\>\"", "\[Rule]", "table"}]}], "]"}], 
+                    "[", "]"}], "//", 
+                    RowBox[{
+                    RowBox[{"With", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"props", "=", "#"}], "}"}], ",", 
+                    "\[IndentingNewLine]", 
+                    RowBox[{"With", "[", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{"col", "=", 
+                    RowBox[{"Column", "@", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{
+                    RowBox[{"Row", "@", 
+                    RowBox[{"{", 
+                    RowBox[{"#1", ",", "\"\<: \>\"", ",", "#2"}], "}"}]}], 
+                    "&"}], "@@@", "props"}], ")"}]}]}], "}"}], ",", 
+                    "\[IndentingNewLine]", 
+                    RowBox[{"Grid", "@", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"Button", "[", "\[IndentingNewLine]", 
+                    RowBox[{
+                    RowBox[{"Dynamic", "[", 
+                    RowBox[{"RawBoxes", "@", 
+                    RowBox[{"FEPrivate`FrontEndResource", "[", 
+                    RowBox[{"\"\<FEBitmaps\>\"", ",", "icon"}], "]"}]}], 
+                    "]"}], ",", "\[IndentingNewLine]", 
+                    RowBox[{"viewMode", "=", 
+                    RowBox[{"Replace", "[", 
+                    RowBox[{"viewMode", ",", "\[IndentingNewLine]", 
+                    RowBox[{"{", 
+                    RowBox[{
+                    RowBox[{"\"\<Elided\>\"", "\[RuleDelayed]", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"icon", "=", "\"\<SquareMinusIconMedium\>\""}], 
+                    ";", "None"}], ")"}]}], ",", "\[IndentingNewLine]", 
+                    RowBox[{"None", "\[Rule]", 
+                    RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"icon", "=", "\"\<SquarePlusIconMedium\>\""}], 
+                    ";", "\"\<Elided\>\""}], ")"}]}]}], "}"}]}], "]"}]}], ",",
+                     "\[IndentingNewLine]", 
+                    RowBox[{"Appearance", "\[Rule]", "\"\<Frameless\>\""}]}], 
+                    "]"}], ",", "\[IndentingNewLine]", 
+                    RowBox[{"Dynamic", "[", "\[IndentingNewLine]", 
+                    RowBox[{
+                    RowBox[{"If", "[", 
+                    RowBox[{
+                    RowBox[{"viewMode", "===", "\"\<Elided\>\""}], ",", 
+                    "\[IndentingNewLine]", "col", ",", "\[IndentingNewLine]", 
+                    
+                    RowBox[{
+                    RowBox[{"Append", "[", 
+                    RowBox[{
+                    RowBox[{"cls", "::", "View"}], ",", 
+                    RowBox[{"\"\<PassObj\>\"", "\[Rule]", "table"}]}], "]"}], 
+                    "[", "]"}]}], "\[IndentingNewLine]", "]"}], ",", 
+                    RowBox[{"TrackedSymbols", "\[RuleDelayed]", 
+                    RowBox[{"{", "viewMode", "}"}]}]}], "]"}]}], "}"}], ",", 
+                    "\[IndentingNewLine]", 
+                    RowBox[{"{", 
+                    RowBox[{"Null", ",", 
+                    RowBox[{"Item", "[", 
+                    RowBox[{
+                    RowBox[{"Button", "[", 
+                    RowBox[{"\"\<Print\>\"", ",", 
+                    RowBox[{"Print", "@", 
+                    RowBox[{"{", 
+                    RowBox[{"props", ",", 
+                    RowBox[{
+                    RowBox[{"Append", "[", 
+                    RowBox[{
+                    RowBox[{"cls", "::", "View"}], ",", 
+                    RowBox[{"\"\<PassObj\>\"", "\[Rule]", "table"}]}], "]"}], 
+                    "[", "]"}]}], "}"}]}], ",", 
+                    RowBox[{"ImageSize", "\[Rule]", "Automatic"}], ",", 
+                    "\[IndentingNewLine]", 
+                    RowBox[{"Appearance", "->", "\"\<Palette\>\""}]}], "]"}], 
+                    ",", 
+                    RowBox[{"Alignment", "\[Rule]", "Left"}]}], "]"}]}], 
+                    "}"}]}], "}"}]}]}], "\[IndentingNewLine]", "]"}]}], 
+                    "\[IndentingNewLine]", "]"}], "&"}]}], ")"}]}]}], 
+                    "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
+                   "]"}]}], "\[IndentingNewLine]", "]"}], ",", 
+                "\[IndentingNewLine]", "\"\<\>\""}], "]"}]}], ",", 
+             RowBox[{"TrackedSymbols", "\[RuleDelayed]", 
+              RowBox[{"{", "tableIndex", "}"}]}]}], "]"}], "//", 
+           RowBox[{
+            RowBox[{"Pane", "[", 
+             RowBox[{"#", ",", 
+              RowBox[{"ImageSize", "\[Rule]", "200"}], ",", 
+              RowBox[{"Alignment", "\[Rule]", "Center"}]}], "]"}], "&"}]}], "//",
+           "Panel"}], "}"}]}], "\[IndentingNewLine]", "}"}], 
+      "\[IndentingNewLine]", "]"}], "//", 
+     RowBox[{
+      RowBox[{"Framed", "[", 
+       RowBox[{"#", ",", 
+        RowBox[{"RoundingRadius", "\[Rule]", "5"}], ",", 
+        RowBox[{"FrameMargins", "\[Rule]", "1"}], ",", 
+        RowBox[{"Background", "\[Rule]", 
+         RowBox[{"GrayLevel", "[", " ", "0.98", "]"}]}]}], "]"}], "&"}]}]}]}],
+   "\[IndentingNewLine]", "]"}]], "Input",
+ CellChangeTimes->{{3.678628240445825*^9, 3.67862827589713*^9}, {
+   3.6786283062061863`*^9, 3.678628407840251*^9}, {3.678628445859181*^9, 
+   3.678628447555068*^9}, {3.678628517747114*^9, 3.6786286175587378`*^9}, {
+   3.6786287589135437`*^9, 3.678628933930698*^9}, {3.678628970421953*^9, 
+   3.678629357362252*^9}, {3.678629411421608*^9, 3.678629415164222*^9}, {
+   3.678629457609017*^9, 3.678629499694483*^9}, {3.678629540429976*^9, 
+   3.678629684375649*^9}, {3.678629749493308*^9, 3.678629944629882*^9}, {
+   3.678629978654787*^9, 3.67863016658111*^9}, {3.678630234351869*^9, 
+   3.6786304469540777`*^9}, {3.6786305070315866`*^9, 3.678630692175024*^9}, 
+   3.678630767666353*^9, {3.6786308015201893`*^9, 3.678630811614029*^9}, {
+   3.678630902853567*^9, 3.678631085329612*^9}, {3.6786311772564497`*^9, 
+   3.678631217349325*^9}, {3.6786312602224083`*^9, 3.6786312952897673`*^9}, 
+   3.6786317223245296`*^9, {3.678632065972974*^9, 3.678632151171233*^9}, {
+   3.67863228789583*^9, 3.678632403971814*^9}, {3.678632454021562*^9, 
+   3.678632718398491*^9}, {3.678632944611369*^9, 3.6786329555270233`*^9}, {
+   3.6786334241392517`*^9, 3.678633538252108*^9}, {3.6786352902281218`*^9, 
+   3.6786353070273123`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Interface", "Subsubsection",
+ CellChangeTimes->{{3.6783731770849943`*^9, 3.678373181780055*^9}, {
+  3.6786282288291817`*^9, 3.678628232717224*^9}}],
+
+Cell[BoxData[
+ DynamicModuleBox[{$CellContext`DB$$ = 
+  ObjectOrientedProgramming`MathematicaClass[$CellContext`DatabaseClass$\
+107Instance$103], $CellContext`tables$$ = 
+  MessageName[$CellContext`DB$$, "TableNames"][], $CellContext`viewMode$$ = 
+  "Elided", $CellContext`icon$$ = 
+  "SquarePlusIconMedium", $CellContext`tableIndex$$ = 1}, 
+  FrameBox[
+   TagBox[GridBox[{
+      {
+       TagBox[
+        PaneBox[
+         FrameBox[
+          TagBox[GridBox[{
+             {
+              ItemBox[
+               ButtonBox["\<\"\[FirstPage]\"\>",
+                Appearance->"Frameless",
+                ButtonFunction:>($CellContext`tableIndex$$ = 1),
+                Evaluator->Automatic,
+                Method->"Preemptive"],
+               ItemSize->{1, All},
+               StripOnInput->False], 
+              ItemBox[
+               ButtonBox["\<\"\[LeftPointer]\"\>",
+                Appearance->"Frameless",
+                
+                ButtonFunction:>($CellContext`tableIndex$$ = 
+                 Max[{1, $CellContext`tableIndex$$ - 1}]),
+                Evaluator->Automatic,
+                Method->"Preemptive"],
+               ItemSize->{1, All},
+               StripOnInput->False], 
+              DynamicBox[ToBoxes[
+                Slider[
+                 Dynamic[$CellContext`tableIndex$$], {1, 
+                  Length[$CellContext`tables$$], 1}, ImageSize -> Small], 
+                StandardForm],
+               ImageSizeCache->{99., {5., 11.}},
+               TrackedSymbols:>{$CellContext`tables$$}], 
+              ItemBox[
+               ButtonBox["\<\"\[RightPointer]\"\>",
+                Appearance->"Frameless",
+                ButtonFunction:>($CellContext`tableIndex$$ = Min[{
+                    Length[$CellContext`tables$$], $CellContext`tableIndex$$ + 
+                    1}]),
+                Evaluator->Automatic,
+                Method->"Preemptive"],
+               ItemSize->{1, All},
+               StripOnInput->False], 
+              ItemBox[
+               ButtonBox["\<\"\[LastPage]\"\>",
+                Appearance->"Frameless",
+                
+                ButtonFunction:>($CellContext`tableIndex$$ = 
+                 Length[$CellContext`tables$$]),
+                Evaluator->Automatic,
+                Method->"Preemptive"],
+               ItemSize->{1, All},
+               StripOnInput->False]}
+            },
+            AutoDelete->False,
+            
+            GridBoxDividers->{
+             "ColumnsIndexed" -> {
+               2 -> GrayLevel[0], 3 -> GrayLevel[0], 4 -> GrayLevel[0], 5 -> 
+                GrayLevel[0]}},
+            
+            GridBoxItemSize->{
+             "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+           "Grid"],
+          FrameMargins->None,
+          RoundingRadius->5,
+          StripOnInput->False],
+         Alignment->Center,
+         ImageSize->{200, 25},
+         ImageSizeAction->"ShrinkToFit"],
+        Deploy,
+        DefaultBaseStyle->"Deploy"]},
+      {
+       PanelBox[
+        PaneBox[
+         DynamicBox[ToBoxes[If[
+             Not[
+              ValueQ[DiscreteVariableRepresentation`DVRBaseClass]], 
+             Get[
+              FileNameJoin[{
+                Nest[ParentDirectory, 
+                 NotebookDirectory[], 3], "init.m"}]]]; If[
+             
+             And[$CellContext`tableIndex$$ > 0, $CellContext`tableIndex$$ <= 
+              Length[$CellContext`tables$$]], 
+             
+             With[{$CellContext`name$ = 
+               Part[$CellContext`tables$$, $CellContext`tableIndex$$]}, 
+              
+              With[{$CellContext`table$ = 
+                MessageName[$CellContext`DB$$, 
+                  "LoadTable"][$CellContext`name$, Table -> 
+                  DatabaseWrapper`MatrixTableClass], $CellContext`cls$ = 
+                Replace[$CellContext`name$, {PatternTest[
+                    Blank[], StringMatchQ[$CellContext`name$, 
+                    StringExpression["Wavefunctions", NumberString]]& ] :> 
+                   DiscreteVariableRepresentation`WavefunctionTableClass, 
+                   PatternTest[
+                    Blank[], StringMatchQ[$CellContext`name$, 
+                    StringExpression["Kinetic", NumberString]]& ] :> 
+                   DiscreteVariableRepresentation`KineticMatrixTableClass}]}, 
+               
+               Replace[$CellContext`table$, Except[
+                  Blank[String]] :> (With[{$CellContext`props$ = #}, 
+                  With[{$CellContext`col$ = Column[
+                    Apply[Row[{#, ": ", #2}]& , $CellContext`props$, {1}]]}, 
+                   Grid[{{
+                    Button[
+                    Dynamic[
+                    RawBoxes[
+                    FEPrivate`FrontEndResource[
+                    "FEBitmaps", $CellContext`icon$$]]], \
+$CellContext`viewMode$$ = 
+                    Replace[$CellContext`viewMode$$, {
+                    "Elided" :> ($CellContext`icon$$ = 
+                    "SquareMinusIconMedium"; None), 
+                    None -> ($CellContext`icon$$ = "SquarePlusIconMedium"; 
+                    "Elided")}], Appearance -> "Frameless"], 
+                    Dynamic[
+                    
+                    If[$CellContext`viewMode$$ === 
+                    "Elided", $CellContext`col$, 
+                    Append[
+                    MessageName[$CellContext`cls$, "View"], 
+                    "PassObj" -> $CellContext`table$][]], 
+                    TrackedSymbols :> {$CellContext`viewMode$$}]}, {Null, 
+                    Item[
+                    Button["Print", 
+                    Print[{$CellContext`props$, 
+                    Append[
+                    MessageName[$CellContext`cls$, "View"], 
+                    "PassObj" -> $CellContext`table$][]}], ImageSize -> 
+                    Automatic, Appearance -> "Palette"], Alignment -> 
+                    Left]}}]]]& )[
+                  Append[
+                   MessageName[$CellContext`cls$, "Properties"], 
+                   "PassObj" -> $CellContext`table$][]]]]], ""], StandardForm],
+          ImageSizeCache->{139., {45.4169921875, 50.5830078125}},
+          TrackedSymbols:>{$CellContext`tableIndex$$}],
+         Alignment->Center,
+         ImageSize->200]]}
+     },
+     AutoDelete->False,
+     GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+    "Grid"],
+   Background->GrayLevel[0.98],
+   FrameMargins->1,
+   RoundingRadius->5,
+   StripOnInput->False],
+  DynamicModuleValues:>{{UpValues[$CellContext`DB$$] = {HoldPattern[
+         HoldPattern[
+          MessageName[$CellContext`DB$$, 
+           PatternTest[
+            Pattern[ObjectOrientedProgramming`Private`args$, 
+             BlankNullSequence[]], MatchQ[#, 
+             Except[
+              Alternatives["usage"]]]& ]]]] :> MessageName[
+         Evaluate[$CellContext`DB$$], 
+         ObjectOrientedProgramming`Private`args$]}}}]], "Output",
+ CellChangeTimes->{3.678635313361724*^9}]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Documentation", "Section",
+ CellChangeTimes->{{3.6776061340424347`*^9, 3.677606136258162*^9}}],
+
+Cell[BoxData[
+ ButtonBox["DiscreteVariableRepresentation",
+  Appearance->"Frameless",
+  BaseStyle->"Hyperlink",
+  ButtonFunction:>NotebookOpen[
+    FileNameJoin[{
+      ParentDirectory[
+       ParentDirectory[
+        NotebookDirectory[]]], "Documentation", "docs.nb"}]],
+  Evaluator->Automatic,
+  Method->"Preemptive"]], "Subsection",
+ CellChangeTimes->{{3.6786763555672827`*^9, 3.678676428152166*^9}},
+ FontFamily->CurrentValue[
+   StyleData["Subsection"], FontFamily]],
+
+Cell[BoxData[
+ ButtonBox["ObjectOrientedProgramming",
+  Appearance->"Frameless",
+  BaseStyle->"Hyperlink",
+  ButtonFunction:>NotebookOpen[
+    FileNameJoin[{
+      ParentDirectory[
+       ParentDirectory[
+        ParentDirectory[
+         ParentDirectory[
+          NotebookDirectory[]]]]], "ObjectOrientedProgramming", 
+      "Documentation", "docs.nb"}]],
+  Evaluator->Automatic,
+  Method->"Preemptive"]], "Subsection",
+ CellChangeTimes->{{3.6786763555672827`*^9, 3.678676428152166*^9}},
+ FontFamily->CurrentValue[
+   StyleData["Subsection"], FontFamily]],
+
+Cell[BoxData[
+ ButtonBox["MolecularModeling",
+  Appearance->"Frameless",
+  BaseStyle->"Hyperlink",
+  ButtonFunction:>NotebookOpen[
+    FileNameJoin[{
+      ParentDirectory[
+       ParentDirectory[
+        ParentDirectory[
+         ParentDirectory[
+          NotebookDirectory[]]]]], "MolecularModeling", "Documentation", 
+      "docs.nb"}]],
+  Evaluator->Automatic,
+  Method->"Preemptive"]], "Subsection",
+ CellChangeTimes->{{3.6786763555672827`*^9, 3.678676428152166*^9}},
+ FontFamily->CurrentValue[
+   StyleData["Subsection"], FontFamily]],
+
+Cell[BoxData[
+ ButtonBox["DatabaseWrapper",
+  Appearance->"Frameless",
+  BaseStyle->"Hyperlink",
+  ButtonFunction:>NotebookOpen[
+    FileNameJoin[{
+      ParentDirectory[
+       ParentDirectory[
+        ParentDirectory[
+         ParentDirectory[
+          NotebookDirectory[]]]]], "DatabaseWrapper", "Documentation", 
+      "docs.nb"}]],
+  Evaluator->Automatic,
+  Method->"Preemptive"]], "Subsection",
+ CellChangeTimes->{{3.6786763555672827`*^9, 3.678676428152166*^9}},
+ FontFamily->CurrentValue[
+   StyleData["Subsection"], FontFamily]],
+
+Cell[BoxData[
+ ButtonBox["ParallelProcess",
+  Appearance->"Frameless",
+  BaseStyle->"Hyperlink",
+  ButtonFunction:>NotebookOpen[
+    FileNameJoin[{
+      ParentDirectory[
+       ParentDirectory[
+        ParentDirectory[
+         ParentDirectory[
+          NotebookDirectory[]]]]], "ParallelProcess", "Documentation", 
+      "docs.nb"}]],
+  Evaluator->Automatic,
+  Method->"Preemptive"]], "Subsection",
+ CellChangeTimes->{{3.6786763555672827`*^9, 3.678676428152166*^9}},
+ FontFamily->CurrentValue[
+   StyleData["Subsection"], FontFamily]]
+}, Closed]],
+
+Cell["", "Section",
+ Editable->False,
+ ShowCellBracket->False,
+ ShowGroupOpener->False,
+ Deployed->True,
+ DefaultNewCellStyle->"Invisible",
+ Deleteable -> False]
+}, Open  ]]
+},
+Editable->True,
+WindowSize->{808, 749},
+WindowMargins->{{179, Automatic}, {Automatic, 0}},
+DockedCells->{
+  Cell[
+   BoxData[
+    TemplateBox[{
+      ButtonBox["\"Load DVR Package\"", ButtonFunction :> Get[
+          FileNameJoin[{
+            Nest[ParentDirectory, 
+             NotebookDirectory[], 3], "init.m"}]] If[Length[
+            Names["DiscreteVariableRepresentation`*"]] > 0, 
+          FEDVR`interface`loaded = True], Method -> "Queued", Evaluator -> 
+       "Local", Appearance -> Automatic], 
+      ButtonBox["\"New DVR Session\"", ButtonFunction :> (If[
+          Not[
+           ValueQ[DiscreteVariableRepresentation`DVRNotebook]], 
+          Get[
+           FileNameJoin[{
+             Nest[ParentDirectory, 
+              NotebookDirectory[], 3], "init.m"}]]]; 
+        DiscreteVariableRepresentation`DVRNotebook), Method -> "Queued", 
+       Evaluator -> "Local", Appearance -> Automatic], 
+      ButtonBox["\"New Dynamic Safe Session\"", ButtonFunction :> (If[
+          Not[
+           ValueQ[DiscreteVariableRepresentation`DVRBaseClass]], 
+          Get[
+           FileNameJoin[{
+             Nest[ParentDirectory, 
+              NotebookDirectory[], 3], "init.m"}]]]; 
+        ClearAll["FEStaticDVR`*"]; CreateDocument[
+          Get[
+           FileNameJoin[{
+             NotebookDirectory[], "NonDynamicDVR.nb"}]]]), Method -> "Queued",
+        Evaluator -> "Local", Appearance -> Automatic], 
+      ButtonBox["\"New DVR Type\"", ButtonFunction :> GenerateDocument[
+         FileNameJoin[{
+           NotebookDirectory[], "NewDVRTemplate.nb"}]], Method -> "Queued", 
+       Evaluator -> "Local", Appearance -> Automatic]}, "RowDefault"]]]},
+FrontEndVersion->"10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, \
+2015)",
+StyleDefinitions->FrontEnd`FileName[{
+   ParentDirectory[
+    ParentDirectory[
+     ParentDirectory[
+      ParentDirectory[]]]], "Stylesheets"}, "Interface Stylesheet.nb", 
+  CharacterEncoding -> "UTF-8"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 119, 1, 65, "Chapter"],
+Cell[CellGroupData[{
+Cell[724, 27, 92, 1, 64, "Section"],
+Cell[CellGroupData[{
+Cell[841, 32, 127, 2, 44, "Subsection"],
+Cell[971, 36, 2960, 75, 352, "Text"],
+Cell[3934, 113, 338, 6, 49, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[4309, 124, 114, 1, 36, "Subsection"],
+Cell[4426, 127, 341, 6, 49, "Text"],
+Cell[4770, 135, 173, 2, 38, "TopStructure"],
+Cell[4946, 139, 103, 1, 20, "SubStructure"],
+Cell[5052, 142, 217, 3, 20, "SubSubStructure"],
+Cell[5272, 147, 275, 3, 20, "SubSubStructure"],
+Cell[5550, 152, 277, 3, 20, "SubSubStructure"],
+Cell[5830, 157, 274, 3, 20, "SubSubStructure"],
+Cell[6107, 162, 260, 3, 20, "SubSubStructure"],
+Cell[6370, 167, 290, 3, 20, "SubStructure"],
+Cell[6663, 172, 301, 6, 20, "SubSubDescription"],
+Cell[6967, 180, 224, 3, 20, "SubStructure"],
+Cell[7194, 185, 98, 1, 20, "SubSubStructure"],
+Cell[7295, 188, 99, 1, 20, "SubSubStructure"],
+Cell[7397, 191, 218, 3, 20, "SubSubStructure"],
+Cell[CellGroupData[{
+Cell[7640, 198, 205, 3, 20, "SubSubStructure"],
+Cell[7848, 203, 521, 9, 106, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[8418, 218, 107, 1, 36, "Subsection"],
+Cell[CellGroupData[{
+Cell[8550, 223, 99, 1, 35, "Subsubsection"],
+Cell[8652, 226, 875, 23, 135, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[9564, 254, 104, 1, 29, "Subsubsection"],
+Cell[9671, 257, 558, 16, 69, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[10266, 278, 106, 1, 29, "Subsubsection"],
+Cell[10375, 281, 264, 5, 49, "Text"]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[10700, 293, 118, 2, 50, "Section"],
+Cell[CellGroupData[{
+Cell[10843, 299, 97, 1, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[10965, 304, 96, 1, 35, "Subsubsection"],
+Cell[11064, 307, 454, 13, 61, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[11555, 325, 107, 1, 29, "Subsubsection"],
+Cell[11665, 328, 2139, 47, 216, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[13841, 380, 104, 1, 29, "Subsubsection"],
+Cell[13948, 383, 1102, 29, 611, "Output"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[15099, 418, 96, 1, 36, "Subsection"],
+Cell[CellGroupData[{
+Cell[15220, 423, 146, 2, 35, "Subsubsection"],
+Cell[15369, 427, 274, 6, 30, "Text"],
+Cell[15646, 435, 386, 11, 42, "Text"],
+Cell[16035, 448, 448, 13, 61, "Text"],
+Cell[16486, 463, 588, 14, 61, "Text"],
+Cell[17077, 479, 357, 11, 42, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[17471, 495, 154, 2, 29, "Subsubsection"],
+Cell[17628, 499, 4296, 103, 437, "Input"],
+Cell[21927, 604, 843, 17, 28, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[22807, 626, 152, 2, 29, "Subsubsection"],
+Cell[22962, 630, 1502, 34, 43, "Output"]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[24525, 671, 98, 1, 50, "Section"],
+Cell[CellGroupData[{
+Cell[24648, 676, 100, 1, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[24773, 681, 105, 1, 35, "Subsubsection"],
+Cell[24881, 684, 23985, 499, 1883, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[48903, 1188, 100, 1, 29, "Subsubsection"],
+Cell[49006, 1191, 10518, 240, 102, "Output"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[59573, 1437, 199, 3, 36, "Subsection"],
+Cell[CellGroupData[{
+Cell[59797, 1444, 135, 2, 35, "Subsubsection"],
+Cell[59935, 1448, 17297, 375, 1321, "Input"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[77269, 1828, 153, 2, 29, "Subsubsection"],
+Cell[77425, 1832, 6943, 166, 167, "Output"]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[84429, 2005, 100, 1, 50, "Section"],
+Cell[84532, 2008, 471, 13, 47, "Subsection"],
+Cell[85006, 2023, 557, 16, 39, "Subsection"],
+Cell[85566, 2041, 541, 16, 39, "Subsection"],
+Cell[86110, 2059, 537, 16, 39, "Subsection"],
+Cell[86650, 2077, 537, 16, 39, "Subsection"]
+}, Closed]],
+Cell[87202, 2096, 161, 6, 50, "Section"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

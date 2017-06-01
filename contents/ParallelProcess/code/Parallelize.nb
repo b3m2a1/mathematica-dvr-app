@@ -1,0 +1,83 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      2039,         74]
+NotebookOptionsPosition[      1444,         49]
+NotebookOutlinePosition[      1927,         68]
+CellTagsIndexPosition[      1884,         65]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Parallel Job Tracking", "Chapter",
+ CellChangeTimes->{{3.674244974047985*^9, 3.674244979174592*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["JobTracker Package", "Section",
+ CellChangeTimes->{{3.674244993894331*^9, 3.6742449994781303`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"BeginPackage", "[", "\"\<JobTracker`\>\"", "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Quiet", "[", 
+   RowBox[{"Remove", "@", "\"\<JobTracker`*\>\""}], "]"}], ";"}]}], "Input",
+ CellChangeTimes->{{3.674244896912181*^9, 3.674244934257262*^9}, {
+  3.674245346977689*^9, 3.674245366238769*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Needs", "@", "\"\<ObjectOrientedProgramming\>\""}]], "Input",
+ CellChangeTimes->{{3.674245652839541*^9, 3.6742456664630547`*^9}}]
+}, Open  ]],
+
+Cell["Testing", "Section",
+ CellChangeTimes->{{3.674245018557302*^9, 3.674245019573596*^9}}]
+}, Open  ]]
+},
+WindowSize->{808, 755},
+WindowMargins->{{203, Automatic}, {Automatic, 0}},
+FrontEndVersion->"10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, \
+2015)",
+StyleDefinitions->FrontEnd`FileName[{
+   ParentDirectory[
+    ParentDirectory[]], "Stylesheets"}, "Minimal Stylesheet.nb", 
+  CharacterEncoding -> "UTF-8"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 106, 1, 65, "Chapter"],
+Cell[CellGroupData[{
+Cell[711, 27, 105, 1, 64, "Section"],
+Cell[819, 30, 346, 8, 46, "Input"],
+Cell[1168, 40, 153, 2, 28, "Input"]
+}, Open  ]],
+Cell[1336, 45, 92, 1, 64, "Section"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

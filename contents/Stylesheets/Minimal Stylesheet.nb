@@ -1,0 +1,73 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      1752,         64]
+NotebookOptionsPosition[      1002,         43]
+NotebookOutlinePosition[      1360,         59]
+CellTagsIndexPosition[      1317,         56]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[StyleData[StyleDefinitions -> "Default.nb"]],
+
+Cell[StyleData["Title"],
+ ShowGroupOpener->True],
+
+Cell[StyleData["Chapter"],
+ ShowGroupOpener->True],
+
+Cell[StyleData["Subchapter"],
+ ShowGroupOpener->True],
+
+Cell[StyleData["Section"],
+ ShowGroupOpener->True],
+
+Cell[StyleData["Subsection"],
+ ShowGroupOpener->True],
+
+Cell[StyleData["Subsubsection"],
+ ShowGroupOpener->True],
+
+Cell[StyleData["Subsubtitle"],
+ CellFrame->{{0, 0}, {1, 0}}]
+},
+WindowSize->{808, 755},
+WindowMargins->{{148, Automatic}, {Automatic, 4}},
+FrontEndVersion->"10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, \
+2015)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 49, 0, 36, 49, 0, "StyleData", "StyleDefinitions", ""],
+Cell[610, 22, 48, 1, 107, 24, 0, "StyleData", "Title", "All"],
+Cell[661, 25, 50, 1, 80, 26, 0, "StyleData", "Chapter", "All"],
+Cell[714, 28, 53, 1, 60, 29, 0, "StyleData", "Subchapter", "All"],
+Cell[770, 31, 50, 1, 65, 26, 0, "StyleData", "Section", "All"],
+Cell[823, 34, 53, 1, 51, 29, 0, "StyleData", "Subsection", "All"],
+Cell[879, 37, 56, 1, 44, 32, 0, "StyleData", "Subsubsection", "All"],
+Cell[938, 40, 60, 1, 54, 30, 0, "StyleData", "Subsubtitle", "All"]
+}
+]
+*)
+
+(* End of internal cache information *)

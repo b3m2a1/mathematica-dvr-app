@@ -1,0 +1,2789 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     78712,       2780]
+NotebookOptionsPosition[     60909,       2165]
+NotebookOutlinePosition[     61398,       2184]
+CellTagsIndexPosition[     61355,       2181]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Chemistry Basics Package", "Chapter"],
+
+Cell[CellGroupData[{
+
+Cell["Internal Code", "Section"],
+
+Cell[CellGroupData[{
+
+Cell["Chemistry Data Class", "Subsection"],
+
+Cell["\<\
+A class for getting useful chemical data. It hasn\[CloseCurlyQuote]t had a \
+serious update in 6 months, so some work including support for isotopes would \
+be good.\
+\>", "ClassDocString",
+ CellChangeTimes->{{3.678728619253709*^9, 3.678728654350724*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Class field: ColorMap", "Subsubsection",
+ CellChangeTimes->{{3.678728660488537*^9, 3.6787286607903633`*^9}},
+ FontColor->RGBColor[0.7137254901960784, 0.2196078431372549, 0.]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ClassField", "[", "ColorMap", "]"}]], "Code",
+ CellChangeTimes->{{3.678728664742272*^9, 3.678728674158428*^9}, 
+   3.6787287888940353`*^9}],
+
+Cell["\<\
+A coloring map to check first. Atom colors can be changed at runtime by \
+editing this. \
+\>", "MethodDocString",
+ CellChangeTimes->{{3.6787286767946978`*^9, 3.678728705437118*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Class field: NoAttribute", "Subsubsection",
+ CellChangeTimes->{{3.678728713748384*^9, 3.678728714196854*^9}},
+ FontColor->RGBColor[0.7137254901960784, 0.2196078431372549, 0.]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ClassField", "[", "NoAttribute", "]"}]], "Code",
+ CellChangeTimes->{3.678728710751268*^9, 3.678728785301422*^9}],
+
+Cell["A head to use when a property is unsupported.", "MethodDocString",
+ CellChangeTimes->{{3.678728717256172*^9, 3.678728730092423*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Class field: BondDistanceMap", "Subsubsection",
+ CellChangeTimes->{3.6787287343988132`*^9},
+ FontColor->RGBColor[0.7137254901960784, 0.2196078431372549, 0.]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ClassField", "[", "BondDistanceMap", "]"}]], "Code",
+ CellChangeTimes->{{3.67872873729287*^9, 3.6787287446045513`*^9}, {
+  3.678728780662393*^9, 3.678728780850972*^9}}],
+
+Cell["An explicit map of standard atom-atom bond distances", "MethodDocString",
+ CellChangeTimes->{{3.678728747286458*^9, 3.6787287590036993`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: BondDistance", "Subsubsection",
+ CellChangeTimes->{{3.678728746070354*^9, 3.678728770091443*^9}},
+ FontColor->RGBColor[0.7137254901960784, 0.2196078431372549, 0.]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"BondDistance", ",", "self_", ",", "atom1_", ",", "atom2_", ",", 
+   RowBox[{"mode_:", "1"}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.678728774668973*^9, 3.678728777075219*^9}}],
+
+Cell["\<\
+Returns the standard bond distance between two types of atoms, given the bond \
+type specified\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678728796073004*^9, 3.678728816986294*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Class field: PropertyMap", "Subsubsection",
+ CellChangeTimes->{3.678728821812499*^9},
+ FontColor->RGBColor[0.7137254901960784, 0.2196078431372549, 0.]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ClassField", "[", "PropertyMap", "]"}]], "Code",
+ CellChangeTimes->{{3.678728825244886*^9, 3.678728826545754*^9}}],
+
+Cell[TextData[{
+ "Specifies what keys to use to look up various data in ",
+ Cell[BoxData[
+  FormBox["ElementData", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " or ",
+ Cell[BoxData[
+  FormBox["ChemicalData", TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "MethodDocString",
+ CellChangeTimes->{{3.678728828307369*^9, 3.6787288471078568`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Color", "Subsubsection",
+ CellChangeTimes->{{3.6787288505239553`*^9, 3.67872885083311*^9}},
+ FontColor->RGBColor[0.7137254901960784, 0.2196078431372549, 0.]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Color", ",", "self_", ",", "obj_"}], "]"}]], "Code",
+ CellChangeTimes->{{3.678728856009097*^9, 3.678728857737093*^9}}],
+
+Cell[TextData[{
+ "Either returns the color from ",
+ Cell[BoxData[
+  FormBox["ColorMap", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " or that from ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"ColorData", "[", "\"\<Atoms\>\"", "]"}], TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "MethodDocString",
+ CellChangeTimes->{{3.6787288591744823`*^9, 3.6787288942391787`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: DataProperty", "Subsubsection",
+ CellChangeTimes->{3.678728900981007*^9},
+ FontColor->RGBColor[0.7137254901960784, 0.2196078431372549, 0.]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"DataProperty", ",", "self_", ",", "obj_", ",", "property_", ",", 
+   RowBox[{"mode_:", "\"\<Atom\>\""}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.6787289044358683`*^9, 3.678728906474386*^9}}],
+
+Cell["\<\
+Tries to find the value of a property for the specified object\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678728907597796*^9, 3.67872891814606*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: IsAtom", "Subsubsection",
+ CellChangeTimes->{3.678728923932229*^9},
+ FontColor->RGBColor[0.7137254901960784, 0.2196078431372549, 0.]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"StaticMethod", "[", 
+  RowBox[{"IsAtom", ",", "obj_"}], "]"}]], "Code",
+ CellChangeTimes->{{3.6787289267727337`*^9, 3.678728928993767*^9}}],
+
+Cell["Tests if something can be interpreted as an atom", "MethodDocString",
+ CellChangeTimes->{{3.678728931870887*^9, 3.678728942737207*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Property", "Subsubsection",
+ CellChangeTimes->{3.6787289471714973`*^9},
+ FontColor->RGBColor[0.7137254901960784, 0.2196078431372549, 0.]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Property", ",", "self_", ",", "obj_", ",", 
+   RowBox[{"property", ":", 
+    RowBox[{"_String", "|", "_Symbol"}]}], ",", 
+   RowBox[{"WithUnits", "->", "False"}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.678728950818976*^9, 3.6787289550333023`*^9}}],
+
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox["WithUnits", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " specifies that the obtained ",
+ Cell[BoxData[
+  FormBox["Quantity", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " should be returned. Else ",
+ Cell[BoxData[
+  FormBox["QuantityMagnitude", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is applied."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678728956823122*^9, 3.678728988463855*^9}}]
+}, Open  ]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Atom Class", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell["InitializationFunction", "Subsubsection",
+ CellChangeTimes->{{3.678729678197011*^9, 3.6787296819302387`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"InitializationFunction", "[", 
+  RowBox[{"self_", ",", "element_", ",", 
+   RowBox[{"position_:", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "0", ",", "0"}], "}"}]}], ",", 
+   RowBox[{"Label", "->", "\"\<\>\""}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.6787296550624323`*^9, 3.6787296583494368`*^9}}],
+
+Cell["\<\
+Initializes the position, element type, bonds, name, and mass of the atom\
+\>", "Text"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound property: InitList", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundProperty", "[", 
+  RowBox[{"InitList", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{3.678729631070003*^9}],
+
+Cell["\<\
+Returns a list that can be used to configure a new atom instance. Really just \
+the element and position.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678729632159416*^9, 3.67872967017358*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: DrawOb", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"DrawOb", ",", "self_", ",", 
+   RowBox[{"Origin", "->", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "0", ",", "0"}], "}"}]}], ",", 
+   RowBox[{"Scale", "->", "1"}], ",", 
+   RowBox[{"Update", "->", "True"}], ",", "\n", "\t\t\t", 
+   RowBox[{"Label", "->", "None"}], ",", 
+   RowBox[{"LabelingFunction", "->", "Automatic"}], ",", 
+   RowBox[{"Style", "->", "Automatic"}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.678729448477607*^9, 3.6787294522031603`*^9}}],
+
+Cell["Gives the display object for the atom.", "Text",
+ CellChangeTimes->{3.678729459677121*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Origin", "Subsubsubsection",
+ CellChangeTimes->{{3.678729465513694*^9, 3.678729466257698*^9}}],
+
+Cell["Specifies where the origin should be.", "MethodDocString",
+ CellChangeTimes->{{3.678729468367111*^9, 3.6787294827933826`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Scale", "Subsubsubsection",
+ CellChangeTimes->{{3.678729493986161*^9, 3.6787294949305353`*^9}}],
+
+Cell["How much to scale the atom\[CloseCurlyQuote]s radius by", \
+"MethodDocString",
+ CellChangeTimes->{{3.678729498605847*^9, 3.678729513482292*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Update", "Subsubsubsection",
+ CellChangeTimes->{{3.678729523149951*^9, 3.678729523895514*^9}}],
+
+Cell["Whether to make it a dynamically updating atom or not.", \
+"MethodDocString",
+ CellChangeTimes->{{3.678729524907592*^9, 3.678729534101841*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Label", "Subsubsubsection",
+ CellChangeTimes->{{3.678729536926773*^9, 3.678729541389882*^9}}],
+
+Cell["What label to give to the atom.", "MethodDocString",
+ CellChangeTimes->{{3.6787295388358192`*^9, 3.678729564509368*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["LabelingFunction", "Subsubsubsection",
+ CellChangeTimes->{{3.678729556206563*^9, 3.6787295696771393`*^9}}],
+
+Cell[TextData[{
+ "How to create the label. \n\nShould be a function like ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"f", "[", 
+    RowBox[{
+    "t", ",", " ", "p", ",", " ", "a", ",", " ", "r", ",", " ", "v", ",", " ",
+      "c"}], "]"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " where ",
+ Cell[BoxData[
+  FormBox["t", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is the label text, ",
+ Cell[BoxData[
+  FormBox["p", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is the base position of the label, ",
+ Cell[BoxData[
+  FormBox["a", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is the anchor point for ",
+ Cell[BoxData[
+  FormBox["Inset", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "s, ",
+ Cell[BoxData[
+  FormBox["r", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is the atomic radius, ",
+ Cell[BoxData[
+  FormBox["v", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is the vector to displace along, and ",
+ Cell[BoxData[
+  FormBox["c", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is the atom color"
+}], "MethodDocString",
+ CellChangeTimes->{{3.678729571201692*^9, 3.6787295952044067`*^9}, {
+  3.678806709264224*^9, 3.6788068623823977`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Style", "Subsubsubsection",
+ CellChangeTimes->{{3.678729601365202*^9, 3.678729602260165*^9}}],
+
+Cell[TextData[{
+ "How to actually draw the atom.\n\n",
+ Cell[BoxData[
+  FormBox["Automatic", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " defaults to a sphere, but any graphics function can be passed.\n\nShould \
+be a function like ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"f", "[", 
+    RowBox[{"p", ",", " ", "r", ",", " ", "a"}], "]"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " where ",
+ Cell[BoxData[
+  FormBox["p", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is the atom position, ",
+ Cell[BoxData[
+  FormBox["r", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is its drawing radius, and ",
+ Cell[BoxData[
+  FormBox["a", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is the atom itself. Note that colors need not be specified in this \
+function."
+}], "MethodDocString",
+ CellChangeTimes->{{3.67872960391883*^9, 3.6787296183240137`*^9}, {
+  3.678806639238471*^9, 3.678806663389995*^9}, {3.6788068670628033`*^9, 
+  3.67880693526821*^9}}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Draw", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Draw", ",", "self_", ",", "\n", "\t\t", 
+   RowBox[{"Boxed", "->", "False"}], ",", 
+   RowBox[{"Style", "->", "Automatic"}], ",", 
+   RowBox[{"Lighting", "->", "\"\<Neutral\>\""}], ",", "\n", "\t\t", 
+   RowBox[{"Label", "->", "None"}], ",", 
+   RowBox[{"LabelingFunction", "->", "Automatic"}], ",", 
+   RowBox[{"OptionsPattern", "[", "]"}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.6787294235710278`*^9, 3.6787294290366488`*^9}}],
+
+Cell[TextData[{
+ "Draws the atom, using ",
+ Cell[BoxData[
+  FormBox["DrawOb", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " to generate the object to draw"
+}], "Text",
+ CellChangeTimes->{{3.678729439257688*^9, 3.678729441538233*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Update", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Update", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{3.6787294071088943`*^9}],
+
+Cell[TextData[{
+ "Updates the symbol returned from ",
+ Cell[BoxData[
+  FormBox["DrawOb", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " with ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"DynamicUpdates", "\[Rule]", "True"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "."
+}], "Text",
+ CellChangeTimes->{{3.6787294088750267`*^9, 3.678729415629733*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Distance", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Distance", ",", "self_", ",", "other_"}], "]"}]], "Code",
+ CellChangeTimes->{3.678729390806552*^9}],
+
+Cell["Just the norm of the vector between the positions", "MethodDocString",
+ CellChangeTimes->{{3.6787293919046583`*^9, 3.6787294007315273`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: CouldBond", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"CouldBond", ",", "self_", ",", "other_", ",", 
+   RowBox[{"tolerance_:", "0"}], ",", 
+   RowBox[{"bType_:", "1"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678729338448133*^9}],
+
+Cell[TextData[{
+ "Tests whether a bond of type ",
+ Cell[BoxData[
+  FormBox["bType", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " could be formed between the atoms, using ",
+ Cell[BoxData[
+  FormBox["tolerance", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " as the tolerance for if their distance is larger than the standard ",
+ Cell[BoxData[
+  FormBox["BondDistance", TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "MethodDocString",
+ CellChangeTimes->{{3.6787293396264057`*^9, 3.678729385787806*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Bond", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Bond", ",", "self_", ",", "other_", ",", 
+   RowBox[{"type", ":", 
+    RowBox[{"_", "?", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"MatchQ", "[", 
+        RowBox[{"#", ",", 
+         RowBox[{"_Integer", "|", "_Real", "|", "_String"}]}], "]"}], "&"}], 
+      ")"}]}], ":", "1"}], ",", 
+   RowBox[{"overWrite_:", "False"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.6787293215212193`*^9}],
+
+Cell["\<\
+Tries to bond to an object.
+If this fails, it returns false, else, it returns true\
+\>", "Text",
+ CellChangeTimes->{3.678729330128022*^9}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: BondType", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"BondType", ",", "self_", ",", "other_"}], "]"}]], "Code",
+ CellChangeTimes->{3.678729305071741*^9}],
+
+Cell["Returns the type of bond the atom has with an object", "Text"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound property: BondVector", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundProperty", "[", 
+  RowBox[{"BondVector", ",", "self_", ",", 
+   RowBox[{"Function", "->", "None"}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.678729252298439*^9, 3.678729264201066*^9}}],
+
+Cell["\<\
+Returns the average of all the bond vectors. Can be used in animation stuff.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678729265324587*^9, 3.678729298030448*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Move", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Move", ",", "self_", ",", 
+   RowBox[{"vectorList", ":", 
+    RowBox[{"{", 
+     RowBox[{"_", ",", "_", ",", "_"}], "}"}], ":", "None"}], ",", 
+   RowBox[{"\"\<X\>\"", "->", "0"}], ",", 
+   RowBox[{"\"\<Y\>\"", "->", "0"}], ",", 
+   RowBox[{"\"\<Z\>\"", "->", "0"}], ",", 
+   RowBox[{"Set", "->", "False"}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.678729196549756*^9, 3.678729216745963*^9}}],
+
+Cell[TextData[{
+ "Moves the atom. If ",
+ Cell[BoxData[
+  FormBox["Set", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is ",
+ Cell[BoxData[
+  FormBox["True", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " the ",
+ Cell[BoxData[
+  FormBox["Position", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is set."
+}], "Text",
+ CellChangeTimes->{{3.678729221116438*^9, 3.6787292451046457`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Rotate", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Rotate", ",", "self_", ",", "\[Theta]_", ",", 
+   RowBox[{"Axis", "->", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "0", ",", "1"}], "}"}]}], ",", 
+   RowBox[{"Center", "->", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "0", ",", "0"}], "}"}]}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.6787291885470037`*^9, 3.678729190610708*^9}}],
+
+Cell["Rotates an atom about a vector and a point.", "Text"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound property: CenterOfMass", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BoundProperty", "[", 
+   RowBox[{"CenterOfMass", ",", "self_"}], "]"}], ":=", 
+  RowBox[{"self", "::", "Position"}]}]], "Code"],
+
+Cell[TextData[{
+ "Here for consistency with some methods in ",
+ Cell[BoxData[
+  FormBox["Molecule", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ". Routes to ",
+ Cell[BoxData[
+  FormBox["Position", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678729159659472*^9, 3.67872918179618*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: GetAtoms", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"BoundMethod", "[", 
+   RowBox[{"GetAtoms", ",", "self_", ",", "args___"}], "]"}], ":=", 
+  "self"}]], "Code"],
+
+Cell["\<\
+Here for consistency in some later functions. Returns the instance itself.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678729127819195*^9, 3.678729151190524*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: $ToString", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"StringFunction", "[", "self_", "]"}]], "Code",
+ CellChangeTimes->{3.678729116854237*^9}],
+
+Cell["Returns the atom element.", "MethodDocString",
+ CellChangeTimes->{{3.678729117786231*^9, 3.67872912229268*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: $ToRepresentation", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"RepresentationFunction", "[", "self_", "]"}]], "Code",
+ CellChangeTimes->{3.6787290991438093`*^9}],
+
+Cell["Draws a 2D circle with the atom symbol and color", "MethodDocString",
+ CellChangeTimes->{{3.678729100498365*^9, 3.678729109722097*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: $GetAttr", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"NoAttributeFunction", "[", 
+  RowBox[{"self_", ",", "attr_"}], "]"}]], "Code",
+ CellChangeTimes->{{3.678729065473406*^9, 3.6787290736695557`*^9}}],
+
+Cell[TextData[{
+ "Tries to get the attribute from ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"ChemData", "::", "Property"}], TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "MethodDocString",
+ CellChangeTimes->{{3.678729076417913*^9, 3.678729092881531*^9}}]
+}, Open  ]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Molecule Class", "Subsection"],
+
+Cell["\<\
+No more than an atom set. Connectivity is not ensured, although splitting of \
+the mlecule\
+\>", "ClassDocString",
+ CellChangeTimes->{{3.67877048979963*^9, 3.67877052452626*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: $Init", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"InitializationFunction", "[", 
+  RowBox[{"self_", ",", "\n", "\t", 
+   RowBox[{"atomList", ":", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"_String", ",", "_List", ",", "___"}], "}"}], ".."}], "}"}], 
+     "|", 
+     RowBox[{"{", 
+      RowBox[{"__", "?", 
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"IsInstance", "[", 
+          RowBox[{"#", ",", "Atom"}], "]"}], "&"}], ")"}]}], "}"}]}], ":", 
+    RowBox[{"{", "}"}]}], ",", "\n", "\t", 
+   RowBox[{"bondList", ":", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"_", "?", "NumberQ"}], ".."}], "}"}], "..."}], "}"}], ":", 
+    RowBox[{"{", "}"}]}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.678770471471806*^9, 3.678770479410801*^9}}],
+
+Cell["Loads all the atoms and makes bonds appropriately", "MethodDocString",
+ CellChangeTimes->{{3.67877048320398*^9, 3.6787704860826893`*^9}, {
+  3.678770632068904*^9, 3.678770639428405*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Class method: Import", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ClassMethod", "[", 
+  RowBox[{"Import", ",", "cls_", ",", "file_", ",", "\n", "\t\t\t\t", 
+   RowBox[{"fileType", ":", 
+    RowBox[{
+    "\"\<ZMatrix\>\"", "|", "\"\<ChemicalTable\>\"", "|", "Automatic"}], ":", 
+    "Automatic"}], ",", "\n", "\t\t\t\t", 
+   RowBox[{"atomList", ":", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"_String", ".."}], "}"}], "|", 
+     RowBox[{"{", 
+      RowBox[{"{", 
+       RowBox[{"_String", ".."}], "}"}], "}"}], "|", "_String"}], ":", 
+    "\"\<X\>\""}], ",", "\n", "\t\t\t\t", 
+   RowBox[{"bondList", ":", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"__Integer", ",", 
+         RowBox[{"_", "?", "NumberQ"}]}], "}"}], "..."}], "}"}], "|", 
+     RowBox[{"{", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"__Integer", ",", 
+          RowBox[{"_", "?", "NumberQ"}]}], "}"}], "..."}], "}"}], "}"}], "|", 
+     "Automatic"}], ":", "Automatic"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678770647832738*^9}],
+
+Cell["Imports molecules from a file", "MethodDocString",
+ CellChangeTimes->{{3.678770649750476*^9, 3.6787706610999947`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Class method: ListToAtoms", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"StaticMethod", "[", 
+  RowBox[{"ListToAtoms", ",", "data_", ",", 
+   RowBox[{"mode_:", "Automatic"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.67877067065444*^9}],
+
+Cell["\<\
+Takes a list, as from reading in a file, as turns it into atoms and bond \
+ready to turned into a molecule\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678770671916788*^9, 3.678770712442164*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Class method: FromList", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ClassMethod", "[", 
+  RowBox[{"FromList", ",", "cls_", ",", "data_", ",", 
+   RowBox[{"mode_:", "Automatic"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678770726651585*^9}],
+
+Cell[TextData[{
+ "Uses ",
+ Cell[BoxData[
+  FormBox["ListToAtoms", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " to build molecules"
+}], "MethodDocString",
+ CellChangeTimes->{{3.6787707279188337`*^9, 3.678770737873466*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Class method: BuildInterface", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ClassMethod", "[", 
+  RowBox[{"BuildInterface", ",", "cls_"}], "]"}]], "Code",
+ CellChangeTimes->{3.678770742853204*^9}],
+
+Cell["\<\
+An interface for building molecules. Works best with z-matrices.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678770744018046*^9, 3.678770760272983*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound property: InitList", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundProperty", "[", 
+  RowBox[{"InitList", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{3.678770766611471*^9}],
+
+Cell["\<\
+A list of atoms, positions, masses, and bonds that can be used to make a new, \
+identical molecule\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678770767381309*^9, 3.678770791599881*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Add", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Add", ",", "self_", ",", "objects__"}], "]"}]], "Code",
+ CellChangeTimes->{{3.678770798025744*^9, 3.6787708002161493`*^9}}],
+
+Cell["Adds atoms to the molecule", "MethodDocString",
+ CellChangeTimes->{{3.678770801069644*^9, 3.678770807431431*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Remove", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Remove", ",", "self_", ",", "objects__"}], "]"}]], "Code",
+ CellChangeTimes->{{3.678770811681059*^9, 3.678770815608705*^9}}],
+
+Cell["Removes atoms from the molecule", "MethodDocString",
+ CellChangeTimes->{{3.6787708164400997`*^9, 3.6787708212229767`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: GetAtoms", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"GetAtoms", ",", "self_", ",", "key_", ",", 
+   RowBox[{"Property", "->", "ObjectString"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678770825543356*^9}],
+
+Cell["Gets atoms in a molecule, selecting for some property", "Text"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: ResolveBonds", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"ResolveBonds", ",", "self_", ",", 
+   RowBox[{"MaxSteps", "->", "5"}], ",", 
+   RowBox[{"Tolerance", "->", ".1"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.67877083672962*^9}],
+
+Cell["\<\
+Applies a simple criterion to attempt to solve the bonding structure of the \
+atomset provided, assuming the sum of the valences is non-zero.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678770838206554*^9, 3.678770866301593*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Split", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Split", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{3.678770874343095*^9}],
+
+Cell["Splits the molecule into connected pieces", "Text",
+ CellChangeTimes->{{3.678770876630471*^9, 3.678770881981188*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Static method: BondOb", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"StaticMethod", "[", 
+  RowBox[{"BondOb", ",", "atom1_", ",", "atom2_", ",", "\n", "\t\t", 
+   RowBox[{"degree_:", "1"}], ",", 
+   RowBox[{"Origin", "->", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "0", ",", "0"}], "}"}]}], ",", 
+   RowBox[{"Style", "->", "Automatic"}], ",", 
+   RowBox[{"ConstantBondWidth", "->", "False"}], ",", 
+   RowBox[{"Update", "->", "False"}], ",", 
+   RowBox[{"BondWidth", "->", ".5"}], ",", "\n", "\t\t\t\t\t", 
+   RowBox[{"TripleBondSeparation", "->", "Automatic"}], ",", 
+   RowBox[{"DoubleBondSeparation", "->", "Automatic"}], ",", 
+   RowBox[{"Scale", "->", "1"}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.678770887829562*^9, 3.678770902420581*^9}}],
+
+Cell["Generates two tubes for a bond object, by default", "MethodDocString",
+ CellChangeTimes->{{3.678770903935507*^9, 3.6787709427558117`*^9}, {
+   3.6787709960598583`*^9, 3.678771035858053*^9}, 3.678771092502668*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Origin", "Subsubsubsection",
+ CellChangeTimes->{{3.678771095430643*^9, 3.67877109682262*^9}}],
+
+Cell["\<\
+The origin of the system, against which to adjust all bond positions\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.6788055325207253`*^9, 3.678805549305286*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Style", "Subsubsubsection",
+ CellChangeTimes->{{3.678771098462531*^9, 3.678771099198449*^9}}],
+
+Cell[TextData[{
+ "This specifies the style in which to draw the bond. It should be either a \
+single function or a list of rules that specifies functions for each type of \
+bond, or ",
+ Cell[BoxData[
+  FormBox["Automatic", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ".\n\nSingle bond styling functions should look like ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"f", "[", 
+    RowBox[{"p", ",", "v", ",", "w", ",", "a"}], "]"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " where ",
+ Cell[BoxData[
+  FormBox["p", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is the bond center, ",
+ Cell[BoxData[
+  FormBox["v", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is the bond vector to halfway between the atoms, ",
+ Cell[BoxData[
+  FormBox["w", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is the width of the bond, and ",
+ Cell[BoxData[
+  FormBox["a", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is the atom it originates at\n\nDouble bond styling functions should look \
+like ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"f", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"p", ",", "c"}], "}"}], ",", "v", ",", "w", ",", "a"}], "]"}], 
+   TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " where ",
+ Cell[BoxData[
+  FormBox["c", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is the vector to space the double bonds along and everything else is the \
+same as in the single bond case\n\nTriple bond styling functions should look \
+like ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"f", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"p", ",", 
+       RowBox[{"{", 
+        RowBox[{"c1", ",", "c2", ",", "c3"}], "}"}]}], "}"}], ",", "v", ",", 
+     "w", ",", "a"}], "]"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " where ",
+ Cell[BoxData[
+  FormBox["c1", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", ",
+ Cell[BoxData[
+  FormBox["c2", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", and ",
+ Cell[BoxData[
+  FormBox["c3", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " are the vectors to spread the triple bonds along and everything else is \
+the same.\n\nHydrogen bonds and any other type of bond should be styled as in \
+the single bond case.\n\nBase styling for bonds can be specified by putting \
+",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"Style", " ", "\[Rule]", " ", "style_"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " as the first element of the list."
+}], "MethodDocString",
+ CellChangeTimes->{{3.6788053981110973`*^9, 3.678805508577977*^9}, {
+  3.678806009239197*^9, 3.678806013916778*^9}, {3.67880608684684*^9, 
+  3.6788060959009237`*^9}, {3.678806147741609*^9, 3.678806180087842*^9}, {
+  3.678806286077773*^9, 3.678806477651133*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Update", "Subsubsubsection",
+ CellChangeTimes->{{3.678771100574448*^9, 3.67877110133442*^9}}],
+
+Cell["Whether to make this bond dynamically updating or not.", \
+"MethodDocString",
+ CellChangeTimes->{{3.678805552114167*^9, 3.678805563073166*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["BondWidth", "Subsubsubsection",
+ CellChangeTimes->{3.678771109531171*^9}],
+
+Cell["The width of the bond.", "MethodDocString",
+ CellChangeTimes->{{3.678805565777173*^9, 3.67880557301654*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["DoubleBondSeparation", "Subsubsubsection",
+ CellChangeTimes->{3.67877112016155*^9}],
+
+Cell[TextData[{
+ "How far to separate double bonds by. ",
+ Cell[BoxData[
+  FormBox["None", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " will make them overlap completely."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678805576463831*^9, 3.678805593040223*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["TripleBondSeparation", "Subsubsubsection",
+ CellChangeTimes->{3.678771113409816*^9}],
+
+Cell[TextData[{
+ "How far to separate triple bonds by. ",
+ Cell[BoxData[
+  FormBox["None", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " will make them overlap completely."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678805576463831*^9, 3.67880560247222*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Scale", "Subsubsubsection",
+ CellChangeTimes->{{3.678771121470953*^9, 3.6787711220938787`*^9}}],
+
+Cell["How to scale the bond widths. Not really used.", "MethodDocString",
+ CellChangeTimes->{{3.678805605421947*^9, 3.6788056188314342`*^9}}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: DrawOb", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"DrawOb", ",", "self_", ",", 
+   RowBox[{"ConstantBondWidth", "->", ".1"}], ",", 
+   RowBox[{"Scale", "->", "1"}], ",", 
+   RowBox[{"ReturnAssociation", "->", "False"}], ",", 
+   RowBox[{"Origin", "->", "Automatic"}], ",", "\n", "\t\t", 
+   RowBox[{"Label", "->", "False"}], ",", 
+   RowBox[{"LabelingFunction", "->", "Automatic"}], ",", 
+   RowBox[{"Style", "->", "Automatic"}], ",", "\n", "\t\t", 
+   RowBox[{"DoubleBondSeparation", "->", "Automatic"}], ",", 
+   RowBox[{"TripleBondSeparation", "->", "Automatic"}], ",", "\n", "\t\t", 
+   RowBox[{"ShowCenterOfMass", "->", "Automatic"}], ",", 
+   RowBox[{"Update", "->", "All"}], ",", 
+   RowBox[{"InertialAxes", "->", "Automatic"}], ",", 
+   RowBox[{"Rotate", "->", "True"}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.6787709681794567`*^9, 3.678770990020544*^9}, 
+   3.6788059669447203`*^9}],
+
+Cell["\<\
+Generates the graphics primitives for representation of the molecule\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.6787710453044987`*^9, 3.678771066163031*^9}, {
+  3.678771372241007*^9, 3.6787713768729763`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["ConstantBondWidth", "Subsubsubsection",
+ CellChangeTimes->{{3.678771068415523*^9, 3.678771073975377*^9}}],
+
+Cell["\<\
+A constant width for bonds. Otherwise it works as a fraction of the smallest \
+bond-partner\[CloseCurlyQuote]s radius, which looks weird overall.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678805635321207*^9, 3.6788056712225018`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["ReturnAssociation", "Subsubsubsection",
+ CellChangeTimes->{{3.6787710760792418`*^9, 3.6787710784791803`*^9}}],
+
+Cell["Whether to return results as an association or a list.", \
+"MethodDocString",
+ CellChangeTimes->{{3.678805677607945*^9, 3.678805687342042*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Origin", "Subsubsubsection",
+ CellChangeTimes->{{3.678771079655046*^9, 3.678771080398872*^9}}],
+
+Cell["\<\
+The origin of the system, against which to adjust all positions\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678805690999402*^9, 3.678805703877507*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Label", "Subsubsubsection",
+ CellChangeTimes->{{3.678771082071125*^9, 3.6787710826469707`*^9}}],
+
+Cell["A label to pass to the atoms", "MethodDocString",
+ CellChangeTimes->{{3.678805707468375*^9, 3.678805718757214*^9}, {
+  3.6788057892903957`*^9, 3.6788057920488863`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["LabelingFunction", "Subsubsubsection",
+ CellChangeTimes->{{3.6787710847271357`*^9, 3.67877108803057*^9}, {
+  3.678805819858588*^9, 3.6788058234747877`*^9}}],
+
+Cell["A labeling function to pass to the atoms", "MethodDocString",
+ CellChangeTimes->{{3.678805794367179*^9, 3.6788058010163727`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Style", "Subsubsubsection",
+ CellChangeTimes->{3.678805838196776*^9}],
+
+Cell[TextData[{
+ "A pair of styling functions, the first for the atoms, the second for the \
+bonds. Styling should be specified as described in ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"Atom", "::", "DrawOb"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " and ",
+ Cell[BoxData[
+  FormBox["BondOb", TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "MethodDocString",
+ CellChangeTimes->{{3.6788059708441896`*^9, 3.6788060031853037`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["DoubleBondSeparation", "Subsubsubsection",
+ CellChangeTimes->{3.6788058413727617`*^9}],
+
+Cell[TextData[{
+ "Passed to ",
+ Cell[BoxData[
+  FormBox["BondOb", TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "MethodDocString",
+ CellChangeTimes->{{3.678805930662861*^9, 3.678805934902557*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["TripleBondSeparation", "Subsubsubsection",
+ CellChangeTimes->{3.678805843884762*^9}],
+
+Cell[TextData[{
+ "Passed to ",
+ Cell[BoxData[
+  FormBox["BondOb", TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "MethodDocString",
+ CellChangeTimes->{{3.678805930662861*^9, 3.678805934902557*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["ShowCenterOfMass", "Subsubsubsection",
+ CellChangeTimes->{3.6788058474763393`*^9}],
+
+Cell["Whether to place a small dot at the COM or not.", "MethodDocString",
+ CellChangeTimes->{{3.678805915854979*^9, 3.678805927174452*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["InertialAxes", "Subsubsubsection",
+ CellChangeTimes->{3.678805855010298*^9}],
+
+Cell["Whether to place the A, B, and C axes of the plot.", "MethodDocString",
+ CellChangeTimes->{{3.678805900615898*^9, 3.678805910134993*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Update", "Subsubsubsection",
+ CellChangeTimes->{3.678805850940186*^9}],
+
+Cell[TextData[{
+ "Which atoms and bonds should be dynamically updating. Uses ",
+ Cell[BoxData[
+  FormBox["GetAtoms", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " to determine this. And any bond with such an atom as a bonding partner is \
+specified to be updating."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678805859804268*^9, 3.678805895535665*^9}}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Class Field: DrawStyles", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"ClassField", "[", "DrawStyles", "]"}], "=", 
+   RowBox[{"<|", 
+    RowBox[{
+     RowBox[{"\"\<Primitives\>\"", "->", 
+      RowBox[{"{", 
+       RowBox[{
+       "Automatic", ",", "Line", ",", "Point", ",", "TraditionalForm", ",", 
+        "Filling", ",", "Tube"}], "}"}]}], ",", "\n", "\t\t\t\t\t\t", 
+     RowBox[{"\"\<Combinations\>\"", "->", 
+      RowBox[{"{", 
+       RowBox[{
+       "\"\<BallAndLine\>\"", ",", "\"\<BallAndTube\>\"", ",", 
+        "\"\<PointAndLine\>\""}], "}"}]}]}], "|>"}]}], ";"}]], "Code"],
+
+Cell[TextData[{
+ "The draw styles known. The ",
+ Cell[BoxData[
+  FormBox["\"\<Primitives\>\"", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " section can be used as either part of a styling and will be understood."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678771308095498*^9, 3.6787713413914337`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Draw", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Draw", ",", "\n", "\t", "self_", ",", 
+   RowBox[{"ConstantBondWidth", "->", "Automatic"}], ",", 
+   RowBox[{"ShowCenterOfMass", "->", "Automatic"}], ",", "\n", "\t", 
+   RowBox[{"Origin", "->", "Automatic"}], ",", 
+   RowBox[{"Scale", "->", ".3"}], ",", 
+   RowBox[{"InertialAxes", "->", "Automatic"}], ",", "\n", "\t", 
+   RowBox[{"PlotStyle", "->", "Automatic"}], ",", 
+   RowBox[{"Label", "->", "False"}], ",", 
+   RowBox[{"LabelingFunction", "->", "Automatic"}], ",", "\n", "\t", 
+   RowBox[{"Update", "->", "None"}], ",", 
+   RowBox[{"Boxed", "->", "False"}], ",", 
+   RowBox[{"Lighting", "->", "Default"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678771353564542*^9}],
+
+Cell[TextData[{
+ "Generates the actual graphic, performing much of the default styling \
+replacements before passing the results to ",
+ Cell[BoxData[
+  FormBox["DrawOb", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ".\n\nThe only option not in ",
+ Cell[BoxData[
+  FormBox["DrawOb", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is ",
+ Cell[BoxData[
+  FormBox["PlotStyle", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", which routes to ",
+ Cell[BoxData[
+  FormBox["Style", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ". The only reason for this renaming is that typing ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"Style", "\[Rule]"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " in the front end pops up a list of cell styles, which is distracting and \
+annoying."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678771379853323*^9, 3.678771413759659*^9}, {
+  3.678806537135599*^9, 3.678806625164122*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: RotateGraphics", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"RotateGraphics", ",", "self_", ",", "graphic_", ",", 
+   RowBox[{"rotationAxes_:", 
+    RowBox[{"{", 
+     RowBox[{"\"\<A\>\"", ",", "\"\<B\>\"", ",", "\"\<C\>\""}], "}"}]}]}], 
+  "]"}]], "Code",
+ CellChangeTimes->{3.678771424323453*^9}],
+
+Cell["\<\
+Rotates a graphic so that its inertial axes align along the specified axis \
+system.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678771425819435*^9, 3.678771477618874*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["rotationAxes", "Subsubsubsection",
+ CellChangeTimes->{{3.678771479290908*^9, 3.678771481242858*^9}}],
+
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"{", 
+    RowBox[{"\"\<A\>\"", ",", "\"\<B\>\"", ",", "\"\<C\>\""}], "}"}], 
+   TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " would rotate it so that the A-axis aligned along the x-axis of the \
+graphic, B along the y, and C along the z"
+}], "MethodDocString",
+ CellChangeTimes->{{3.678771500445135*^9, 3.6787715560965223`*^9}}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound property: Mass", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundProperty", "[", 
+  RowBox[{"Mass", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{{3.6787715641382637`*^9, 3.678771567344495*^9}}],
+
+Cell["Returns the total mass of the molecule", "MethodDocString",
+ CellChangeTimes->{{3.678771568036374*^9, 3.678771575544224*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Move", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Move", ",", "self_", ",", 
+   RowBox[{"move", ":", 
+    RowBox[{"_", "?", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"MatchQ", "[", 
+        RowBox[{"#", ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"_", "?", "NumberQ"}], ",", 
+           RowBox[{"_", "?", "NumberQ"}], ",", 
+           RowBox[{"_", "?", "NumberQ"}]}], "}"}]}], "]"}], "&"}], ")"}]}], 
+    ":", "None"}], ",", "\n", "\t\t", 
+   RowBox[{"atomList", ":", 
+    RowBox[{"_", "?", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"MatchQ", "[", 
+          RowBox[{"#", ",", 
+           RowBox[{"(", 
+            RowBox[{"_Rule", "|", "_RuleDelayed"}], ")"}]}], "]"}], "//", 
+         "Not"}], ")"}], "&"}], ")"}]}], ":", "All"}], ",", "\n", "\t\t", 
+   RowBox[{"\"\<X\>\"", "->", "0"}], ",", 
+   RowBox[{"\"\<Y\>\"", "->", "0"}], ",", 
+   RowBox[{"\"\<Z\>\"", "->", "0"}], ",", 
+   RowBox[{"Axes", "->", 
+    RowBox[{"IdentityMatrix", "[", "3", "]"}]}], ",", 
+   RowBox[{"Set", "->", "False"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.67877158490584*^9}],
+
+Cell["\<\
+Moves some set of atoms (defaults to everything). Can specify motion along \
+intertial axes or any other axis system.\
+\>", "Text"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Rotate", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Rotate", ",", "self_", ",", "\[Theta]_", ",", 
+   RowBox[{"atomList", ":", 
+    RowBox[{"_", "?", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"MatchQ", "[", 
+          RowBox[{"#", ",", 
+           RowBox[{"(", 
+            RowBox[{"_Rule", "|", "_RuleDelayed"}], ")"}]}], "]"}], "//", 
+         "Not"}], ")"}], "&"}], ")"}]}], ":", "All"}], ",", "\n", "\t", 
+   RowBox[{"Axis", "->", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "1", ",", "0"}], "}"}]}], ",", 
+   RowBox[{"Center", "->", "Automatic"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.6787716007456083`*^9}],
+
+Cell["Rotates some set of atoms (defaults to everything)", "Text"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Breathe", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Breathe", ",", "self_", ",", 
+   RowBox[{"quantity", ":", 
+    RowBox[{"_", "?", 
+     RowBox[{"(", "NumberQ", ")"}]}], ":", ".1"}], ",", 
+   RowBox[{"atomList", ":", 
+    RowBox[{"_", "?", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"MatchQ", "[", 
+        RowBox[{"#", ",", 
+         RowBox[{"_List", "|", "None", "|", "All"}]}], "]"}], "&"}], ")"}]}], 
+    ":", "All"}], ",", "\n", "\t\t\t\t", 
+   RowBox[{"Mode", "->", "Scaled"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678771609952839*^9}],
+
+Cell["\<\
+Extends atoms along bond angles, if defined, and along the center of mass \
+vector if not. Breathes by either a fixed amount or a fraction of the bond \
+length (second is default). Was going to be used in animating vibrations.\
+\>", "Text",
+ CellChangeTimes->{{3.678771636449779*^9, 3.678771647969542*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound property: CenterOfMass", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundProperty", "[", 
+  RowBox[{"CenterOfMass", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{{3.6787716526682577`*^9, 3.6787716543535833`*^9}}],
+
+Cell["Obvious", "MethodDocString",
+ CellChangeTimes->{{3.678771661102536*^9, 3.678771662216873*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound property: EMCMatrix", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundProperty", "[", 
+  RowBox[{"EMCMatrix", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{{3.67877166720254*^9, 3.678771668713224*^9}}],
+
+Cell[TextData[{
+ "Returns the ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"{", 
+    RowBox[{"Element", ",", " ", "Mass", ",", " ", "Position"}], "}"}], 
+   TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " triple for every atom. Used to calculate the ",
+ Cell[BoxData[
+  FormBox["InertiaTensor", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "."
+}], "MethodDocString",
+ CellChangeTimes->{{3.6787716695674343`*^9, 3.678771704583351*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound property: IsLinear", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundProperty", "[", 
+  RowBox[{"IsLinear", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{3.6787717149532948`*^9}],
+
+Cell["\<\
+Returns whether the molecule is linear or a single molecule or not.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678771716444621*^9, 3.678771732478788*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound property: DegreesOfFreedom", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundProperty", "[", 
+  RowBox[{"DegreesOfFreedom", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{3.678771739145824*^9}],
+
+Cell["Here for fun. Simple calculation, fun example of a property.", \
+"MethodDocString",
+ CellChangeTimes->{{3.678771741134591*^9, 3.678771768085876*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound property: InteriaTensor", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundProperty", "[", 
+  RowBox[{"InertiaTensor", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{{3.678771773400115*^9, 3.6787717772142897`*^9}}],
+
+Cell["The interia tensor for the molecule", "MethodDocString",
+ CellChangeTimes->{{3.678771778079434*^9, 3.678771783373522*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound property: ABCVectors", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundProperty", "[", 
+  RowBox[{"ABCVectors", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{{3.678771788759112*^9, 3.6787717907975893`*^9}}],
+
+Cell["\<\
+The eigensystem of the inertia tensor, with the eigenvalues inverted to get \
+A, B, and C\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678771791544159*^9, 3.678771863963038*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: ABCAxes", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"ABCAxes", ",", "self_", ",", 
+   RowBox[{"magnitudes_:", 
+    RowBox[{"{", 
+     RowBox[{"1", ",", "1", ",", "1"}], "}"}]}], ",", 
+   RowBox[{"WithMagnitude", "->", "False"}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.678771870933025*^9, 3.678771872739525*^9}}],
+
+Cell[TextData[{
+ "Graphics version of ",
+ Cell[BoxData[
+  FormBox["ABCVectors", TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "MethodDocString",
+ CellChangeTimes->{{3.678771873854776*^9, 3.678771879766698*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: EmpiricalFormula", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"EmpiricalFormula", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{3.678771883357444*^9}],
+
+Cell[TextData[{
+ "Generates an ",
+ Cell[BoxData[
+  FormBox["EmpiricalFormula", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " for the molecule"
+}], "MethodDocString",
+ CellChangeTimes->{{3.678771884029188*^9, 3.67877189497083*^9}, {
+  3.67877193404282*^9, 3.678771937450515*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: $ToString", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"$ToString", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{3.678771944020255*^9}],
+
+Cell[TextData[{
+ "Just calls ",
+ Cell[BoxData[
+  FormBox["EmpiricalFormula", TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "MethodDocString",
+ CellChangeTimes->{{3.678771945157653*^9, 3.678771955009103*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Representation Function", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"RepresentationFunction", "[", "self_", "]"}]], "Code",
+ CellChangeTimes->{3.678771964636799*^9}],
+
+Cell["\<\
+Allows switching between the empirical formula and default drawing.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678771968236854*^9, 3.678771983641251*^9}}]
+}, Open  ]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Complex Class", "Subsection"],
+
+Cell[TextData[{
+ "A complex of two components. Subclasses ",
+ Cell[BoxData[
+  FormBox["Molecule", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ". Exists solely so the ",
+ Cell[BoxData[
+  FormBox["ReducedMass", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is defined."
+}], "ClassDocString",
+ CellChangeTimes->{{3.678771992291864*^9, 3.678772048631403*^9}, {
+  3.678772127877014*^9, 3.67877214266879*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: $Init", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"InitializationFunction", "[", 
+  RowBox[{"self_", ",", "compA_", ",", "compB_"}], "]"}]], "Code",
+ CellChangeTimes->{3.678772060752721*^9}],
+
+Cell["\<\
+Figures out from what\[CloseCurlyQuote]s provided whether to make a molecule, \
+atom, or complex for each component.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678772062404489*^9, 3.67877211229357*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound property: InitList", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundProperty", "[", 
+  RowBox[{"InitList", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{3.6787720839186*^9}],
+
+Cell[TextData[{
+ "Same deal as with ",
+ Cell[BoxData[
+  FormBox["Molecule", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", but with a few more details"
+}], "MethodDocString",
+ CellChangeTimes->{{3.678772085147048*^9, 3.678772119587343*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound property: Atoms", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundProperty", "[", 
+  RowBox[{"Atoms", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{{3.6787721469660463`*^9, 3.678772149348586*^9}}],
+
+Cell["Combines the atoms of both components", "MethodDocString",
+ CellChangeTimes->{{3.678772152409316*^9, 3.6787721633478117`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: GetAtoms", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"GetAtoms", ",", "self_", ",", "key_", ",", 
+   RowBox[{"Property", "->", "ObjectString"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678772232965159*^9}],
+
+Cell[TextData[{
+ "Gets atoms, but now can be specified to get from either component by using ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"{", 
+    RowBox[{"\"\<Component 1\>\"", ",", "key_"}], "}"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " or ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"{", 
+    RowBox[{"\"\<Component 2\>\"", ",", "key_"}], "}"}], TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "MethodDocString",
+ CellChangeTimes->{{3.678772234669734*^9, 3.678772289176272*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound property: ReducedMass", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundProperty", "[", 
+  RowBox[{"ReducedMass", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{{3.678772223765401*^9, 3.678772225514257*^9}}],
+
+Cell["Pretty obvious", "MethodDocString",
+ CellChangeTimes->{{3.6787722263197403`*^9, 3.678772229377866*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Rotate", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Rotate", ",", "self_", ",", "\[Theta]_", ",", 
+   RowBox[{"atomList", ":", 
+    RowBox[{"_", "?", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{
+         RowBox[{"MatchQ", "[", 
+          RowBox[{"#", ",", 
+           RowBox[{"(", 
+            RowBox[{"_Rule", "|", "_RuleDelayed"}], ")"}]}], "]"}], "//", 
+         "Not"}], ")"}], "&"}], ")"}]}], ":", "All"}], ",", "\n", "\t", 
+   RowBox[{"Axis", "->", 
+    RowBox[{"{", 
+     RowBox[{"0", ",", "1", ",", "0"}], "}"}]}], ",", 
+   RowBox[{"Center", "->", "Automatic"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678772205091267*^9}],
+
+Cell[TextData[{
+ "Extends ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"Molecule", "::", "Rotate"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " by allowing for rotation about the component of the complex\nFor things \
+like ",
+ Cell[BoxData[
+  FormBox["Ar", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " complexes, using the ",
+ Cell[BoxData[
+  FormBox["Update", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " parameter well would allow one to animate a rotation of the ",
+ Cell[BoxData[
+  FormBox["Ar", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " about the COM or whatever."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678772176300872*^9, 3.678772218335161*^9}}]
+}, Open  ]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Convenience Functions Class", "Subsection"],
+
+Cell["\<\
+A class that has a bunch of convenience functions and things of that nature. \
+Could just as well be pure Mathematica code, rather than a class.\
+\>", "ClassDocString",
+ CellChangeTimes->{{3.678772373220366*^9, 3.678772406973118*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: $Init", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"InitializationFunction", "[", 
+  RowBox[{"self_", ",", 
+   RowBox[{"molecule", ":", 
+    RowBox[{"_", "?", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"Not", "@", 
+        RowBox[{"MatchQ", "[", 
+         RowBox[{"#", ",", 
+          RowBox[{"_", 
+           RowBox[{"(", 
+            RowBox[{"Rule", "|", "RuleDelayed"}], ")"}]}]}], "]"}]}], "&"}], 
+      ")"}]}], ":", "None"}], ",", 
+   RowBox[{"Update", "->", 
+    RowBox[{"{", "}"}]}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.678772306146948*^9, 3.678772343271234*^9}}],
+
+Cell["\<\
+At one point was going to be used for animations, which made binding a \
+specific molecule useful.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.6787723453355303`*^9, 3.6787723665661287`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Class field: CompoundMap", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ClassField", "[", "CompoundMap", "]"}]], "Code",
+ CellChangeTimes->{{3.67877241160994*^9, 3.678772415894216*^9}}],
+
+Cell[TextData[{
+ "A map of compounds of interest. Includes water, argon vinyl-chloride, \
+acetylene, etc. Key formatting is a bit weird, but ",
+ Cell[BoxData[
+  FormBox["GetCompound", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " deals with that."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678772416893116*^9, 3.678772465554618*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Class method: GetPrimitive", "Subsubsection"],
+
+Cell[BoxData[
+ RowBox[{"ClassMethod", "[", 
+  RowBox[{"GetPrimitive", ",", "cls_", ",", "l_", ",", 
+   RowBox[{"complexType_:", "ChemicalComplex"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678772490277116*^9}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: GetCompound", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"GetCompound", ",", "self_", ",", "compKey_"}], "]"}]], "Code",
+ CellChangeTimes->{{3.678772468851083*^9, 3.678772470306416*^9}}],
+
+Cell[TextData[{
+ "Formats requests to ",
+ Cell[BoxData[
+  FormBox["CompoundMap", TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "MethodDocString",
+ CellChangeTimes->{{3.678772470994688*^9, 3.678772479512683*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Static method: BondDistances", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"StaticMethod", "[", 
+  RowBox[{"BondDistances", ",", 
+   RowBox[{"chemical_", "/;", 
+    RowBox[{"(", 
+     RowBox[{"Quiet", "@", 
+      RowBox[{"Check", "[", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"ChemicalData", "[", "chemical", "]"}], ";", "True"}], ",", 
+        "False"}], "]"}]}], ")"}]}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678772513084672*^9}],
+
+Cell["\<\
+Returns both the average bond distances and the bond distances for each atom \
+for a given chemical. Could potentially be extended to automatically scrape \
+useful bond data from Matheamatica\[CloseCurlyQuote]s databases.\
+\>", "Text",
+ CellChangeTimes->{{3.6787725212677507`*^9, 3.678772562640107*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Rotate", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Rotate", ",", "self_", ",", 
+   RowBox[{"object", ":", 
+    RowBox[{"_", "?", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"MatchQ", "[", 
+        RowBox[{"#", ",", "_MathematicaClass"}], "]"}], "&"}], ")"}]}], ":", 
+    "Automatic"}], ",", "\n", "\t\t\t\t", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"degrees_", ",", "args__"}], "}"}], "|", 
+    RowBox[{"degrees_", "?", 
+     RowBox[{"(", 
+      RowBox[{
+       RowBox[{"!", 
+        RowBox[{"MatchQ", "[", 
+         RowBox[{"#", ",", "_List"}], "]"}]}], "&"}], ")"}]}]}], ",", "\n", 
+   "\t\t\t\t", 
+   RowBox[{"Repeated", "->", "1"}], ",", 
+   RowBox[{"Timing", "->", ".2"}], ",", 
+   RowBox[{"Delayed", "->", "0"}], ",", 
+   RowBox[{"Cycles", "->", "1"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.6787725692991953`*^9}],
+
+Cell["\<\
+Rotates an object about a point. Doesn\[CloseCurlyQuote]t get much use. Can \
+be used in animations, though.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678772570347172*^9, 3.6787725960073566`*^9}}]
+}, Open  ]]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell["Examples", "Section",
+ CellChangeTimes->{{3.678806964999764*^9, 3.678806966326541*^9}}]
+}, Open  ]]
+},
+WindowSize->{808, 755},
+WindowMargins->{{12, Automatic}, {Automatic, 24}},
+FrontEndVersion->"10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, \
+2015)",
+StyleDefinitions->FrontEnd`FileName[{
+   ParentDirectory[
+    ParentDirectory[]], "Stylesheets"}, "Documentation Stylesheet.nb", 
+  CharacterEncoding -> "UTF-8"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 43, 0, 65, "Chapter"],
+Cell[CellGroupData[{
+Cell[648, 26, 32, 0, 64, "Section"],
+Cell[CellGroupData[{
+Cell[705, 30, 42, 0, 44, "Subsection"],
+Cell[750, 32, 265, 5, 49, "ClassDocString"],
+Cell[CellGroupData[{
+Cell[1040, 41, 180, 2, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[1245, 47, 163, 3, 50, "Code"],
+Cell[1411, 52, 191, 4, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[1651, 62, 181, 2, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[1857, 68, 136, 2, 49, "Code"],
+Cell[1996, 72, 138, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[2183, 79, 163, 2, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[2371, 85, 192, 3, 50, "Code"],
+Cell[2566, 90, 147, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[2762, 97, 183, 2, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[2970, 103, 231, 4, 50, "Code"],
+Cell[3204, 109, 195, 4, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[3448, 119, 157, 2, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[3630, 125, 138, 2, 50, "Code"],
+Cell[3771, 129, 360, 10, 31, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[4180, 145, 177, 2, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[4382, 151, 173, 3, 50, "Code"],
+Cell[4558, 156, 383, 11, 32, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[4990, 173, 159, 2, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[5174, 179, 245, 4, 50, "Code"],
+Cell[5422, 185, 162, 3, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[5633, 194, 153, 2, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[5811, 200, 163, 3, 50, "Code"],
+Cell[5977, 205, 141, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[6167, 212, 157, 2, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[6349, 218, 303, 6, 51, "Code"],
+Cell[6655, 226, 465, 14, 32, "MethodDocString"]
+}, Open  ]]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[7181, 247, 32, 0, 36, "Subsection"],
+Cell[CellGroupData[{
+Cell[7238, 251, 115, 1, 35, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[7378, 256, 323, 7, 50, "Code"],
+Cell[7704, 265, 97, 2, 30, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[7850, 273, 49, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[7924, 277, 141, 3, 50, "Code"],
+Cell[8068, 282, 205, 4, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[8322, 292, 45, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[8392, 296, 509, 11, 66, "Code"],
+Cell[8904, 309, 96, 1, 30, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9037, 315, 100, 1, 28, "Subsubsubsection"],
+Cell[9140, 318, 132, 1, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[9309, 324, 101, 1, 22, "Subsubsubsection"],
+Cell[9413, 327, 150, 2, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[9600, 334, 100, 1, 22, "Subsubsubsection"],
+Cell[9703, 337, 149, 2, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[9889, 344, 99, 1, 22, "Subsubsubsection"],
+Cell[9991, 347, 126, 1, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[10154, 353, 112, 1, 22, "Subsubsubsection"],
+Cell[10269, 356, 1224, 40, 90, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[11530, 401, 99, 1, 22, "Subsubsubsection"],
+Cell[11632, 404, 996, 29, 128, "MethodDocString"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[12677, 439, 43, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[12745, 443, 484, 9, 82, "Code"],
+Cell[13232, 454, 243, 7, 31, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[13524, 467, 45, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[13594, 471, 139, 3, 50, "Code"],
+Cell[13736, 476, 366, 12, 32, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[14151, 494, 47, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[14223, 498, 154, 3, 50, "Code"],
+Cell[14380, 503, 146, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[14575, 510, 48, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[14648, 514, 229, 5, 50, "Code"],
+Cell[14880, 521, 531, 14, 52, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[15460, 541, 43, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[15528, 545, 446, 12, 51, "Code"],
+Cell[15977, 559, 148, 4, 49, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[16174, 569, 47, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[16246, 573, 154, 3, 50, "Code"],
+Cell[16403, 578, 68, 0, 30, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[16520, 584, 51, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[16596, 588, 212, 4, 50, "Code"],
+Cell[16811, 594, 177, 3, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[17037, 603, 43, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[17105, 607, 446, 10, 50, "Code"],
+Cell[17554, 619, 411, 15, 31, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[18014, 640, 45, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[18084, 644, 381, 9, 50, "Code"],
+Cell[18468, 655, 59, 0, 30, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[18576, 661, 53, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[18654, 665, 162, 4, 50, "Code"],
+Cell[18819, 671, 352, 11, 31, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[19220, 688, 47, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[19292, 692, 144, 4, 50, "Code"],
+Cell[19439, 698, 175, 3, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[19663, 707, 48, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[19736, 711, 112, 2, 50, "Code"],
+Cell[19851, 715, 117, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[20017, 722, 56, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[20098, 726, 122, 2, 50, "Code"],
+Cell[20223, 730, 141, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[20413, 737, 47, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[20485, 741, 170, 3, 50, "Code"],
+Cell[20658, 746, 262, 7, 32, "MethodDocString"]
+}, Open  ]]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[20981, 760, 36, 0, 36, "Subsection"],
+Cell[21020, 762, 188, 4, 30, "ClassDocString"],
+Cell[CellGroupData[{
+Cell[21233, 770, 44, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[21302, 774, 800, 24, 82, "Code"],
+Cell[22105, 800, 192, 2, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[22346, 808, 45, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[22416, 812, 1034, 29, 99, "Code"],
+Cell[23453, 843, 124, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[23626, 850, 50, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[23701, 854, 184, 4, 50, "Code"],
+Cell[23888, 860, 207, 4, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[24144, 870, 47, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[24216, 874, 194, 4, 50, "Code"],
+Cell[24413, 880, 232, 7, 31, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[24694, 893, 53, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[24772, 897, 144, 3, 50, "Code"],
+Cell[24919, 902, 165, 3, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[25133, 911, 49, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[25207, 915, 141, 3, 50, "Code"],
+Cell[25351, 920, 199, 4, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[25599, 930, 42, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[25666, 934, 178, 3, 50, "Code"],
+Cell[25847, 939, 119, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[26015, 946, 45, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[26085, 950, 179, 3, 50, "Code"],
+Cell[26267, 955, 128, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[26444, 962, 47, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[26516, 966, 205, 4, 50, "Code"],
+Cell[26724, 972, 69, 0, 30, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[26842, 978, 51, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[26918, 982, 228, 5, 50, "Code"],
+Cell[27149, 989, 242, 4, 49, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[27440, 999, 44, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[27509, 1003, 136, 3, 50, "Code"],
+Cell[27648, 1008, 123, 1, 30, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[27820, 1015, 46, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[27891, 1019, 702, 14, 82, "Code"],
+Cell[28596, 1035, 218, 2, 30, "MethodDocString"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[28851, 1042, 99, 1, 28, "Subsubsubsection"],
+Cell[28953, 1045, 171, 3, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[29161, 1053, 99, 1, 22, "Subsubsubsection"],
+Cell[29263, 1056, 2772, 81, 306, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[32072, 1142, 99, 1, 22, "Subsubsubsection"],
+Cell[32174, 1145, 149, 2, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[32360, 1152, 79, 1, 22, "Subsubsubsection"],
+Cell[32442, 1155, 114, 1, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[32593, 1161, 89, 1, 22, "Subsubsubsection"],
+Cell[32685, 1164, 271, 7, 31, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[32993, 1176, 90, 1, 22, "Subsubsubsection"],
+Cell[33086, 1179, 270, 7, 31, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[33393, 1191, 101, 1, 22, "Subsubsubsection"],
+Cell[33497, 1194, 141, 1, 30, "MethodDocString"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[33687, 1201, 45, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[33757, 1205, 896, 17, 98, "Code"],
+Cell[34656, 1224, 222, 4, 30, "MethodDocString"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[34915, 1233, 111, 1, 28, "Subsubsubsection"],
+Cell[35029, 1236, 248, 4, 49, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[35314, 1245, 115, 1, 22, "Subsubsubsection"],
+Cell[35432, 1248, 149, 2, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[35618, 1255, 100, 1, 22, "Subsubsubsection"],
+Cell[35721, 1258, 164, 3, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[35922, 1266, 101, 1, 22, "Subsubsubsection"],
+Cell[36026, 1269, 174, 2, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[36237, 1276, 162, 2, 22, "Subsubsubsection"],
+Cell[36402, 1280, 135, 1, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[36574, 1286, 75, 1, 22, "Subsubsubsection"],
+Cell[36652, 1289, 452, 12, 50, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[37141, 1306, 92, 1, 22, "Subsubsubsection"],
+Cell[37236, 1309, 206, 6, 31, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[37479, 1320, 90, 1, 22, "Subsubsubsection"],
+Cell[37572, 1323, 206, 6, 31, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[37815, 1334, 88, 1, 22, "Subsubsubsection"],
+Cell[37906, 1337, 140, 1, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[38083, 1343, 82, 1, 22, "Subsubsubsection"],
+Cell[38168, 1346, 143, 1, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[38348, 1352, 76, 1, 22, "Subsubsubsection"],
+Cell[38427, 1355, 364, 8, 50, "MethodDocString"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[38840, 1369, 48, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[38913, 1373, 563, 15, 66, "Code"],
+Cell[39479, 1390, 314, 7, 50, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[39842, 1403, 43, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[39910, 1407, 728, 14, 114, "Code"],
+Cell[40641, 1423, 948, 27, 111, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[41638, 1456, 53, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[41716, 1460, 292, 7, 50, "Code"],
+Cell[42011, 1469, 185, 4, 30, "MethodDocString"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[42233, 1478, 106, 1, 28, "Subsubsubsection"],
+Cell[42342, 1481, 391, 10, 51, "MethodDocString"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[42782, 1497, 45, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[42852, 1501, 163, 3, 50, "Code"],
+Cell[43018, 1506, 131, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[43198, 1513, 43, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[43266, 1517, 1140, 32, 82, "Code"],
+Cell[44409, 1551, 141, 3, 49, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[44599, 1560, 45, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[44669, 1564, 663, 18, 66, "Code"],
+Cell[45335, 1584, 66, 0, 30, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[45450, 1590, 46, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[45521, 1594, 555, 15, 66, "Code"],
+Cell[46079, 1611, 316, 5, 68, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[46444, 1622, 53, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[46522, 1626, 173, 3, 50, "Code"],
+Cell[46698, 1631, 100, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[46847, 1638, 50, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[46922, 1642, 165, 3, 50, "Code"],
+Cell[47090, 1647, 446, 14, 32, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[47585, 1667, 49, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[47659, 1671, 143, 3, 50, "Code"],
+Cell[47805, 1676, 168, 3, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[48022, 1685, 57, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[48104, 1689, 149, 3, 50, "Code"],
+Cell[48256, 1694, 155, 2, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[48460, 1702, 54, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[48539, 1706, 172, 3, 50, "Code"],
+Cell[48714, 1711, 128, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[48891, 1718, 51, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[48967, 1722, 169, 3, 50, "Code"],
+Cell[49139, 1727, 190, 4, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[49378, 1737, 46, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[49449, 1741, 314, 7, 50, "Code"],
+Cell[49766, 1750, 220, 6, 31, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[50035, 1762, 55, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[50115, 1766, 147, 3, 50, "Code"],
+Cell[50265, 1771, 288, 8, 32, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[50602, 1785, 48, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[50675, 1789, 140, 3, 50, "Code"],
+Cell[50818, 1794, 217, 6, 32, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[51084, 1806, 48, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[51157, 1810, 120, 2, 50, "Code"],
+Cell[51280, 1814, 168, 3, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[51509, 1824, 35, 0, 36, "Subsection"],
+Cell[51547, 1826, 423, 12, 31, "ClassDocString"],
+Cell[CellGroupData[{
+Cell[51995, 1842, 44, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[52064, 1846, 163, 3, 50, "Code"],
+Cell[52230, 1851, 216, 4, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[52495, 1861, 49, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[52569, 1865, 139, 3, 50, "Code"],
+Cell[52711, 1870, 250, 7, 31, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[53010, 1883, 46, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[53081, 1887, 164, 3, 50, "Code"],
+Cell[53248, 1892, 132, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[53429, 1899, 47, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[53501, 1903, 205, 4, 50, "Code"],
+Cell[53709, 1909, 498, 14, 50, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[54256, 1929, 52, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[54333, 1933, 168, 3, 50, "Code"],
+Cell[54504, 1938, 109, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[54662, 1945, 45, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[54732, 1949, 661, 18, 66, "Code"],
+Cell[55396, 1969, 702, 21, 72, "MethodDocString"]
+}, Open  ]]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[56159, 1997, 49, 0, 36, "Subsection"],
+Cell[56211, 1999, 244, 4, 49, "ClassDocString"],
+Cell[CellGroupData[{
+Cell[56480, 2007, 44, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[56549, 2011, 554, 16, 51, "Code"],
+Cell[57106, 2029, 203, 4, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[57358, 2039, 49, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[57432, 2043, 137, 2, 50, "Code"],
+Cell[57572, 2047, 346, 8, 51, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[57967, 2061, 51, 0, 29, "Subsubsection"],
+Cell[58021, 2063, 208, 4, 50, "Code"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[58266, 2072, 50, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[58341, 2076, 183, 3, 50, "Code"],
+Cell[58527, 2081, 221, 6, 32, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[58797, 2093, 53, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[58875, 2097, 391, 11, 50, "Code"],
+Cell[59269, 2110, 313, 5, 49, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[59631, 2121, 45, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[59701, 2125, 834, 24, 82, "Code"],
+Cell[60538, 2151, 211, 4, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+Cell[60800, 2161, 93, 1, 50, "Section"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

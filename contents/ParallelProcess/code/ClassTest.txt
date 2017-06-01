@@ -1,0 +1,8 @@
+#!/usr/local/bin/WolframScript -script
+
+cont="MolecularModeling`";
+Pause[5];
+d=ParentDirectory@ParentDirectory@DirectoryName@$InputFileName;
+Needs[cont,FileNameJoin@{d,cont~StringTrim~"`","init.m"}];
+water=ChemWrapper::GetCompound["Water"];
+water::IsLinear

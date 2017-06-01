@@ -1,0 +1,720 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     20476,        711]
+NotebookOptionsPosition[     15866,        546]
+NotebookOutlinePosition[     16355,        565]
+CellTagsIndexPosition[     16312,        562]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Objects", "Section",
+ CellChangeTimes->{{3.6788034084797163`*^9, 3.6788034393012238`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Heads", "Subsection",
+ CellChangeTimes->{{3.678803396959692*^9, 3.678803404143475*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["UnsubmittedJob", "Subsubsection",
+ CellChangeTimes->{{3.678803449808001*^9, 3.6788034540559797`*^9}, 
+   3.678803517061141*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"UnsubmittedJob", "[", "r_", "]"}]], "Code",
+ CellChangeTimes->{{3.6788034684701967`*^9, 3.678803475517003*^9}}],
+
+Cell["\<\
+A formatting head to specify that the job is unsubmitted and to display some \
+appropriate representation\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.67880347814957*^9, 3.678803500260275*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["CompletedJob", "Subsubsection",
+ CellChangeTimes->{{3.678803510541923*^9, 3.6788035130438633`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"CompletedJob", "[", "r_", "]"}]], "Code"],
+
+Cell["\<\
+A formatting head to specify that the job is complete and the result is \
+enclosed\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.67880347814957*^9, 3.6788035329635677`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["SuccessResult", "Subsubsection",
+ CellChangeTimes->{3.678803548119248*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"SuccessResult", "[", "r_", "]"}]], "Code"],
+
+Cell[TextData[{
+ "A head that specifies that the run successfully completed. ",
+ Cell[BoxData[
+  FormBox["r", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is the result of the run"
+}], "MethodDocString",
+ CellChangeTimes->{{3.678803549192069*^9, 3.678803569282776*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["DequeuedResult", "Subsubsection",
+ CellChangeTimes->{3.6788035758181953`*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"DequeuedResult", "[", "r_", "]"}]], "Code"],
+
+Cell["\<\
+A head that specifies the run was dequeued before completion. It\
+\[CloseCurlyQuote]s not wholly clear how this arises, but the result is \
+clearly in the Mathematica internals.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678803591268311*^9, 3.678803625857642*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["InvalidResult", "Subsubsection",
+ CellChangeTimes->{{3.678803632016426*^9, 3.6788036346813183`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"InvalidResult", "[", "r_", "]"}]], "Code"],
+
+Cell["A head that specifies the run failed.", "MethodDocString",
+ CellChangeTimes->{{3.6788036368347282`*^9, 3.678803642400985*^9}}]
+}, Open  ]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Parallel Process Class", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[" ParallelProcess", "Subsubsection",
+ CellChangeTimes->{{3.678803674992292*^9, 3.678803679180428*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ParallelProcess", "[", 
+  RowBox[{"cmd_", ",", "specs___"}], "]"}]], "Code",
+ CellChangeTimes->{3.678803681178093*^9}],
+
+Cell[TextData[{
+ "A constructor for a ",
+ Cell[BoxData[
+  FormBox["ParallelProcessObject", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " that formats everything appropriately."
+}], "MethodDocString",
+ CellChangeTimes->{{3.67880368230029*^9, 3.678803703232233*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Initialization Function", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"InitializationFunction", "[", 
+  RowBox[{"self_", ",", "jobcmd_HoldComplete", ",", "\n", "\t", 
+   RowBox[{"p", ":", "_SharedPackages", ":", 
+    RowBox[{"SharedPackages", "[", "]"}]}], ",", "\n", "\t", 
+   RowBox[{"d", ":", "_SharedDefinitions", ":", 
+    RowBox[{"SharedDefinitions", "[", "]"}]}], ",", "\n", "\t", 
+   RowBox[{"f", ":", "_SharedFunctions", ":", 
+    RowBox[{"SharedFunctions", "[", "]"}]}], ",", "\n", "\t", 
+   RowBox[{"v", ":", "_SharedVariables", ":", 
+    RowBox[{"SharedVariables", "[", "]"}]}], ",", "\n", "\t", 
+   RowBox[{"c", ":", "_VariableClosure", ":", 
+    RowBox[{"VariableClosure", "[", "]"}]}], ",", "\n", "\t", 
+   RowBox[{"checkPeriod", ":", 
+    RowBox[{"_", "?", "NumericQ"}], ":", "1"}], ",", "\n", 
+   RowBox[{"SuccessResult", "->", " ", 
+    RowBox[{"Function", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"proc", ",", "suc"}], "}"}], ",", "Null"}], "]"}]}], ",", "\n", 
+   RowBox[{"DequeuedResult", "->", " ", 
+    RowBox[{"Function", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"proc", ",", "fal"}], "}"}], ",", "Null"}], "]"}]}], ",", "\n", 
+   RowBox[{"InvalidResult", "->", " ", 
+    RowBox[{"Function", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"proc", ",", "inv"}], "}"}], ",", "Null"}], "]"}]}], ",", "\n", 
+   RowBox[{"Quiet", "->", "All"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678803732244359*^9}],
+
+Cell[TextData[{
+ "Initializes the ",
+ Cell[BoxData[
+  FormBox["ParallelProcesObject", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ".\n\n",
+ Cell[BoxData[
+  FormBox["SharedPackages", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " argument specifies the packages to distribute across parallel kernels. By \
+passing a ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"{", 
+    RowBox[{"context", ",", "file"}], "}"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " pair will load ",
+ Cell[BoxData[
+  FormBox["context", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " from ",
+ Cell[BoxData[
+  FormBox["file", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ".\n",
+ Cell[BoxData[
+  FormBox["SharedDefinitions", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " does the same thing for the symbols enclosed.\n",
+ Cell[BoxData[
+  FormBox["SharedFunctions", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " specifies the functions to share across kernels.\n",
+ Cell[BoxData[
+  FormBox["SharedVariables", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " specifies the variables to share across kernels.\n",
+ Cell[BoxData[
+  FormBox["VariableClosure", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " specifies the variables to construct a closure for in running.\n",
+ Cell[BoxData[
+  FormBox["checkPeriod", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " is the rate at which to check whether the run has finished or not."
+}], "MethodDocString",
+ CellChangeTimes->{{3.678803743093137*^9, 3.6788037532370768`*^9}, {
+  3.678803976698763*^9, 3.678804144706169*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["SuccessResult", "Subsubsubsection",
+ CellChangeTimes->{{3.678803757163423*^9, 3.6788037599793673`*^9}}],
+
+Cell["A function to apply if the run completes successfully.", \
+"MethodDocString",
+ CellChangeTimes->{{3.678803763508462*^9, 3.6788037734831533`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["DequeuedResult", "Subsubsubsection",
+ CellChangeTimes->{3.678803779030959*^9}],
+
+Cell[TextData[{
+ "A function to apply in the case of a ",
+ Cell[BoxData[
+  FormBox["DequeuedResult", TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "MethodDocString",
+ CellChangeTimes->{{3.678803780584386*^9, 3.678803790535253*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["InvalidResult", "Subsubsubsection",
+ CellChangeTimes->{3.678803797942397*^9}],
+
+Cell["A function to apply if the run fails", "MethodDocString",
+ CellChangeTimes->{{3.6788038009639997`*^9, 3.6788038059385853`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Quiet", "Subsubsubsection",
+ CellChangeTimes->{3.678803817093939*^9}],
+
+Cell[TextData[{
+ "What messages to quiet. Defaults to quieting everything. ",
+ Cell[BoxData[
+  FormBox["None", TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " quiets nothing."
+}], "MethodDocString",
+ CellChangeTimes->{{3.6788038184405813`*^9, 3.678803847825375*^9}}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Queue", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Queue", ",", "self_", ",", "\n", "\t", 
+   RowBox[{"packs", ":", 
+    RowBox[{"_SharedPackages", "|", "Automatic"}], ":", "Automatic"}], ",", 
+   "\n", "\t", 
+   RowBox[{"defs", ":", 
+    RowBox[{"_SharedDefinitions", "|", "Automatic"}], ":", "Automatic"}], ",",
+    "\n", "\t", 
+   RowBox[{"funcs", ":", 
+    RowBox[{"_SharedFunctions", "|", "Automatic"}], ":", "Automatic"}], ",", 
+   "\n", "\t", 
+   RowBox[{"svars", ":", 
+    RowBox[{"_SharedVariables", "|", "Automatic"}], ":", "Automatic"}], ",", 
+   "\n", "\t", 
+   RowBox[{"var", ":", 
+    RowBox[{"_VariableClosure", "|", "Automatic"}], ":", "Automatic"}], ",", 
+   "\n", "\t", 
+   RowBox[{"Verbose", "->", "False"}], ",", "\n", "\t", 
+   RowBox[{"Quiet", "->", "Automatic"}]}], "]"}]], "Code",
+ CellChangeTimes->{3.678804153690628*^9}],
+
+Cell["\<\
+Tosses the run onto the processing queue. Configures the run. The arguments \
+are much the same as for the initialization function.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678804157337297*^9, 3.678804200889708*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Verbose", "Subsubsubsection",
+ CellChangeTimes->{{3.6788042044017467`*^9, 3.6788042054259043`*^9}}],
+
+Cell["Whether to print verbose output or not.", "MethodDocString",
+ CellChangeTimes->{{3.6788042070053043`*^9, 3.678804220945602*^9}}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Start", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Start", ",", "self_", ",", "\n", "\t", 
+   RowBox[{"p", ":", 
+    RowBox[{"_SharedPackages", "|", "Automatic"}], ":", "Automatic"}], ",", 
+   "\n", "\t", 
+   RowBox[{"d", ":", 
+    RowBox[{"_SharedDefinitions", "|", "Automatic"}], ":", "Automatic"}], ",",
+    "\n", "\t", 
+   RowBox[{"f", ":", 
+    RowBox[{"_SharedFunctions", "|", "Automatic"}], ":", "Automatic"}], ",", 
+   "\n", "\t", 
+   RowBox[{"s", ":", 
+    RowBox[{"_SharedVariables", "|", "Automatic"}], ":", "Automatic"}], ",", 
+   "\n", "\t", 
+   RowBox[{"v", ":", 
+    RowBox[{"_VariableClosure", "|", "Automatic"}], ":", "Automatic"}], ",", 
+   "\n", "\t", 
+   RowBox[{"Verbose", "->", "False"}], ",", "\n", "\t", 
+   RowBox[{"Quiet", "->", "Automatic"}]}], "\n", "]"}]], "Code",
+ CellChangeTimes->{3.678804228148549*^9}],
+
+Cell["Starts the job. Queues it up if necessary first.", "MethodDocString",
+ CellChangeTimes->{{3.678804229197132*^9, 3.678804246425136*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Query", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Query", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{3.6788042527557364`*^9, 3.6788043311494513`*^9}],
+
+Cell["Checks if the run has started, finished, or is running.", \
+"MethodDocString",
+ CellChangeTimes->{{3.678804268366087*^9, 3.678804287040309*^9}, 
+   3.6788043362205343`*^9}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Retry", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Retry", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{3.678804594612*^9}],
+
+Cell["Retries the run, if it failed to run.", "MethodDocString",
+ CellChangeTimes->{{3.678804595996602*^9, 3.6788046031051617`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: CheckResult", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"CheckResult", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{{3.678804608987619*^9, 3.678804613953203*^9}, 
+   3.678804652938554*^9}],
+
+Cell["\<\
+Checks the result of the run and runs the appropriate function on the result\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678804654714271*^9, 3.678804676064608*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: WaitResult", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"WaitResult", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{3.678804695296401*^9}],
+
+Cell["Forcibly waits for the run to finish. Locks the kernel.", \
+"MethodDocString",
+ CellChangeTimes->{{3.6788046965183687`*^9, 3.678804712580572*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: CheckRetry", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"CheckRetry", ",", "self_"}], "]"}]], "Code",
+ CellChangeTimes->{{3.6788047256792316`*^9, 3.6788047522775173`*^9}}],
+
+Cell[TextData[{
+ "If the run hasn\[CloseCurlyQuote]t completed, calls ",
+ Cell[BoxData[
+  FormBox["Retry", TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "MethodDocString",
+ CellChangeTimes->{{3.678804753453699*^9, 3.6788047645083323`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Representation Function", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"RepresentationFunction", "[", "self_", "]"}]], "Code",
+ CellChangeTimes->{3.6788047800400248`*^9}],
+
+Cell["Generates a dynamic watcher of the results.", "MethodDocString",
+ CellChangeTimes->{{3.67880478316918*^9, 3.678804795186713*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Bound method: Run", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"BoundMethod", "[", 
+  RowBox[{"Run", ",", "self_", ",", "\n", "\t", 
+   RowBox[{"p", ":", 
+    RowBox[{"_SharedPackages", "|", "Automatic"}], ":", "Automatic"}], ",", 
+   "\n", "\t", 
+   RowBox[{"d", ":", 
+    RowBox[{"_SharedDefinitions", "|", "Automatic"}], ":", "Automatic"}], ",",
+    "\n", "\t", 
+   RowBox[{"sf", ":", 
+    RowBox[{"_SharedFunctions", "|", "Automatic"}], ":", "Automatic"}], ",", 
+   "\n", "\t", 
+   RowBox[{"sv", ":", 
+    RowBox[{"_SharedVariables", "|", "Automatic"}], ":", "Automatic"}], ",", 
+   "\n", "\t", 
+   RowBox[{"v", ":", 
+    RowBox[{"_VariableClosure", "|", "Automatic"}], ":", "Automatic"}], ",", 
+   "\n", "\t", 
+   RowBox[{"checkEvery", ":", 
+    RowBox[{
+     RowBox[{"_", "?", "NumericQ"}], "|", "Automatic"}], ":", "Automatic"}], 
+   ",", "\n", "\t", 
+   RowBox[{"checkTimes", ":", 
+    RowBox[{"_Integer", "|", "\[Infinity]"}], ":", "\[Infinity]"}], ",", "\n",
+    "\t", 
+   RowBox[{"delay", ":", 
+    RowBox[{"_", "?", "NumericQ"}], ":", "0"}], ",", "\n", "\t", 
+   RowBox[{"Verbose", "->", "False"}], ",", "\n", "\t", 
+   RowBox[{"Quiet", "->", "Automatic"}]}], "]"}]], "Code",
+ CellChangeTimes->{{3.6788048244251547`*^9, 3.678804841031108*^9}}],
+
+Cell["Returns the instance, which formats to a watcher.", "MethodDocString",
+ CellChangeTimes->{{3.678804842053412*^9, 3.6788048524287653`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Class method: RunScript", "Subsubsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ClassMethod", "[", 
+  RowBox[{"RunScript", ",", "cls_", ",", 
+   RowBox[{"scriptFile_", "?", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"MatchQ", "[", 
+        RowBox[{"#", ",", "_String"}], "]"}], "&&", 
+       RowBox[{"FileExistsQ", "[", "#", "]"}]}], "&"}], ")"}]}], ",", 
+   "ops___"}], "]"}]], "Code",
+ CellChangeTimes->{3.678804860311672*^9}],
+
+Cell["\<\
+Starts a process from a script and runs it in the background.\
+\>", "MethodDocString",
+ CellChangeTimes->{{3.678804863590405*^9, 3.678804882644372*^9}}]
+}, Open  ]]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell["Examples", "Section",
+ CellChangeTimes->{{3.6788048966526423`*^9, 3.678804898787866*^9}}]
+},
+WindowSize->{808, 755},
+WindowMargins->{{12, Automatic}, {Automatic, 24}},
+FrontEndVersion->"10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, \
+2015)",
+StyleDefinitions->FrontEnd`FileName[{
+   ParentDirectory[
+    ParentDirectory[]], "Stylesheets"}, "Documentation Stylesheet.nb", 
+  CharacterEncoding -> "UTF-8"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 96, 1, 64, "Section"],
+Cell[CellGroupData[{
+Cell[701, 27, 93, 1, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[819, 32, 133, 2, 35, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[977, 38, 135, 2, 50, "Code"],
+Cell[1115, 42, 205, 4, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[1369, 52, 105, 1, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[1499, 57, 65, 1, 50, "Code"],
+Cell[1567, 60, 184, 4, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[1800, 70, 80, 1, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[1905, 75, 66, 1, 50, "Code"],
+Cell[1974, 78, 280, 7, 31, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[2303, 91, 83, 1, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[2411, 96, 67, 1, 50, "Code"],
+Cell[2481, 99, 278, 5, 49, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[2808, 110, 106, 1, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[2939, 115, 66, 1, 50, "Code"],
+Cell[3008, 118, 132, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[3201, 126, 44, 0, 36, "Subsection"],
+Cell[CellGroupData[{
+Cell[3270, 130, 107, 1, 35, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[3402, 135, 142, 3, 50, "Code"],
+Cell[3547, 140, 274, 7, 32, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[3870, 153, 48, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[3943, 157, 1411, 31, 210, "Code"],
+Cell[5357, 190, 1621, 47, 193, "MethodDocString"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7015, 242, 109, 1, 28, "Subsubsubsection"],
+Cell[7127, 245, 151, 2, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[7315, 252, 84, 1, 22, "Subsubsubsection"],
+Cell[7402, 255, 241, 6, 32, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[7680, 266, 83, 1, 22, "Subsubsubsection"],
+Cell[7766, 269, 133, 1, 30, "MethodDocString"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[7936, 275, 75, 1, 22, "Subsubsubsection"],
+Cell[8014, 278, 274, 7, 31, "MethodDocString"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[8337, 291, 44, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[8406, 295, 850, 20, 161, "Code"],
+Cell[9259, 317, 232, 4, 49, "MethodDocString"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9528, 326, 105, 1, 28, "Subsubsubsection"],
+Cell[9636, 329, 134, 1, 30, "MethodDocString"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[9819, 336, 44, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[9888, 340, 839, 20, 176, "Code"],
+Cell[10730, 362, 141, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[10920, 369, 44, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[10989, 373, 162, 3, 50, "Code"],
+Cell[11154, 378, 178, 3, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[11381, 387, 44, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[11450, 391, 133, 3, 50, "Code"],
+Cell[11586, 396, 132, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[11767, 403, 50, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[11842, 407, 192, 4, 50, "Code"],
+Cell[12037, 413, 177, 3, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[12263, 422, 49, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[12337, 426, 141, 3, 50, "Code"],
+Cell[12481, 431, 152, 2, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[12682, 439, 49, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[12756, 443, 169, 3, 50, "Code"],
+Cell[12928, 448, 249, 6, 32, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[13226, 460, 48, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[13299, 464, 122, 2, 50, "Code"],
+Cell[13424, 468, 135, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[13608, 475, 42, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[13675, 479, 1215, 29, 209, "Code"],
+Cell[14893, 510, 144, 1, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[15086, 517, 48, 0, 29, "Subsubsection"],
+Cell[CellGroupData[{
+Cell[15159, 521, 392, 11, 50, "Code"],
+Cell[15554, 534, 162, 3, 30, "MethodDocString"]
+}, Open  ]]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+Cell[15767, 543, 95, 1, 50, "Section"]
+}
+]
+*)
+
+(* End of internal cache information *)

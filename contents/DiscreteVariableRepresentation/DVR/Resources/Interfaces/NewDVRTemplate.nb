@@ -1,0 +1,484 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     14657,        475]
+NotebookOptionsPosition[     11317,        360]
+NotebookOutlinePosition[     12590,        401]
+CellTagsIndexPosition[     12547,        398]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["About This Template", "Section"],
+
+Cell[CellGroupData[{
+
+Cell["What is this?", "Subsection"],
+
+Cell["\<\
+This a template for writing a DVR. Replace each of the blue templating boxes \
+with the appropriate functions or values for the DVR. For 1 and 3 dimensional \
+DVRs, a lot of the code has already been written and can be reimported from a \
+previously defined DVR, and in that case only the function in the DVR Setup \
+block needs to be defined.\
+\>", "Text",
+ CellChangeTimes->{{3.677512750270767*^9, 3.677512836159107*^9}, {
+  3.677512994270794*^9, 3.6775130137384167`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Why use this?", "Subsection",
+ CellChangeTimes->{{3.6775129528484163`*^9, 3.6775129598358803`*^9}}],
+
+Cell["\<\
+DVR config files require every attribute in the DVR Setup block to be defined \
+and this provides a well structured way to write them.\
+\>", "Text",
+ CellChangeTimes->{{3.677512855974765*^9, 3.677512938428986*^9}}]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[Cell[BoxData[
+ FormBox[
+  TemplateBox[{"\"DVR Name\"","\"DVR Name\"","Named",TextData},
+   "NotebookTemplateSlot"], TextForm]]]], "Section",
+ CellChangeTimes->{{3.677511634755309*^9, 3.6775116350901937`*^9}, {
+  3.677511791752112*^9, 3.677511795822383*^9}, {3.677512840847481*^9, 
+  3.677512843462241*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Description", "Subsection"],
+
+Cell["Place a description here", "Text"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Specs", "Subsection"],
+
+Cell["\<\
+Put in a brief usage message about this DVR, e.g., how many dimensions does \
+it work in, what DVRs does it depend on, etc.\
+\>", "Text"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Code", "Section"],
+
+Cell[BoxData[
+ RowBox[{"BeginDVRExtension", "@", 
+  "\"\<\!\(\*FormBox[TemplateBox[{\"\\\"DVR Name\\\"\",\"\\\"DVR \
+Name\\\"\",\"Named\",TextData},
+\"NotebookTemplateSlot\"],
+TextForm]\)\>\""}]], "Code",
+ CellChangeTimes->{{3.6775118089752274`*^9, 3.677511813324108*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Exposed Code", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell["Exposed Functions", "Subsubsection"],
+
+Cell[BoxData[
+ FormBox[Cell[BoxData[
+   FormBox[
+    TemplateBox[{"\"Exposed Functions\"","None","Named",BoxData},
+     "NotebookTemplateSlot"], TextForm]]], TextForm]], "Code",
+ CellChangeTimes->{{3.677511818030216*^9, 3.6775118562567883`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Exposed Options", "Subsubsection"],
+
+Cell[BoxData[Cell[BoxData[
+  FormBox[
+   TemplateBox[{"\"Exposed Options\"","None","Named",BoxData},
+    "NotebookTemplateSlot"], TextForm]]]], "Code",
+ CellChangeTimes->{{3.6775118589751043`*^9, 3.677511863471274*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Internal Code", "Subsection"],
+
+Cell[BoxData[
+ RowBox[{"Begin", "[", "\"\<`Private`\>\"", "]"}]], "Code"],
+
+Cell[BoxData[Cell[BoxData[
+  FormBox[
+   TemplateBox[{"\"Imports\"","None","Named",BoxData},
+    "NotebookTemplateSlot"], TextForm]]]], "Code",
+ CellChangeTimes->{{3.6775118763242493`*^9, 3.677511890557394*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Grid Formatting Function", "Subsubsection"],
+
+Cell["\<\
+This function should take a grid and the grid points used to generate the \
+grid.\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{Cell[BoxData[
+     FormBox[
+      TemplateBox[{
+       "\"Grid Formatting Function\"","FormatGrid","Named",BoxData},
+       "NotebookTemplateSlot"], TextForm]]], "[", 
+    RowBox[{"grid_", ",", "points_"}], "]"}], ":=", Cell[BoxData[
+    FormBox[
+     TemplateBox[{"\"Grid Formatting Definition\"","grid","Named",BoxData},
+      "NotebookTemplateSlot"], TextForm]]]}], ";"}]], "Code",
+ CellChangeTimes->{{3.6775118932512074`*^9, 3.677511904611904*^9}, {
+  3.677511979304739*^9, 3.677511989723645*^9}, {3.6775121011911592`*^9, 
+  3.677512151102002*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Grid Points Function", "Subsubsection"],
+
+Cell["\<\
+This function should take the number of grid points for each coordinate, the \
+ranges, and return a grid of coordinates.\
+\>", "Text",
+ CellChangeTimes->{{3.677512657021953*^9, 3.677512668241329*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{Cell[BoxData[
+     FormBox[
+      TemplateBox[{"\"Grid Points Function\"","GridPoints","Named",BoxData},
+       "NotebookTemplateSlot"], TextForm]]], "[", 
+    RowBox[{"points__", ",", "ranges__"}], "]"}], ":=", Cell[BoxData[
+    FormBox[
+     TemplateBox[{"\"Points Function Definition\"",TemplateArgBox[
+        TemplateArgBox[
+         RowBox[{"Throw", "[", "\"Not Implemented\"", "]"}], 2], 2],"Named",
+       BoxData},
+      "NotebookTemplateSlot"], TextForm]]]}], ";"}]], "Code",
+ CellChangeTimes->{{3.6775119090501223`*^9, 3.67751191340207*^9}, {
+  3.677512152408887*^9, 3.67751216403926*^9}, {3.677512217605998*^9, 
+  3.677512291293029*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Kinetic Matrix Function", "Subsubsection"],
+
+Cell["\<\
+This should take the grid generated in grid points function and turn it into \
+the kinetic energy matrix for the DVR\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{Cell[BoxData[
+     FormBox[
+      TemplateBox[{
+       "\"Kinetic Matrix Function\"","KineticMatrix","Named",BoxData},
+       "NotebookTemplateSlot"], TextForm]]], "[", "grid_", "]"}], ":=", Cell[
+   BoxData[
+    FormBox[
+     TemplateBox[{
+      "\"Kinetic Function Definition\"",
+       RowBox[{"Throw", "[", "\"Not Implemented\"", "]"}],"Named",BoxData},
+      "NotebookTemplateSlot"], TextForm]]]}], ";"}]], "Code",
+ CellChangeTimes->{{3.6775119171139317`*^9, 3.6775119252933083`*^9}, {
+  3.6775120541309357`*^9, 3.677512056513871*^9}, {3.677512254851837*^9, 
+  3.67751230156866*^9}, {3.677512359372353*^9, 3.677512378424726*^9}, {
+  3.677512602815627*^9, 3.67751260954209*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Potential Matrix Function", "Subsubsection"],
+
+Cell["\<\
+This should take the grid generated in grid points function and turn it into \
+the potential energy matrix for the DVR\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{Cell[BoxData[
+     FormBox[
+      TemplateBox[{
+       "\"Potential Matrix Function\"","PotentialMatrix","Named",BoxData},
+       "NotebookTemplateSlot"], TextForm]]], "[", "grid_", "]"}], ":=", Cell[
+   BoxData[
+    FormBox[
+     TemplateBox[{
+      "\"Potential Function Definition\"",
+       RowBox[{"Throw", "[", "\"Not Implemented\"", "]"}],"Named",BoxData},
+      "NotebookTemplateSlot"], TextForm]]]}], ";"}]], "Code",
+ CellChangeTimes->{{3.677511927666131*^9, 3.677511936588752*^9}, {
+  3.677512068058804*^9, 3.677512069857297*^9}, {3.677512306550857*^9, 
+  3.677512315208411*^9}, {3.6775123798726377`*^9, 3.6775123938089447`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Wavefunctions Function", "Subsubsection"],
+
+Cell["\<\
+Should take the kinetic and potential energy matrices generated and turn it \
+into an ordered array of energies and wavefunction vectors\
+\>", "Text"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{Cell[BoxData[
+     FormBox[
+      TemplateBox[{
+       "\"Wavefunctions Function\"","Wavefunctions","Named",BoxData},
+       "NotebookTemplateSlot"], TextForm]]], "[", 
+    RowBox[{"T_", ",", "V_"}], "]"}], ":=", Cell[BoxData[
+    FormBox[
+     TemplateBox[{
+      "\"Wavefunctions Function Definition\"",
+       RowBox[{"Throw", "[", "\"Not Implemented\"", "]"}],"Named",BoxData},
+      "NotebookTemplateSlot"], TextForm]]]}], ";"}]], "Code",
+ CellChangeTimes->{{3.677511939601831*^9, 3.6775119462636023`*^9}, {
+  3.677512078978163*^9, 3.677512080177155*^9}, {3.677512397045703*^9, 
+  3.6775124148162107`*^9}, {3.6775125541662903`*^9, 3.6775125679149837`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Plotting Function", "Subsubsection"],
+
+Cell["\<\
+Should take the wavefunctions, the grid, and the potential to plot the \
+results. Generally reusing some prewritten code works best.\
+\>", "Text",
+ CellChangeTimes->{{3.6775126976684933`*^9, 3.677512721587337*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{Cell[BoxData[
+     FormBox[
+      TemplateBox[{"\"Plotting Function\"","PlotResults","Named",BoxData},
+       "NotebookTemplateSlot"], TextForm]]], "[", 
+    RowBox[{"\[CapitalPsi]_", ",", "grid_", ",", "potential_"}], "]"}], ":=", 
+   Cell[BoxData[
+    FormBox[
+     TemplateBox[{
+      "\"Plotting Function Definition\"",
+       RowBox[{"Throw", "[", "\"Not Implemented\"", "]"}],"Named",BoxData},
+      "NotebookTemplateSlot"], TextForm]]]}], ";"}]], "Code",
+ CellChangeTimes->{{3.677511949337584*^9, 3.677511974033009*^9}, {
+  3.677512418762786*^9, 3.6775124434067802`*^9}, {3.67751257956996*^9, 
+  3.6775125924173727`*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["DVR Set Up", "Subsection"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"`$DVRDimension", "=", Cell[BoxData[
+    FormBox[
+     TemplateBox[{"\"DVR Dimension\"","None","Named",BoxData},
+      "NotebookTemplateSlot"], TextForm]]]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"`$FormatGrid", "=", Cell[BoxData[
+    FormBox[
+     TemplateBox[{"\"Grid Formatting Function\"","FormatGrid","Named",BoxData},
+      "NotebookTemplateSlot"], TextForm]]]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"`$PointLabels", "=", Cell[BoxData[
+    FormBox[
+     TemplateBox[{"\"Grid Points Function\"","None","Named",BoxData},
+      "NotebookTemplateSlot"], TextForm]]]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"`$GridPointsFunction", "=", Cell[BoxData[
+    FormBox[
+     TemplateBox[{"\"Grid Points Function\"","GridPoints","Named",BoxData},
+      "NotebookTemplateSlot"], TextForm]]]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"`$KineticMatrixFunction", "=", Cell[BoxData[
+    FormBox[
+     TemplateBox[{
+      "\"Kinetic Matrix Function\"","KineticMatrix","Named",BoxData},
+      "NotebookTemplateSlot"], TextForm]]]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"`$PotentialMatrixFunction", "=", Cell[BoxData[
+    FormBox[
+     TemplateBox[{
+      "\"Potential Matrix Function\"","PotentialMatrix","Named",BoxData},
+      "NotebookTemplateSlot"], TextForm]]]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"`$WavefunctionsFunction", "=", Cell[BoxData[
+    FormBox[
+     TemplateBox[{
+      "\"Wavefunctions Function\"","Wavefunctions","Named",BoxData},
+      "NotebookTemplateSlot"], TextForm]]]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"`$PlotFunction", "=", Cell[BoxData[
+    FormBox[
+     TemplateBox[{"\"Plotting Function\"","PlotResults","Named",BoxData},
+      "NotebookTemplateSlot"], TextForm]]]}], ";"}]}], "Code",
+ CellChangeTimes->{{3.677511957124082*^9, 3.67751196421835*^9}, {
+  3.6775119944028683`*^9, 3.67751201023216*^9}, {3.677512044655718*^9, 
+  3.6775120897585278`*^9}, {3.67751250383882*^9, 3.677512598335271*^9}}],
+
+Cell[BoxData[
+ RowBox[{"EndDVRExtension", "[", "]"}]], "Code"]
+}, Closed]]
+}, Open  ]]
+},
+AutoGeneratedPackage->Automatic,
+WindowSize->{808, 755},
+WindowMargins->{{Automatic, 76}, {Automatic, 0}},
+DockedCells->{},
+TaggingRules->{"NotebookTemplateVersion" -> 1., "NotebookTemplate" -> True},
+CellContext->Notebook,
+FrontEndVersion->"10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, \
+2015)",
+StyleDefinitions->Notebook[{
+   Cell[
+    StyleData[StyleDefinitions -> "Default.nb"]], 
+   Cell[
+    StyleData["Title"], ShowGroupOpener -> True], 
+   Cell[
+    StyleData["Chapter"], ShowGroupOpener -> True], 
+   Cell[
+    StyleData["Subchapter"], ShowGroupOpener -> True], 
+   Cell[
+    StyleData["Section"], ShowGroupOpener -> True], 
+   Cell[
+    StyleData["Subsection"], ShowGroupOpener -> True], 
+   Cell[
+    StyleData["Subsubsection"], ShowGroupOpener -> True], 
+   Cell[
+    StyleData["Subsubtitle"], CellFrame -> {{0, 0}, {1, 0}}]}, 
+  WindowSize -> {808, 755}, 
+  WindowMargins -> {{28, Automatic}, {36, Automatic}}, Visible -> False, 
+  FrontEndVersion -> 
+  "10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, 2015)", 
+  StyleDefinitions -> "PrivateStylesheetFormatting.nb"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 38, 0, 64, "Section"],
+Cell[CellGroupData[{
+Cell[643, 26, 35, 0, 44, "Subsection"],
+Cell[681, 28, 484, 8, 87, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[1202, 41, 105, 1, 36, "Subsection"],
+Cell[1310, 44, 224, 4, 49, "Text"]
+}, Closed]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[1583, 54, 320, 6, 75, "Section"],
+Cell[CellGroupData[{
+Cell[1928, 64, 33, 0, 44, "Subsection"],
+Cell[1964, 66, 40, 0, 30, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2041, 71, 27, 0, 44, "Subsection"],
+Cell[2071, 73, 147, 3, 49, "Text"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2267, 82, 23, 0, 64, "Section"],
+Cell[2293, 84, 272, 6, 58, "Code"],
+Cell[CellGroupData[{
+Cell[2590, 94, 34, 0, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[2649, 98, 42, 0, 35, "Subsubsection"],
+Cell[2694, 100, 245, 5, 59, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2976, 110, 40, 0, 35, "Subsubsection"],
+Cell[3019, 112, 219, 4, 60, "Code"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3287, 122, 35, 0, 44, "Subsection"],
+Cell[3325, 124, 73, 1, 50, "Code"],
+Cell[3401, 127, 211, 4, 60, "Code"],
+Cell[CellGroupData[{
+Cell[3637, 135, 49, 0, 35, "Subsubsection"],
+Cell[3689, 137, 105, 3, 30, "Text"],
+Cell[3797, 142, 598, 14, 60, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4432, 161, 45, 0, 35, "Subsubsection"],
+Cell[4480, 163, 210, 4, 49, "Text"],
+Cell[4693, 169, 695, 16, 60, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5425, 190, 48, 0, 35, "Subsubsection"],
+Cell[5476, 192, 140, 3, 30, "Text"],
+Cell[5619, 197, 728, 17, 60, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6384, 219, 50, 0, 35, "Subsubsection"],
+Cell[6437, 221, 142, 3, 49, "Text"],
+Cell[6582, 226, 685, 16, 60, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[7304, 247, 47, 0, 35, "Subsubsection"],
+Cell[7354, 249, 160, 3, 49, "Text"],
+Cell[7517, 254, 707, 16, 60, "Code"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8261, 275, 42, 0, 35, "Subsubsection"],
+Cell[8306, 277, 224, 4, 49, "Text"],
+Cell[8533, 283, 674, 16, 60, "Code"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9256, 305, 32, 0, 44, "Subsection"],
+Cell[9291, 307, 1933, 46, 256, "Code"],
+Cell[11227, 355, 62, 1, 49, "Code"]
+}, Closed]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

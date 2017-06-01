@@ -1,0 +1,1457 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.3' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     48952,       1448]
+NotebookOptionsPosition[     37894,       1111]
+NotebookOutlinePosition[     41080,       1189]
+CellTagsIndexPosition[     41037,       1186]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Discrete Variable Representation Interface", "Chapter",
+ CellChangeTimes->{{3.675595466715296*^9, 3.675595482163065*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["About", "Section",
+ CellChangeTimes->{{3.675595331901579*^9, 3.6755953326925488`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["What is a DVR?", "Subsection",
+ CellChangeTimes->{{3.675595336876307*^9, 3.675595339052903*^9}, 
+   3.67559544943932*^9}],
+
+Cell[TextData[{
+ "Discrete variable representation, or DVR, is a method for performing \
+quantum mechanical calculations. It hinges on approximating the Hamiltonian \
+operator, written ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    StyleBox["\[ScriptCapitalH]",
+     FontWeight->"Bold",
+     FontSlant->"Plain"], 
+    StyleBox["=",
+     FontWeight->"Plain",
+     FontSlant->"Plain"], 
+    RowBox[{
+     StyleBox["\[ScriptCapitalT]",
+      FontWeight->"Bold",
+      FontSlant->"Plain"], 
+     StyleBox["+",
+      FontWeight->"Plain",
+      FontSlant->"Plain"], 
+     StyleBox["\[ScriptCapitalV]",
+      FontWeight->"Bold"]}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ ", where ",
+ StyleBox["\[ScriptCapitalT]",
+  FontWeight->"Bold"],
+ " is the kinetic energy operator and ",
+ StyleBox["\[ScriptCapitalV] ",
+  FontWeight->"Bold"],
+ "is the potential energy operator. \n\nOne approximates by constructing a \
+grid of quadrature points and assuming two things:\n\n",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"\t", 
+    TagBox[GridBox[{
+       {
+        RowBox[{"1", ")"}], 
+        RowBox[{
+        "Operators", " ", "which", " ", "are", " ", "pure", " ", "functions", 
+         " ", "of", " ", "coordinates", " ", "have", " ", "no", " ", "value", 
+         " ", "anywhere", " ", "except", " ", "at", " ", 
+         StyleBox["a",
+          FontSlant->"Plain"], " ", "grid", " ", "point"}]},
+       {
+        RowBox[{"2", ")"}], 
+        RowBox[{
+        "The", " ", "potential", " ", "energy", " ", "operator", " ", "is", 
+         " ", "such", " ", "an", " ", "operator"}]}
+      },
+      AutoDelete->False,
+      GridBoxAlignment->{"Columns" -> {{Left}}},
+      GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+     
+     "Grid"]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\n\nThen in the matrix formulation of quantum mechanics, where ",
+ StyleBox["\[ScriptCapitalT]",
+  FontWeight->"Bold"],
+ " and ",
+ StyleBox["\[ScriptCapitalV]",
+  FontWeight->"Bold"],
+ " are matrices, ",
+ StyleBox["\[ScriptCapitalV]",
+  FontWeight->"Bold"],
+ " is diagonal. What this means, computation-wise, is that all one needs to \
+do is calculate the potential at each gridpoint classically and then arrange \
+these values along the diagonal of an appropriately constructed matrix.\n\n\
+All that is left, having dealt with the potential energy, is to find a matrix \
+representation for the kinetic energy. Furthermore, to achieve efficient \
+computations, this should be done without any integrations whatsoever.\n\n\
+Having done this, all one then needs to do is diagonalize the Hamiltonian \
+matrix, which will be the sum of these two matrices, and the eigenvalues will \
+be the energies and the eigenvectors the wavefunctions. "
+}], "Text",
+ CellChangeTimes->{{3.67760044511016*^9, 3.677600524218799*^9}, {
+  3.677600685567025*^9, 3.677600697062381*^9}, {3.6776007460447063`*^9, 
+  3.677601136785686*^9}, {3.677601172773548*^9, 3.677601318282887*^9}, {
+  3.677601352472826*^9, 3.677601437938833*^9}}],
+
+Cell["\<\
+Different (grid, kinetic energy, potential energy) tuples can then be \
+considered to be \[OpenCurlyDoubleQuote]a\[CloseCurlyDoubleQuote] DVR, which \
+is to say, they\[CloseCurlyQuote]re an explicit implementation of this \
+calculation framework.\
+\>", "Text",
+ CellChangeTimes->{{3.677601485958618*^9, 3.6776016313759823`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["How is this implemented?", "Subsection",
+ CellChangeTimes->{{3.6776014607842207`*^9, 3.677601473606904*^9}}],
+
+Cell["\<\
+Given a specific DVR type, all one needs to do is calculate the grid, kinetic \
+energy, and potential energy and combine these. The framework designed to \
+generalize this, is structured as follows:\
+\>", "Text",
+ CellChangeTimes->{{3.6776016503018436`*^9, 3.677601734646028*^9}, {
+  3.677603250041581*^9, 3.6776032645373917`*^9}}],
+
+Cell["Discrete Variable Representation", "TopStructure",
+ CellChangeTimes->{{3.677602011945088*^9, 3.677602020351063*^9}, {
+  3.6776032317464457`*^9, 3.677603239097752*^9}}],
+
+Cell["Config File", "SubStructure",
+ CellChangeTimes->{{3.6776020223242903`*^9, 3.677602035993164*^9}}],
+
+Cell["Grid generating function", "SubSubStructure",
+ CellChangeTimes->{{3.677603136230995*^9, 3.677603165348319*^9}, {
+  3.677603225379389*^9, 3.6776032286742268`*^9}, {3.677603309141445*^9, 
+  3.677603318613841*^9}}],
+
+Cell["Kinetic energy generating function", "SubSubStructure",
+ CellChangeTimes->{{3.677603136230995*^9, 3.677603165348319*^9}, {
+  3.677603225379389*^9, 3.6776032286742268`*^9}, {3.677603309141445*^9, 
+  3.6776033129173403`*^9}, {3.677603375725243*^9, 3.677603385706403*^9}}],
+
+Cell["Potential energy generating function", "SubSubStructure",
+ CellChangeTimes->{{3.677603136230995*^9, 3.677603165348319*^9}, {
+  3.677603225379389*^9, 3.6776032286742268`*^9}, {3.677603309141445*^9, 
+  3.6776033129173403`*^9}, {3.677603375725243*^9, 3.677603391714034*^9}}],
+
+Cell["Wavefunctions generating function", "SubSubStructure",
+ CellChangeTimes->{{3.677603136230995*^9, 3.677603165348319*^9}, {
+  3.677603225379389*^9, 3.6776032286742268`*^9}, {3.677603309141445*^9, 
+  3.6776033129173403`*^9}, {3.677603375725243*^9, 3.677603400122219*^9}}],
+
+Cell["Plotting function", "SubSubStructure",
+ CellChangeTimes->{{3.677603136230995*^9, 3.677603165348319*^9}, {
+  3.677603225379389*^9, 3.6776032286742268`*^9}, {3.677603309141445*^9, 
+  3.6776033129173403`*^9}, {3.677603375725243*^9, 3.6776034033404016`*^9}}],
+
+Cell["DVR Class @ Points, Range, Config File \[Rule] Instance", "SubStructure",
+ CellChangeTimes->{{3.677602300828677*^9, 3.6776023040736513`*^9}, {
+  3.677602445352379*^9, 3.677602445363576*^9}, {3.677602732648972*^9, 
+  3.677602732659672*^9}, {3.67760334226864*^9, 3.677603368045535*^9}}],
+
+Cell["\<\
+Creates an instance of the DVR using the attributes defined in the config \
+file plus other options\
+\>", "SubSubDescription",
+ CellChangeTimes->{{3.67760304366759*^9, 3.677603130192494*^9}, {
+  3.677603325444889*^9, 3.677603337468896*^9}, {3.677603844182172*^9, 
+  3.6776038464579163`*^9}}],
+
+Cell["Instance", "SubStructure",
+ CellChangeTimes->{{3.677602300828677*^9, 3.6776023040736513`*^9}, {
+   3.677602445352379*^9, 3.677602445363576*^9}, 3.677602732648972*^9, {
+   3.677603276065096*^9, 3.6776032770976133`*^9}}],
+
+Cell["Points", "SubSubStructure",
+ CellChangeTimes->{{3.67760328403859*^9, 3.677603321473727*^9}}],
+
+Cell["Range", "SubSubStructure",
+ CellChangeTimes->{{3.67760328403859*^9, 3.6776033234651413`*^9}}],
+
+Cell["Loading and saving functions", "SubSubStructure",
+ CellChangeTimes->{{3.67760328403859*^9, 3.677603323452909*^9}, {
+  3.677603854609003*^9, 3.677603861587469*^9}, {3.677603905551856*^9, 
+  3.677603915057246*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Run functions", "SubSubStructure",
+ CellChangeTimes->{{3.67760328403859*^9, 3.677603323452909*^9}, {
+  3.677603854609003*^9, 3.677603861587469*^9}, {3.677603905551856*^9, 
+  3.6776039173516703`*^9}}],
+
+Cell[TextData[{
+ "What should be noted is the DVR instance takes a config file as essentially \
+a template to implement to full details of the calculation. The framework at \
+hand also has options and parameters for saving results and calculating them \
+in the background, but the basic idea is simply that:\n\t\n\t",
+ StyleBox["Given a config file as a template, the framework deals with all \
+the calculation details",
+  FontSlant->"Italic"]
+}], "Text",
+ CellChangeTimes->{{3.677603933385612*^9, 3.677604118217773*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Using this Notebook", "Subsection",
+ CellChangeTimes->{{3.675595362973662*^9, 3.675595366509666*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Using the interface", "Subsubsection",
+ CellChangeTimes->{{3.677604203971065*^9, 3.677604206281725*^9}}],
+
+Cell["\<\
+There are two pieces to the interface, the interface itself and the instance \
+it generates and uses. The interface itself has two stages, the instance \
+generation frame and then the calculation frame. The instance can be used to \
+query and set options outside of the interface, should one want to do that.\
+\>", "Text",
+ CellChangeTimes->{{3.677605858286676*^9, 3.677606002485291*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Code base operation", "Subsubsection",
+ CellChangeTimes->{{3.677604217666855*^9, 3.6776042196895857`*^9}, {
+  3.67760583130716*^9, 3.677605836842946*^9}}],
+
+Cell[TextData[{
+ "The instructions for code based operations are detailed in the ",
+ Cell[BoxData[
+  TagBox[Cell[BoxData[
+    StyleBox[
+     RowBox[{"Running", " ", "via", " ", "Commands"}],
+     FontFamily->"Arial",
+     FontSize->15]], "Section"],
+   DisplayForm]]],
+ " section."
+}], "Text",
+ CellChangeTimes->{{3.6776057898583517`*^9, 3.677605840898693*^9}}]
+}, Closed]]
+}, Closed]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["DVR Interface", "Section",
+ CellChangeTimes->{{3.6755952236539173`*^9, 3.675595227341489*^9}}],
+
+Cell[BoxData[Cell[BoxData[
+  FormBox[
+   TemplateBox[{"\"SaveBox\"","","Named",BoxData},
+    "NotebookTemplateSlot"], TextForm]]]], "Output",
+ CellChangeTimes->{{3.678455498492187*^9, 3.678455509603883*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["DVR Interface", "Subsection",
+ ShowGroupOpener->False,
+ CellChangeTimes->{{3.6755951786281*^9, 3.675595181134965*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Dynamic", "[", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{"Replace", "[", "\[IndentingNewLine]", 
+    RowBox[{Cell[BoxData[
+      FormBox[
+       TemplateBox[{"\"DVRInterface\"","\"DVRInterface\"","Named",BoxData},
+        "NotebookTemplateSlot"], TextForm]]], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"ex", ":", 
+       RowBox[{"Except", "[", "_ExpressionCell", "]"}]}], "\[RuleDelayed]", 
+      RowBox[{"Switch", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Replace", "[", 
+         RowBox[{"FEDVR`loadCounter", ",", 
+          RowBox[{"s_Symbol", "\[RuleDelayed]", 
+           RowBox[{"(", 
+            RowBox[{"s", "=", "1"}], ")"}]}]}], "]"}], ",", 
+        "\[IndentingNewLine]", "1", ",", 
+        RowBox[{
+         RowBox[{"FEDVR`loadCounter", "++"}], ";", 
+         RowBox[{"NotebookDelete", "[", 
+          RowBox[{"PreviousCell", "[", "]"}], "]"}]}], ",", 
+        "\[IndentingNewLine]", "2", ",", 
+        RowBox[{
+         RowBox[{"FEDVR`loadCounter", "++"}], ";", "\"\<Loading...\>\""}], 
+        ",", "\[IndentingNewLine]", "_", ",", 
+        RowBox[{
+         RowBox[{"ClearAll", "[", "FEDVR`loadCounter", "]"}], ";", 
+         RowBox[{"NotebookWrite", "[", 
+          RowBox[{
+           RowBox[{"EvaluationCell", "[", "]"}], ",", 
+           RowBox[{"Cell", "[", 
+            RowBox[{
+             RowBox[{"BoxData", "[", 
+              RowBox[{"ToBoxes", "[", "ex", "]"}], "]"}], ",", 
+             "\"\<Output\>\"", ",", 
+             RowBox[{"Options", "[", 
+              RowBox[{"EvaluationCell", "[", "]"}], "]"}]}], "]"}]}], 
+          "]"}]}]}], "]"}]}]}], "]"}], ",", 
+   RowBox[{"TrackedSymbols", "\[RuleDelayed]", 
+    RowBox[{"{", "}"}]}], ",", "\[IndentingNewLine]", 
+   RowBox[{"UpdateInterval", "\[Rule]", "1"}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.6781170772774343`*^9, 3.678117171466731*^9}, {
+  3.678233918329399*^9, 3.678233926270838*^9}, {3.6782340126429777`*^9, 
+  3.678234016173641*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["DVR Instance", "Subsection",
+ ShowGroupOpener->False,
+ DefaultNewCellStyle->"Input",
+ CellChangeTimes->{{3.6755952092266283`*^9, 3.675595211393613*^9}}],
+
+Cell[BoxData[Cell[BoxData[
+  FormBox[
+   TemplateBox[{"\"DVRInstance\"","","Named",BoxData},
+    "NotebookTemplateSlot"], TextForm]]]], "Output",
+ CellChangeTimes->{{3.6781169955106993`*^9, 3.6781169979648542`*^9}, {
+  3.678117041611236*^9, 3.678117042377857*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Running via Commands", "Section",
+ CellChangeTimes->{{3.67559555762055*^9, 3.675595559140624*^9}, {
+  3.6775879549955482`*^9, 3.677587970892029*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Basics", "Subsection",
+ CellChangeTimes->{{3.677594085560782*^9, 3.677594086295699*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Initializing a DVR", "Subsubsection",
+ CellChangeTimes->{{3.677587974789509*^9, 3.677587991954815*^9}}],
+
+Cell["The basic form for initializing a DVR is ", "Text",
+ CellChangeTimes->{{3.6775881241126423`*^9, 3.677588133894959*^9}}],
+
+Cell[BoxData[
+ RowBox[{"DVRBaseClass", "[", "\n", "\t", 
+  RowBox[{
+   RowBox[{"pointDivisionList", ":", 
+    RowBox[{"{", 
+     RowBox[{"dim1PointNumber_", ",", "dim2PointNumber_", ",", ".."}], 
+     "}"}]}], ",", "\n", "\t", 
+   RowBox[{"gridRangeList", ":", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"dim1MinCoord_", ",", "dim1MaxCoord_"}], "}"}], ",", 
+      RowBox[{"{", 
+       RowBox[{"dim2MinCoord_", ",", "dim2MaxCoord_"}], "}"}], ",", ".."}], 
+     "}"}]}], ",", "\n", "\t", 
+   RowBox[{"configFileBaseName", ":", "_String"}], ",", "\n", "\t", 
+   RowBox[{"molecule", ":", "_", 
+    RowBox[{"(*", 
+     RowBox[{
+     "A", " ", "molecule", " ", "or", " ", "complex", " ", "from", " ", "the",
+       " ", "MolecularModeling", " ", "package"}], "*)"}], ":", "None"}], ",",
+    "\n", "\t", 
+   RowBox[{"DVRName", "->", "\"\<\>\""}], ",", "\n", "\t", 
+   RowBox[{"DVRUnits", "->", "None"}], ",", "\n", "\t", 
+   RowBox[{"ReloadPackage", "->", "False"}], ",", "\n", "\t", 
+   RowBox[{"StorageMode", "->", "\"\<Database\>\""}]}], "\n", "\t", 
+  "]"}]], "Code",
+ InitializationCell->False,
+ CellChangeTimes->{{3.6775895400206347`*^9, 3.677589750200248*^9}, {
+  3.6775898360962343`*^9, 3.6775899030915422`*^9}, {3.6775899397891493`*^9, 
+  3.677589942673852*^9}, {3.677590032298769*^9, 3.677590033047264*^9}, {
+  3.677590312260582*^9, 3.6775903247193403`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["pointDivisionList", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}}],
+
+Cell["\<\
+pointDivisionList is simply how many DVR points to use in each coordinate\
+\>", "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590663366569*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["gridRangeList", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590894247034*^9}}],
+
+Cell["\<\
+gridRangeList is the minimum and maximum of each coordinate in the grid\
+\>", "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.6775906641106586`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["configFileBaseName", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.6775908924070168`*^9}}],
+
+Cell["configFileBaseName is the basename of the .m file to load", "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590664550847*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["molecule", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590890806971*^9}}],
+
+Cell["\<\
+molecule is an optional molecule or complex to use (mostly useful to be \
+inserted into a graphic after 
+rendering)\
+\>", "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590669910426*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["DVRName", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590888926716*^9}}],
+
+Cell["\<\
+DVRName is a name that can be provided to more easily distinguish a DVR\
+\>", "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590673406505*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["DVRUnits", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590886855247*^9}}],
+
+Cell["\<\
+DVRUnits is the set of units to pass to various components of the DVR
+These can be specified for the different components of a the DVR by using a \
+replacement list e.g. :\
+\>", "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.6775906747421083`*^9}, {
+  3.677590913653112*^9, 3.677591014907518*^9}, {3.677591083089547*^9, 
+  3.677591098941188*^9}}],
+
+Cell[BoxData[
+ RowBox[{"DVRUnits", "\[Rule]", 
+  RowBox[{"{", "\n", "\t", 
+   RowBox[{
+    RowBox[{"KineticMatrix", "\[Rule]", 
+     RowBox[{"DVRUnits", "[", 
+      RowBox[{"1", ",", "\"\<Joules\>\""}], "]"}]}], ",", "\n", "\t", 
+    RowBox[{"PotentialMatrix", "\[Rule]", 
+     RowBox[{"DVRUnits", "[", 
+      RowBox[{"1", ",", "\"\<ElectronVolts\>\""}], "]"}]}]}], "}"}]}]], "Code",\
+
+ CellChangeTimes->{{3.6775911138771563`*^9, 3.677591164406788*^9}}],
+
+Cell["\<\
+This feature is still somewhat glitchy, but will be useable in the future\
+\>", "Text",
+ CellChangeTimes->{{3.677591249885708*^9, 3.677591276755683*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["ReloadPackage", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590882382983*^9}}],
+
+Cell["\<\
+ReloadPackage specifies whether to reload the file specified by \
+configFileBaseName\
+\>", "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590675630292*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["StorageMode", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590884718955*^9}}],
+
+Cell["\<\
+StorageMode specifies whether to store data as files or in the SQL file \
+Data.sql\
+\>", "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590676614403*^9}}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Calculating Grid Points", "Subsubsection",
+ CellChangeTimes->{{3.675595380309641*^9, 3.67559538449354*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DVR", "::", "Grid"}], "[", 
+  RowBox[{"points__", ",", "ranges__"}], "]"}]], "Code",
+ CellChangeTimes->{{3.677604253937955*^9, 3.677604267309857*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Calculating Kinetic Energy Matrices", "Subsubsection",
+ CellChangeTimes->{{3.6755953965972977`*^9, 3.675595403941024*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DVR", "::", "KineticMatrix"}], "[", "grid_", "]"}]], "Code",
+ CellChangeTimes->{{3.677604253937955*^9, 3.677604283349264*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Calculating Potential Energy Matrices", "Subsubsection",
+ CellChangeTimes->{{3.6755954058526917`*^9, 3.675595417076488*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DVR", "::", "PotentialMatrix"}], "[", "grid_", "]"}]], "Code",
+ CellChangeTimes->{{3.677604287230801*^9, 3.677604293493231*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Calculating Wavefunctions", "Subsubsection",
+ CellChangeTimes->{{3.675595418596541*^9, 3.675595431317482*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DVR", "::", "Wavefunctions"}], "[", 
+  RowBox[{"T_", ",", "V_"}], "]"}]], "Code",
+ CellChangeTimes->{{3.677604253937955*^9, 3.677604267309857*^9}, {
+  3.677604299342185*^9, 3.6776043080041437`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Plotting", "Subsubsection",
+ CellChangeTimes->{{3.675595432677558*^9, 3.675595433644857*^9}}],
+
+Cell["\<\
+Every DVR instance has a function Plot which can be applied to a set of \
+wavefunctions, a grid, and a potential to plot the results. Call this via\
+\>", "Text",
+ CellChangeTimes->{{3.6775938681167793`*^9, 3.677593879423612*^9}, {
+  3.677593952055938*^9, 3.677594027084303*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DVR", "::", "Plot"}], "[", 
+  RowBox[{"results_", ",", "grid_", ",", "potential_", ",", "ops"}], 
+  "]"}]], "Code",
+ CellChangeTimes->{{3.6775940296374483`*^9, 3.677594050147346*^9}}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Run Functions", "Subsection",
+ CellChangeTimes->{{3.677594113040167*^9, 3.67759411945252*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Basic run", "Subsubsection",
+ CellChangeTimes->{{3.675595418596541*^9, 3.675595431317482*^9}, {
+  3.677594140661584*^9, 3.6775941436520348`*^9}}],
+
+Cell["\<\
+A DVR has a function, RunDVR, which is the workhorse for all DVR runs, call \
+this via\
+\>", "Text",
+ CellChangeTimes->{{3.677594168385457*^9, 3.677594211426454*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DVR", "::", "RunDVR"}], "[", "\n", "\t", 
+  RowBox[{
+   RowBox[{"Verbose", "->", "False"}], ",", "\n", "\t", 
+   RowBox[{"RunPoints", "->", "Automatic"}], ",", "\n", "\t", 
+   RowBox[{"ReturnPoint", "->", "Plot"}], ",", "\n", "\t", 
+   RowBox[{"DVRUnits", "->", "Automatic"}], ",", "\n", "\t", 
+   RowBox[{"Grid", "->", "Automatic"}], ",", "\n", "\t", 
+   RowBox[{"KineticMatrix", "->", "Automatic"}], ",", "\n", "\t", 
+   RowBox[{"PotentialMatrix", "->", "Automatic"}], ",", "\n", "\t", 
+   RowBox[{"Wavefunctions", "->", "Automatic"}], ",", "\n", "\t", 
+   RowBox[{"StoreResults", "->", "None"}], ",", "\n", "\t", 
+   RowBox[{"StorageMode", "->", "Automatic"}], ",", "\n", "\t", 
+   RowBox[{"ShowCompound", "->", "False"}], ",", "\n", "\t", 
+   RowBox[{"RecalculateWavefunctions", "->", "True"}], ",", "\n", "\t", 
+   RowBox[{"RecalculateKineticMatrix", "->", "False"}], ",", "\n", "\t", 
+   "ops"}], "\n", "\t", "]"}]], "Code",
+ InitializationCell->False,
+ CellChangeTimes->{{3.677594213619767*^9, 3.677594215810494*^9}, {
+  3.677594260084347*^9, 3.677594302047715*^9}, {3.6775946332458363`*^9, 
+  3.6775946408538103`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Verbose", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.6775944326231937`*^9}],
+
+Cell["\<\
+Verbose specifies whether to print temporary output from the run, most \
+importantly a run tracking grid.
+
+If Verbose is neither True nor False it doesn\[CloseCurlyQuote]t print \
+output, but does update the tracking grid coming from \
+\>", "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590663366569*^9}, {
+  3.6775944763063793`*^9, 3.677594578604298*^9}}],
+
+Cell[BoxData[
+ RowBox[{"DVR", "::", "MonitoringGrid"}]], "Code",
+ CellChangeTimes->{{3.677594582549333*^9, 3.677594586564004*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["RunPoints", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.677594435286789*^9}],
+
+Cell["\<\
+RunPoints allows for runtime overload of the number of grid points used. 
+
+It permanently overrides the Points attribute of the DVR instance\
+\>", "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590663366569*^9}, {
+  3.677594594151555*^9, 3.677594612955412*^9}, {3.6775947877142677`*^9, 
+  3.677594824718224*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["ReturnPoint", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.677594438638845*^9}],
+
+Cell["ReturnPoint is what the DVR should return. It can be any of:", "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590663366569*^9}, {
+  3.6775948486493483`*^9, 3.677594896212666*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Grid", "Item",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590663366569*^9}, {
+  3.6775948486493483`*^9, 3.677594905355782*^9}}],
+
+Cell["The grid of points generate", "ItemParagraph",
+ CellChangeTimes->{{3.67759498905682*^9, 3.677594995274057*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["KineticMatrix", "Item",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590663366569*^9}, {
+  3.6775948486493483`*^9, 3.6775949231318493`*^9}}],
+
+Cell["The kinetic energy matrix calculated or loaded", "ItemParagraph",
+ CellChangeTimes->{{3.677594999690363*^9, 3.677595008625903*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["PotentialMatrix", "Item",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590663366569*^9}, {
+  3.6775948486493483`*^9, 3.677594927235734*^9}}],
+
+Cell["The potential energy matrix calculated or loaded", "ItemParagraph",
+ CellChangeTimes->{{3.6775950096882677`*^9, 3.677595018313719*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Wavefunctions", "Item",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590663366569*^9}, {
+  3.6775948486493483`*^9, 3.677594930643763*^9}}],
+
+Cell["The wavefunctions used", "ItemParagraph",
+ CellChangeTimes->{{3.677595020135503*^9, 3.6775950236334267`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Plot", "Item",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590663366569*^9}, {
+  3.6775948486493483`*^9, 3.677594919620104*^9}}],
+
+Cell["The plot generated", "ItemParagraph",
+ CellChangeTimes->{{3.6775950265202303`*^9, 3.677595030225301*^9}}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["DVRUnits", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.677594441926668*^9}],
+
+Cell["\<\
+This is simply a runtime override for the DVRUnits option specified at \
+initialization\
+\>", "Text",
+ CellChangeTimes->{{3.677595072793906*^9, 3.6775950975956497`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Grid", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.677594444542807*^9}],
+
+Cell["\<\
+Allows for specifying a pre-generated grid. If this is done, the run skips \
+calculating the grid.\
+\>", "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590663366569*^9}, {
+  3.677595128710854*^9, 3.677595205347576*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["KineticMatrix", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.6775944473348913`*^9}],
+
+Cell["\<\
+Allows for specifying a pre-generated kinetic energy matrix. If this is done, \
+the run skips calculating or loading the matrix.\
+\>", "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590663366569*^9}, {
+  3.677595128710854*^9, 3.6775952270912*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["PotentialMatrix", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.6775944500147543`*^9}],
+
+Cell["\<\
+Allows for specifying a pre-generated potential energy matrix. If this is \
+done, the run skips calculating or loading the potential energy matrix.\
+\>", "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590663366569*^9}, {
+  3.677595128710854*^9, 3.677595205347576*^9}, {3.677595239404636*^9, 
+  3.6775952524827633`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Wavefunctions", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.6775944528383617`*^9}],
+
+Cell[TextData[{
+ "Allows for specifying a pre-generated set of wavefunctions. If this is \
+done, the run skips calculating the kinetic energy matrix and wavefunctions. \
+It still requires a potential energy for plotting, but one can supply the 0 \
+potential, ",
+ Cell[BoxData[
+  TagBox[Cell["(0&)", "Code"],
+   DisplayForm]]],
+ " to get out the appropriate results."
+}], "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590663366569*^9}, {
+  3.677595128710854*^9, 3.677595205347576*^9}, {3.677595260395678*^9, 
+  3.677595284393941*^9}, {3.677596251532979*^9, 3.6775962828671303`*^9}, {
+  3.677596317732893*^9, 3.677596328622665*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["StoreResults", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.6775944562382717`*^9}],
+
+Cell["Whether to store generated results as DVR attributes or not.", "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590663366569*^9}, {
+  3.6775967730195208`*^9, 3.6775967997928753`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["StorageMode", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.677594459726371*^9}],
+
+Cell["Whether to store via files or SQL databases", "Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590663366569*^9}, {
+  3.677596755360257*^9, 3.6775967680823307`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["ShowCompound", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.677594466798172*^9}],
+
+Cell["If true, adds the DVR\[CloseCurlyQuote]s compound into the plot.", \
+"Text",
+ CellChangeTimes->{{3.677590329014447*^9, 3.677590663366569*^9}, {
+  3.6775966332049427`*^9, 3.677596651455926*^9}, {3.677596681527513*^9, 
+  3.6775967438482733`*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["RecalculateWavefunctions", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.677594470029952*^9}],
+
+Cell["\<\
+If true, wavefunctions are automatically recalculated, not loaded.\
+\>", "Text",
+ CellChangeTimes->{{3.677596807827186*^9, 3.677596822159853*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["RecalculateKineticMatrix", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.6775944727341013`*^9}],
+
+Cell["\<\
+If true, the kinetic energy matrix is automatically recalculated, not loaded.\
+\
+\>", "Text",
+ CellChangeTimes->{{3.677596823777781*^9, 3.677596839183943*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["ops", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.6775944727341013`*^9, {3.6775975490250874`*^9, 3.6775975493033857`*^9}}],
+
+Cell[TextData[{
+ "Options to be passed to the functions. These combine with the options \
+specified in ",
+ Cell[BoxData[
+  TagBox[Cell["DVR::Arguments", "Code"],
+   DisplayForm]]]
+}], "Text",
+ CellChangeTimes->{{3.677597550535326*^9, 3.677597584690764*^9}, {
+   3.677597695621601*^9, 3.677597717096292*^9}, 3.677597796382772*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Cell", "[", 
+   RowBox[{"\"\<DVR::Arguments\>\"", ",", "\"\<Input\>\""}], "]"}], "//", 
+  "DisplayForm"}]], "Input",
+ CellChangeTimes->{{3.677597718892023*^9, 3.677597721697628*^9}, {
+  3.67759775797361*^9, 3.677597801450077*^9}}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Running with potential from file", "Subsubsection",
+ CellChangeTimes->{{3.675595418596541*^9, 3.675595431317482*^9}, {
+  3.6775941461320133`*^9, 3.6775941584117727`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DVR", "::", "RunPotentialFile"}], "[", 
+  RowBox[{
+   RowBox[{"file", ":", 
+    RowBox[{"_String", "|", "_Integer"}]}], ",", "ops"}], "]"}]], "Code",
+ InitializationCell->False,
+ CellChangeTimes->{{3.677597473311051*^9, 3.677597496003914*^9}, {
+  3.6775976929496527`*^9, 3.677597693789916*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["file", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.6775944727341013`*^9, {3.6775975490250874`*^9, 3.6775975493033857`*^9}, {
+   3.677597887129395*^9, 3.677597887672186*^9}}],
+
+Cell[TextData[{
+ "This is either an explicit file or a the base name of a file in the folder ",
+ Cell[BoxData[
+  TagBox[Cell["$DVRRoot/Resources/DVR::DVRFile/", "Code"],
+   DisplayForm]], "Output",
+  CellChangeTimes->{3.677598203819009*^9}],
+ " or an integer specifying the alphabetical position of file in that folder"
+}], "Text",
+ CellChangeTimes->{{3.677597888768044*^9, 3.677597933580814*^9}, 
+   3.6775981790660477`*^9, {3.677598209730177*^9, 3.677598262202345*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["ops", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.6775944727341013`*^9, {3.6775975490250874`*^9, 3.6775975493033857`*^9}}],
+
+Cell[TextData[{
+ "A set of options that get passed directly to ",
+ Cell[BoxData[
+  TagBox[Cell["DVR::RunDVR", "Code"],
+   DisplayForm]]]
+}], "Text",
+ CellChangeTimes->{{3.677598274043812*^9, 3.677598304488921*^9}}]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Running in the background", "Subsubsection",
+ CellChangeTimes->{{3.675595418596541*^9, 3.675595431317482*^9}, {
+   3.677594159979463*^9, 3.677594164779559*^9}, 3.677597884297011*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DVR", "::", "RunInBackground"}], "[", "\n", "\t", 
+  RowBox[{
+   RowBox[{"file", ":", 
+    RowBox[{"_string", "|", "None"}], ":", "None"}], ",", "\n", "\t", 
+   RowBox[{"\"\<Script\>\"", "->", "False"}], ",", "\n", "\t", 
+   RowBox[{"\"\<Server\>\"", "->", "False"}], ",", "\n", "\t", 
+   RowBox[{"Quiet", "->", "None"}], ",", "\n", "\t", "ops"}], "]"}]], "Code",
+ InitializationCell->False,
+ CellChangeTimes->{{3.677599262804874*^9, 3.67759928948066*^9}, {
+  3.677599344484292*^9, 3.677599379224153*^9}, {3.677599693878808*^9, 
+  3.677599696550651*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["file", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.6775944727341013`*^9, {3.6775975490250874`*^9, 3.6775975493033857`*^9}, {
+   3.677597887129395*^9, 3.677597887672186*^9}}],
+
+Cell[TextData[{
+ "This is either an explicit file or a the base name of a file in the folder ",
+ Cell[BoxData[
+  TagBox[Cell["$DVRRoot/Resources/DVR::DVRFile/", "Code"],
+   DisplayForm]], "Output",
+  CellChangeTimes->{3.677598203819009*^9}],
+ " or ",
+ Cell[BoxData[
+  TagBox[Cell["None", "Code"],
+   DisplayForm]]]
+}], "Text",
+ CellChangeTimes->{{3.677597888768044*^9, 3.677597933580814*^9}, 
+   3.6775981790660477`*^9, {3.677598209730177*^9, 3.677598262202345*^9}, {
+   3.677599396688751*^9, 3.677599424958325*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["\[OpenCurlyDoubleQuote]Script\[CloseCurlyDoubleQuote]", \
+"Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.6775944727341013`*^9, {3.6775975490250874`*^9, 3.6775975493033857`*^9}, {
+   3.6775995377206287`*^9, 3.677599544024466*^9}}],
+
+Cell["\<\
+Specifies whether the run should compile to a run script before executing. \
+Given Mathematica\[CloseCurlyQuote]s poor performance in parallelization, \
+this is generally safer.\
+\>", "Text",
+ CellChangeTimes->{{3.67759954609242*^9, 3.677599591092422*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["\[OpenCurlyDoubleQuote]Server\[CloseCurlyDoubleQuote]", \
+"Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.6775944727341013`*^9, {3.6775975490250874`*^9, 3.6775975493033857`*^9}, {
+   3.677599533891737*^9, 3.677599535488717*^9}}],
+
+Cell["\<\
+Specifies whether to run on a server or not. Will pull up a dialog to specify \
+the run server.\
+\>", "Text",
+ CellChangeTimes->{{3.677599610716361*^9, 3.677599627335134*^9}, {
+  3.6775996651523943`*^9, 3.677599674807084*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Verbose", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.6775944727341013`*^9, {3.6775975490250874`*^9, 3.6775975493033857`*^9}, {
+   3.67759953038491*^9, 3.677599531352713*^9}, {3.677600212536237*^9, 
+   3.67760021353472*^9}}],
+
+Cell["\<\
+Specifies verbose output from the ParallelProcess object generated\
+\>", "Text",
+ CellChangeTimes->{{3.677600226486163*^9, 3.677600272384283*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Quiet", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.6775944727341013`*^9, {3.6775975490250874`*^9, 3.6775975493033857`*^9}, {
+   3.67759953038491*^9, 3.677599531352713*^9}}],
+
+Cell["\<\
+Specifies which errors to quiet in the ParallelProcess object generated\
+\>", "Text",
+ CellChangeTimes->{{3.677600226486163*^9, 3.677600288943636*^9}}]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["ops", "Subsubsubsection",
+ CellChangeTimes->{{3.677590861152918*^9, 3.677590869303754*^9}, 
+   3.6775944727341013`*^9, {3.6775975490250874`*^9, 3.6775975493033857`*^9}}],
+
+Cell[TextData[{
+ "A set of options that get passed directly to ",
+ Cell[BoxData[
+  TagBox[Cell["DVR::RunDVR", "Code"],
+   DisplayForm]]],
+ " or ",
+ Cell[BoxData[
+  TagBox[Cell["DVR::RunPotentialFile", "Code"],
+   DisplayForm]]]
+}], "Text",
+ CellChangeTimes->{{3.677598274043812*^9, 3.677598304488921*^9}, {
+  3.677599702680574*^9, 3.6775997112182302`*^9}}]
+}, Closed]]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Testing", "Section",
+ DefaultNewCellStyle->"Input",
+ CellChangeTimes->{{3.67559526079767*^9, 3.675595261980077*^9}},
+ FontColor->RGBColor[
+  0.7607843137254902, 0.29411764705882354`, 0.08627450980392157]],
+
+Cell[CellGroupData[{
+
+Cell["", "Subsubsection",
+ CellChangeTimes->{{3.6776047105351963`*^9, 3.6776047209188213`*^9}, {
+  3.6776048481809387`*^9, 3.677604851467503*^9}},
+ Background->GrayLevel[0.85]],
+
+Cell[TextData[{
+ "Past this purple bar below, the default cell becomes an input cell. To use \
+the DVR instance generated without having to copy it each time, evaluate the \
+first input below, which performs some operator overloading at low-level. \
+Then to use the DVR, follow the instructions in   ",
+ Cell[BoxData[
+  TagBox[Cell[BoxData[
+    StyleBox[
+     RowBox[{"Running", " ", "via", " ", "Commands"}],
+     FontFamily->"Arial",
+     FontSize->15]], "Section"],
+   DisplayForm]]],
+ " ."
+}], "Text",
+ CellChangeTimes->{{3.677587918766095*^9, 3.67758793135638*^9}, 
+   3.6775880343260927`*^9, {3.677588065385429*^9, 3.677588076257154*^9}, {
+   3.6775893423488827`*^9, 3.677589369520149*^9}, {3.6776056996640387`*^9, 
+   3.6776057630610237`*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "Subsubsection",
+ ShowGroupOpener->False,
+ Deployed->True,
+ DefaultNewCellStyle->"Input",
+ CellChangeTimes->{{3.6776047105351963`*^9, 3.6776047209188213`*^9}, {
+  3.6776048481809387`*^9, 3.677604851467503*^9}},
+ Background->RGBColor[
+  0.4588235294117647, 0.12941176470588237`, 0.8509803921568627]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"DVR", "=", Cell[BoxData[
+    FormBox[
+     TemplateBox[{"\"DVRSymbol\"","\"DVRSymbol\"","Named",BoxData},
+      "NotebookTemplateSlot"], TextForm]]]}], ";"}]], "Input",
+ CellChangeTimes->{{3.677589371725173*^9, 3.6775893732965813`*^9}, {
+   3.67785735468191*^9, 3.677857369074572*^9}, {3.677933081244864*^9, 
+   3.677933087966186*^9}, 3.6779331651148443`*^9, {3.677933198718154*^9, 
+   3.677933211067266*^9}}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{808, 755},
+WindowMargins->{{83, Automatic}, {Automatic, 44}},
+DockedCells->FEPrivate`FrontEndResource[
+ "NotebookTemplatingExpressions", "AuthoringDockedCell"],
+TaggingRules->{"NotebookTemplateVersion" -> 1., "NotebookTemplate" -> True},
+CellContext->Notebook,
+FrontEndVersion->"10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, \
+2015)",
+StyleDefinitions->Notebook[{
+   Cell[
+    StyleData[StyleDefinitions -> "Default.nb"]], 
+   Cell[
+    StyleData["Chapter"], ShowGroupOpener -> False, DefaultNewCellStyle -> 
+    "Section"], 
+   Cell[
+    StyleData["Subchapter"], ShowGroupOpener -> True], 
+   Cell[
+    StyleData["Section"], ShowGroupOpener -> True, DefaultNewCellStyle -> 
+    "Subsection"], 
+   Cell[
+    StyleData["Subsection"], ShowGroupOpener -> True, DefaultNewCellStyle -> 
+    "Subsubsection"], 
+   Cell[
+    StyleData["Subsubsection"], ShowGroupOpener -> True, DefaultNewCellStyle -> 
+    "Text"], 
+   Cell[
+    StyleData["Subsubsubsection", StyleDefinitions -> "Subsubsection"], 
+    ShowGroupOpener -> True, DefaultNewCellStyle -> "Text", FontSize -> 14], 
+   Cell[
+    StyleData["Subsubtitle"], CellFrame -> {{0, 0}, {1, 0}}], 
+   Cell[
+    StyleData["Item"], ShowGroupOpener -> True, ShowShortBoxForm -> False, 
+    CellGroupingRules -> {"SectionGrouping", 65}, DefaultNewCellStyle -> 
+    "ItemParagraph", FontSize -> 14, FontWeight -> "Bold"], 
+   Cell[
+    StyleData["TopStructure", StyleDefinitions -> StyleData["Item"]], 
+    CellFrame -> {{1, 0}, {1, 0}}, CellDingbat -> None, ShowGroupOpener -> 
+    False, CellMargins -> {{81, 10}, {0, 8}}, DefaultNewCellStyle -> 
+    "SubStructure", FontSize -> 18, FontColor -> Automatic], 
+   Cell[
+    StyleData["SubStructure", StyleDefinitions -> StyleData["Item"]], 
+    CellFrame -> {{1, 0}, {0, 0}}, CellDingbat -> "+", ShowGroupOpener -> 
+    False, CellMargins -> {{81, 10}, {0, 0}}, 
+    CellElementSpacings -> {"CellMinHeight" -> 20}, ReturnCreatesNewCell -> 
+    True, CellFrameMargins -> 35, DefaultNewCellStyle -> "SubSubStructure", 
+    FontSize -> 16, FontWeight -> "Plain", FontSlant -> "Italic", FontColor -> 
+    Automatic], 
+   Cell[
+    StyleData[
+    "SubSubStructure", StyleDefinitions -> StyleData["SubStructure"]], 
+    CellDingbat -> "-", CellFrameMargins -> 45, DefaultNewCellStyle -> 
+    "SubSubDescription", FontSize -> 14, FontSlant -> "Plain", 
+    FontVariations -> {"Underline" -> False}, FontColor -> Automatic], 
+   Cell[
+    StyleData[
+    "SubSubDescription", StyleDefinitions -> StyleData["SubSubStructure"]], 
+    CellDingbat -> "|", CellFrameMargins -> 50, FontSize -> 12, FontColor -> 
+    Automatic], 
+   Cell[
+    StyleData["Invisible"], ShowCellBracket -> False, CellSize -> {1, 1}, 
+    FontColor -> CurrentValue[
+      StyleData["Notebook"], "Background"]], 
+   Cell[
+    StyleData["Code"], InitializationCell -> False]}, Visible -> False, 
+  FrontEndVersion -> 
+  "10.3 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 10, 2015)", 
+  StyleDefinitions -> "PrivateStylesheetFormatting.nb"]
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 127, 1, 65, "Chapter"],
+Cell[CellGroupData[{
+Cell[732, 27, 92, 1, 64, "Section"],
+Cell[CellGroupData[{
+Cell[849, 32, 127, 2, 44, "Subsection"],
+Cell[979, 36, 3026, 77, 352, "Text"],
+Cell[4008, 115, 338, 6, 49, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[4383, 126, 114, 1, 36, "Subsection"],
+Cell[4500, 129, 341, 6, 49, "Text"],
+Cell[4844, 137, 173, 2, 38, "TopStructure"],
+Cell[5020, 141, 103, 1, 20, "SubStructure"],
+Cell[5126, 144, 217, 3, 20, "SubSubStructure"],
+Cell[5346, 149, 275, 3, 20, "SubSubStructure"],
+Cell[5624, 154, 277, 3, 20, "SubSubStructure"],
+Cell[5904, 159, 274, 3, 20, "SubSubStructure"],
+Cell[6181, 164, 260, 3, 20, "SubSubStructure"],
+Cell[6444, 169, 290, 3, 20, "SubStructure"],
+Cell[6737, 174, 301, 6, 20, "SubSubDescription"],
+Cell[7041, 182, 224, 3, 20, "SubStructure"],
+Cell[7268, 187, 98, 1, 20, "SubSubStructure"],
+Cell[7369, 190, 99, 1, 20, "SubSubStructure"],
+Cell[7471, 193, 218, 3, 20, "SubSubStructure"],
+Cell[CellGroupData[{
+Cell[7714, 200, 205, 3, 20, "SubSubStructure"],
+Cell[7922, 205, 521, 9, 106, "Text"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[8492, 220, 107, 1, 36, "Subsection"],
+Cell[CellGroupData[{
+Cell[8624, 225, 110, 1, 35, "Subsubsection"],
+Cell[8737, 228, 398, 6, 68, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[9172, 239, 160, 2, 29, "Subsubsection"],
+Cell[9335, 243, 361, 11, 41, "Text"]
+}, Closed]]
+}, Closed]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[9757, 261, 100, 1, 64, "Section"],
+Cell[9860, 264, 207, 4, 40, "Output"],
+Cell[CellGroupData[{
+Cell[10092, 272, 124, 2, 44, "Subsection"],
+Cell[10219, 276, 1992, 45, 271, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12248, 326, 158, 3, 44, "Subsection"],
+Cell[12409, 331, 264, 5, 40, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12722, 342, 155, 2, 64, "Section"],
+Cell[CellGroupData[{
+Cell[12902, 348, 94, 1, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[13021, 353, 109, 1, 35, "Subsubsection"],
+Cell[13133, 356, 125, 1, 30, "Text"],
+Cell[13261, 359, 1386, 31, 193, "Code",
+ InitializationCell->False],
+Cell[CellGroupData[{
+Cell[14672, 394, 111, 1, 28, "Subsubsubsection"],
+Cell[14786, 397, 163, 3, 30, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[14986, 405, 107, 1, 22, "Subsubsubsection"],
+Cell[15096, 408, 163, 3, 30, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[15296, 416, 114, 1, 22, "Subsubsubsection"],
+Cell[15413, 419, 139, 1, 30, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[15589, 425, 102, 1, 22, "Subsubsubsection"],
+Cell[15694, 428, 205, 5, 49, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[15936, 438, 101, 1, 22, "Subsubsubsection"],
+Cell[16040, 441, 161, 3, 30, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[16238, 449, 102, 1, 22, "Subsubsubsection"],
+Cell[16343, 452, 361, 7, 49, "Text"],
+Cell[16707, 461, 453, 11, 80, "Code"],
+Cell[17163, 474, 163, 3, 30, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[17363, 482, 107, 1, 22, "Subsubsubsection"],
+Cell[17473, 485, 174, 4, 30, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[17684, 494, 105, 1, 22, "Subsubsubsection"],
+Cell[17792, 497, 172, 4, 30, "Text"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[18013, 507, 113, 1, 29, "Subsubsection"],
+Cell[18129, 510, 185, 4, 50, "Code"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[18351, 519, 128, 1, 29, "Subsubsection"],
+Cell[18482, 522, 161, 3, 50, "Code"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[18680, 530, 130, 1, 29, "Subsubsection"],
+Cell[18813, 533, 163, 3, 50, "Code"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[19013, 541, 116, 1, 29, "Subsubsection"],
+Cell[19132, 544, 233, 5, 50, "Code"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[19402, 554, 99, 1, 29, "Subsubsection"],
+Cell[19504, 557, 288, 5, 49, "Text"],
+Cell[19795, 564, 218, 5, 50, "Code"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[20062, 575, 100, 1, 36, "Subsection"],
+Cell[CellGroupData[{
+Cell[20187, 580, 151, 2, 35, "Subsubsection"],
+Cell[20341, 584, 176, 4, 30, "Text"],
+Cell[20520, 590, 1161, 21, 280, "Code",
+ InitializationCell->False],
+Cell[CellGroupData[{
+Cell[21706, 615, 129, 2, 28, "Subsubsubsection"],
+Cell[21838, 619, 375, 8, 68, "Text"],
+Cell[22216, 629, 130, 2, 50, "Code"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[22383, 636, 129, 2, 22, "Subsubsubsection"],
+Cell[22515, 640, 330, 7, 68, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[22882, 652, 131, 2, 22, "Subsubsubsection"],
+Cell[23016, 656, 193, 2, 30, "Text"],
+Cell[CellGroupData[{
+Cell[23234, 662, 137, 2, 28, "Item"],
+Cell[23374, 666, 117, 1, 21, "ItemParagraph"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[23528, 672, 148, 2, 24, "Item"],
+Cell[23679, 676, 137, 1, 21, "ItemParagraph"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[23853, 682, 148, 2, 24, "Item"],
+Cell[24004, 686, 141, 1, 21, "ItemParagraph"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[24182, 692, 146, 2, 24, "Item"],
+Cell[24331, 696, 115, 1, 21, "ItemParagraph"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[24483, 702, 137, 2, 24, "Item"],
+Cell[24623, 706, 111, 1, 21, "ItemParagraph"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[24783, 713, 128, 2, 22, "Subsubsubsection"],
+Cell[24914, 717, 179, 4, 30, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[25130, 726, 124, 2, 22, "Subsubsubsection"],
+Cell[25257, 730, 237, 5, 30, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[25531, 740, 135, 2, 22, "Subsubsubsection"],
+Cell[25669, 744, 265, 5, 49, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[25971, 754, 137, 2, 22, "Subsubsubsection"],
+Cell[26111, 758, 337, 6, 49, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[26485, 769, 135, 2, 22, "Subsubsubsection"],
+Cell[26623, 773, 639, 13, 70, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[27299, 791, 134, 2, 22, "Subsubsubsection"],
+Cell[27436, 795, 195, 2, 30, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[27668, 802, 131, 2, 22, "Subsubsubsection"],
+Cell[27802, 806, 176, 2, 30, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[28015, 813, 132, 2, 22, "Subsubsubsection"],
+Cell[28150, 817, 250, 4, 30, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[28437, 826, 144, 2, 22, "Subsubsubsection"],
+Cell[28584, 830, 156, 3, 30, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[28777, 838, 146, 2, 22, "Subsubsubsection"],
+Cell[28926, 842, 169, 4, 30, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[29132, 851, 175, 2, 22, "Subsubsubsection"],
+Cell[29310, 855, 329, 8, 32, "Text"],
+Cell[29642, 865, 265, 6, 28, "Input"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[29956, 877, 176, 2, 29, "Subsubsection"],
+Cell[30135, 881, 329, 8, 51, "Code",
+ InitializationCell->False],
+Cell[CellGroupData[{
+Cell[30489, 893, 226, 3, 28, "Subsubsubsection"],
+Cell[30718, 898, 471, 9, 70, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[31226, 912, 175, 2, 22, "Subsubsubsection"],
+Cell[31404, 916, 214, 6, 32, "Text"]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[31667, 928, 188, 2, 29, "Subsubsection"],
+Cell[31858, 932, 589, 12, 129, "Code",
+ InitializationCell->False],
+Cell[CellGroupData[{
+Cell[32472, 948, 226, 3, 28, "Subsubsubsection"],
+Cell[32701, 953, 516, 13, 51, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[33254, 971, 279, 4, 22, "Subsubsubsection"],
+Cell[33536, 977, 266, 5, 49, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[33839, 987, 277, 4, 22, "Subsubsubsection"],
+Cell[34119, 993, 236, 5, 30, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[34392, 1003, 277, 4, 22, "Subsubsubsection"],
+Cell[34672, 1009, 156, 3, 30, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[34865, 1017, 226, 3, 22, "Subsubsubsection"],
+Cell[35094, 1022, 161, 3, 30, "Text"]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[35292, 1030, 175, 2, 22, "Subsubsubsection"],
+Cell[35470, 1034, 356, 11, 32, "Text"]
+}, Closed]]
+}, Closed]]
+}, Closed]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[35899, 1053, 210, 4, 50, "Section"],
+Cell[CellGroupData[{
+Cell[36134, 1061, 176, 3, 51, "Subsubsection"],
+Cell[36313, 1066, 750, 17, 79, "Text"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[37100, 1088, 307, 7, 51, "Subsubsection"],
+Cell[37410, 1097, 444, 9, 40, "Input"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)
